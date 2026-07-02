@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Générateur de documents RGPD & AI Act | Clarté — RTH NETGOCE</title>
+<meta name="description" content="Générez vos documents réglementaires RGPD & AI Act (.docx) pré-remplis à l'en-tête de votre société : registre, politiques, procédures, DPA, AIPD…">
+<link rel="stylesheet" href="fonts/fonts.css">
+<!-- Librairie docx (génération .docx côté navigateur) — chaîne de CDN de secours -->
+<script>
+(function(){
+  var cdns=[
+    'https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.min.js',
+    'https://cdnjs.cloudflare.com/ajax/libs/docx/8.5.0/docx.umd.min.js',
+    'https://unpkg.com/docx@8.5.0/build/index.umd.js'
+  ];
+  var i=0;
+  function load(){
+    if(i>=cdns.length){ console.warn('docx: aucun CDN disponible.'); window._docxFailed=true; return; }
+    var s=document.createElement('script'); s.src=cdns[i++];
+    s.onload=function(){ if(!(window.docx&&window.docx.Document)) load(); };
+    s.onerror=load;
+    document.head.appendChild(s);
+  }
+  load();
+})();
+</script>
+<style>
+  :root{
+    --ink:#0c1024;--body:#3f4661;--dim:#8b93ad;--line:#e7e9f3;
+    --bg:#ffffff;--bg2:#f7f8fc;--card:#ffffff;
+    --indigo:#4f46e5;--indigo2:#7c69f5;--indigo-ink:#3730a3;--indigo-soft:#eef0ff;
+    --gold:#f5b301;--gold-soft:#fff6e0;--green:#12a150;--radius:16px;--shadow:0 10px 40px rgba(19,24,54,.08);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:'Manrope',system-ui,-apple-system,sans-serif;color:var(--ink);background:var(--bg2);line-height:1.6;-webkit-font-smoothing:antialiased}
+  a{color:var(--indigo);text-decoration:none}
+  .serif{font-family:'Fraunces',Georgia,serif;font-weight:600}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+  header.top{position:sticky;top:0;z-index:100;backdrop-filter:blur(14px);background:rgba(255,255,255,.85);border-bottom:1px solid var(--line)}
+  .nav{display:flex;align-items:center;justify-content:space-between;height:64px}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:18px;color:var(--ink)}
+  .brand .dot{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,var(--indigo),var(--indigo2));display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(79,70,229,.4)}
+  .brand .dot svg{display:block}
+  .back{font-size:14px;font-weight:700;color:var(--indigo-ink);background:var(--indigo-soft);padding:8px 15px;border-radius:11px}
+  .hero{padding:44px 0 10px}
+  .hero .tag{display:inline-block;font-size:12px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--indigo);margin-bottom:10px}
+  .hero h1{font-size:clamp(26px,4vw,38px);font-weight:800;letter-spacing:-.02em;margin-bottom:8px}
+  .hero p{color:var(--body);font-size:16px;max-width:680px}
+  section.block{padding:30px 0}
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:26px 28px}
+  .panel h2{font-size:20px;font-weight:800;margin-bottom:4px}
+  .panel .sub{color:var(--dim);font-size:14px;margin-bottom:20px}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:0 18px}
+  @media(max-width:680px){.grid{grid-template-columns:1fr}}
+  .fld{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+  .fld.full{grid-column:1/-1}
+  .fld label{font-size:11.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--dim);font-weight:800}
+  .fld input,.fld select,.fld textarea{padding:11px 13px;border:1.5px solid var(--line);border-radius:10px;font-family:inherit;font-size:14.5px;background:#fff;color:var(--ink)}
+  .fld textarea{min-height:74px;resize:vertical}
+  .fld input:focus,.fld select:focus,.fld textarea:focus{outline:none;border-color:var(--indigo)}
+  .fld .hint{font-size:11.5px;color:var(--dim);font-weight:600}
+  .checks{display:flex;flex-wrap:wrap;gap:8px}
+  .chk{display:inline-flex;align-items:center;gap:7px;border:1.5px solid var(--line);border-radius:100px;padding:7px 13px;font-size:13px;font-weight:700;cursor:pointer;user-select:none;background:#fff}
+  .chk input{accent-color:var(--indigo)}
+  .chk.on{border-color:var(--indigo);background:var(--indigo-soft);color:var(--indigo-ink)}
+  .saverow{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:6px}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:none;border-radius:12px;font-family:inherit;font-weight:800;font-size:14px;padding:12px 20px;cursor:pointer;transition:filter .15s,transform .1s}
+  .btn:active{transform:translateY(1px)}
+  .btn-primary{background:linear-gradient(135deg,var(--indigo),var(--indigo2));color:#fff;box-shadow:0 10px 26px rgba(79,70,229,.32)}
+  .btn-primary:hover{filter:brightness(1.06)}
+  .btn-ghost{background:var(--indigo-soft);color:var(--indigo-ink)}
+  .saved{font-size:13px;font-weight:700;color:var(--green);display:none}
+  .docs{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+  .doc{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;display:flex;flex-direction:column;box-shadow:0 6px 22px rgba(19,24,54,.05)}
+  .doc .ic{font-size:24px;margin-bottom:8px}
+  .doc h3{font-size:16px;font-weight:800;margin-bottom:4px}
+  .doc .cat{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;padding:2px 8px;border-radius:100px;margin-bottom:8px}
+  .doc .cat.rg{background:#e7edf5;color:#1f3a5f}.doc .cat.ia{background:#f0e7fb;color:#5b3a8e}.doc .cat.gv{background:#e4f2e6;color:#2e7d32}
+  .doc p{font-size:13px;color:var(--body);margin-bottom:14px;flex:1}
+  .doc .need{font-size:11.5px;color:var(--dim);margin-bottom:12px;line-height:1.45}
+  .doc button{width:100%}
+  .toolbar{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:20px}
+  .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:12px 20px;border-radius:12px;font-size:14px;font-weight:700;box-shadow:0 10px 30px rgba(0,0,0,.3);z-index:300;opacity:0;transition:opacity .25s;pointer-events:none}
+  .toast.show{opacity:1}
+  .toast.ok{background:#0f7a3d}.toast.err{background:#b8322b}
+  .disc{font-size:12px;color:var(--dim);margin-top:18px;line-height:1.6}
+  footer{background:var(--ink);color:rgba(255,255,255,.6);padding:30px 0;font-size:12.5px;text-align:center;margin-top:30px}
+  footer a{color:rgba(255,255,255,.8)}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap nav">
+    <a class="brand" href="index.html"><span class="dot"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9L17 7M7 17l-2.1 2.1" stroke="#fff" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="12" r="4" fill="#fff"/></svg></span> Clarté <span style="font-weight:600;color:var(--dim);font-size:11px">· Documents</span></a>
+    <a class="back" href="index.html">← Accueil</a>
+  </div>
+</header>
+
+<div class="hero"><div class="wrap">
+  <span class="tag">Générateur de documents · RGPD &amp; AI Act</span>
+  <h1 class="serif">Vos documents réglementaires, prêts en un clic.</h1>
+  <p>Renseignez la fiche de votre société une seule fois, puis générez chaque document au format Word (.docx), pré-rempli et à l'en-tête de votre entreprise. Les documents sont des modèles à relire et compléter — Clarté vous accompagne pour les finaliser.</p>
+</div></div>
+
+<!-- FICHE SOCIÉTÉ -->
+<section class="block"><div class="wrap">
+  <div class="panel">
+    <h2 class="serif">1. La fiche de votre société</h2>
+    <div class="sub">Ces informations servent d'en-tête et pré-remplissent tous les documents. Elles restent dans votre navigateur (rien n'est envoyé).</div>
+    <div class="grid">
+      <div class="fld"><label>Raison sociale *</label><input id="raisonSociale" placeholder="Ex. Boulangerie Martin SARL"></div>
+      <div class="fld"><label>Forme juridique</label><input id="formeJuridique" placeholder="SARL, SAS, EI, association…"></div>
+      <div class="fld"><label>Capital social (€)</label><input id="capital" placeholder="Ex. 8 000"></div>
+      <div class="fld"><label>SIRET</label><input id="siret" placeholder="14 chiffres"></div>
+      <div class="fld"><label>RCS / Ville d'immatriculation</label><input id="rcsVille" placeholder="Ex. Paris"></div>
+      <div class="fld"><label>TVA intracommunautaire</label><input id="tva" placeholder="Ex. FR…"></div>
+      <div class="fld full"><label>Adresse du siège *</label><input id="adresse" placeholder="N°, rue, code postal, ville"></div>
+      <div class="fld"><label>Représentant légal</label><input id="representant" placeholder="Prénom Nom"></div>
+      <div class="fld"><label>Qualité</label><input id="qualite" placeholder="Gérant(e), Président(e)…"></div>
+      <div class="fld"><label>Email de contact RGPD *</label><input id="emailRgpd" type="email" placeholder="rgpd@votre-domaine.fr"></div>
+      <div class="fld"><label>Secteur d'activité</label><input id="secteur" placeholder="Ex. Commerce, Santé…"></div>
+      <div class="fld"><label>Site web</label><input id="siteWeb" placeholder="www.votre-domaine.fr"></div>
+      <div class="fld"><label>Hébergeur du site</label><input id="hebergeur" placeholder="Ex. OVH, GitHub Pages…"></div>
+      <div class="fld"><label>Pays d'hébergement</label><input id="hebergeurPays" placeholder="Ex. France (UE)"></div>
+      <div class="fld"><label>Effectif approximatif</label><input id="effectif" placeholder="Ex. 8"></div>
+      <div class="fld"><label>Ville (juridiction)</label><input id="ville" placeholder="Ex. Paris"></div>
+    </div>
+
+    <div class="fld full" style="margin-top:6px">
+      <label>Un DPO (délégué à la protection des données) est-il désigné ?</label>
+      <div class="checks">
+        <label class="chk"><input type="checkbox" id="dpoDesigne"> DPO désigné</label>
+      </div>
+    </div>
+    <div class="grid">
+      <div class="fld"><label>Nom du DPO / référent RGPD</label><input id="dpoNom" placeholder="Prénom Nom"></div>
+      <div class="fld"><label>Email du DPO / référent</label><input id="dpoEmail" placeholder="dpo@votre-domaine.fr"></div>
+    </div>
+
+    <div class="fld full">
+      <label>Catégories de données traitées</label>
+      <div class="checks" id="donneesChecks">
+        <label class="chk"><input type="checkbox" value="Clients"> Clients</label>
+        <label class="chk"><input type="checkbox" value="Prospects"> Prospects</label>
+        <label class="chk"><input type="checkbox" value="Salariés"> Salariés</label>
+        <label class="chk"><input type="checkbox" value="Fournisseurs"> Fournisseurs</label>
+        <label class="chk"><input type="checkbox" value="Candidats (CV)"> Candidats (CV)</label>
+        <label class="chk"><input type="checkbox" value="Données de santé"> Données de santé</label>
+        <label class="chk"><input type="checkbox" value="Données bancaires"> Données bancaires</label>
+        <label class="chk"><input type="checkbox" value="Mineurs"> Mineurs</label>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="fld full"><label>Sous-traitants / prestataires (un par ligne : Nom — rôle — pays)</label>
+        <textarea id="sousTraitants" placeholder="Ex.&#10;OVH — hébergement — France&#10;Sendinblue — emailing — France&#10;Cabinet Durand — comptabilité — France"></textarea></div>
+      <div class="fld full">
+        <label>Usage d'intelligence artificielle</label>
+        <div class="checks"><label class="chk"><input type="checkbox" id="usageIA"> L'entreprise utilise des outils d'IA</label></div>
+      </div>
+      <div class="fld full"><label>Outils d'IA utilisés (un par ligne : Outil — usage)</label>
+        <textarea id="iaOutils" placeholder="Ex.&#10;ChatGPT — rédaction de contenus&#10;Chatbot site — support client&#10;Outil de tri de CV — recrutement"></textarea></div>
+    </div>
+
+    <div class="saverow">
+      <button class="btn btn-ghost" onclick="saveFiche()">💾 Enregistrer la fiche</button>
+      <span class="saved" id="savedMsg">✅ Fiche enregistrée</span>
+    </div>
+  </div>
+</div></div>
+
+<!-- DOCUMENTS -->
+<section class="block"><div class="wrap">
+  <div class="panel">
+    <h2 class="serif">2. Vos documents</h2>
+    <div class="sub">Cliquez pour générer un document Word (.docx) pré-rempli. Le pictogramme ⓘ indique les informations spécifiques à compléter dans le document.</div>
+    <div class="toolbar">
+      <button class="btn btn-primary" onclick="genPack()">📦 Générer le pack complet (.docx)</button>
+      <span class="disc" style="margin:0">Un seul fichier réunissant tous les documents.</span>
+    </div>
+    <div class="docs" id="docsGrid"></div>
+    <p class="disc">⚠️ Les documents générés sont des <b>modèles</b> établis à partir de la réglementation en vigueur (RGPD — Règl. UE 2016/679 ; AI Act — Règl. UE 2024/1689). Ils doivent être relus, complétés et adaptés à votre situation. Ils ne constituent pas un conseil juridique et n'engagent pas la responsabilité de RTH NETGOCE. Pour une mise en conformité complète, contactez Clarté.</p>
+  </div>
+</div></div>
+
+<footer><div class="wrap">
+  <b style="color:#fff">Clarté</b> · RTH NETGOCE — Conformité RGPD &amp; AI Act · <a href="index.html">Accueil</a> · <a href="le-controle.html">Le Contrôle</a> · <a href="mentions.html">Mentions légales</a>
+</div></footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ================= FICHE SOCIÉTÉ (localStorage) ================= */
+var FIELDS=['raisonSociale','formeJuridique','capital','siret','rcsVille','tva','adresse','representant','qualite','emailRgpd','secteur','siteWeb','hebergeur','hebergeurPays','effectif','ville','dpoNom','dpoEmail','sousTraitants','iaOutils'];
+var CHECKBOXES=['dpoDesigne','usageIA'];
+function $(id){return document.getElementById(id);}
+function toast(msg,type){var t=$('toast');t.textContent=msg;t.className='toast show '+(type||'');setTimeout(function(){t.className='toast';},2600);}
+
+function collectFiche(){
+  var f={};
+  FIELDS.forEach(function(k){ f[k]=($(k)&&$(k).value.trim())||''; });
+  CHECKBOXES.forEach(function(k){ f[k]=$(k)?$(k).checked:false; });
+  f.donnees=[]; document.querySelectorAll('#donneesChecks input:checked').forEach(function(c){ f.donnees.push(c.value); });
+  return f;
+}
+function saveFiche(){
+  try{ localStorage.setItem('clarte_fiche', JSON.stringify(collectFiche())); }catch(e){}
+  var s=$('savedMsg'); s.style.display='inline'; setTimeout(function(){s.style.display='none';},2200);
+  toast('Fiche enregistrée','ok');
+}
+function loadFiche(){
+  var raw; try{ raw=localStorage.getItem('clarte_fiche'); }catch(e){}
+  // pré-remplissage depuis le test « Le Contrôle » si présent
+  try{ var q=JSON.parse(localStorage.getItem('clarte_quiz_prefill')||'null'); if(q&&!raw){ if($('raisonSociale'))$('raisonSociale').value=q.etab||''; if($('emailRgpd'))$('emailRgpd').value=q.email||''; if($('secteur'))$('secteur').value=q.secteur||''; if($('ville'))$('ville').value=q.ville||''; if($('representant'))$('representant').value=q.resp||''; } }catch(e){}
+  if(!raw) return;
+  try{
+    var f=JSON.parse(raw);
+    FIELDS.forEach(function(k){ if($(k)&&f[k]!=null)$(k).value=f[k]; });
+    CHECKBOXES.forEach(function(k){ if($(k))$(k).checked=!!f[k]; });
+    if(f.donnees) document.querySelectorAll('#donneesChecks input').forEach(function(c){ c.checked=f.donnees.indexOf(c.value)>=0; });
+  }catch(e){}
+}
+
+/* ================= HELPERS docx ================= */
+function today(){ var d=new Date(); return String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear(); }
+function V(x){ return (x&&String(x).trim())? String(x).trim() : '{{ À COMPLÉTER }}'; }
+function downloadBlob(blob,name){ var u=URL.createObjectURL(blob); var a=document.createElement('a'); a.href=u; a.download=name; document.body.appendChild(a); a.click(); setTimeout(function(){URL.revokeObjectURL(u);a.remove();},1500); }
+
+function ensureDocx(cb){
+  if(window.docx&&window.docx.Document) return cb();
+  if(window._docxFailed){ toast('Génération indisponible (librairie non chargée). Vérifiez votre connexion.','err'); return; }
+  var tries=0; var iv=setInterval(function(){ tries++; if(window.docx&&window.docx.Document){ clearInterval(iv); cb(); } else if(tries>40){ clearInterval(iv); toast('Génération indisponible (librairie non chargée).','err'); } },150);
+}
+
+// fabrique les primitives une fois docx chargé
+function DX(){
+  var d=window.docx;
+  var FONT='Calibri';
+  var C={ink:'0C1024',indigo:'4F46E5',gold:'B8860B',dim:'6B7280',red:'B8322B',line:'D8D8E0'};
+  function p(t,o){o=o||{};return new d.Paragraph({spacing:{before:o.before||40,after:o.after||60},alignment:o.center?d.AlignmentType.CENTER:(o.right?d.AlignmentType.RIGHT:d.AlignmentType.LEFT),children:[new d.TextRun({text:t||'',size:o.size||21,font:FONT,bold:!!o.bold,italics:!!o.italic,color:o.color||'222222'})]});}
+  function runs(arr,o){o=o||{};return new d.Paragraph({spacing:{before:o.before||40,after:o.after||60},children:arr.map(function(r){return new d.TextRun({text:r.t,size:r.size||21,font:FONT,bold:!!r.b,italics:!!r.i,color:r.c||'222222'});})});}
+  function h1(t){return new d.Paragraph({spacing:{before:360,after:180},children:[new d.TextRun({text:t,bold:true,size:30,font:FONT,color:C.indigo})]});}
+  function h2(t){return new d.Paragraph({spacing:{before:260,after:120},border:{bottom:{style:d.BorderStyle.SINGLE,size:4,color:C.indigo}},children:[new d.TextRun({text:t,bold:true,size:24,font:FONT,color:C.ink})]});}
+  function li(t){return new d.Paragraph({bullet:{level:0},spacing:{before:20,after:20},children:[new d.TextRun({text:t,size:21,font:FONT,color:'222222'})]});}
+  function spacer(){return new d.Paragraph({spacing:{before:60,after:60},children:[new d.TextRun({text:''})]});}
+  function cell(t,o){o=o||{};return new d.TableCell({width:o.w?{size:o.w,type:d.WidthType.DXA}:undefined,shading:o.head?{fill:C.indigo,type:d.ShadingType.CLEAR,color:'auto'}:(o.shade?{fill:o.shade,type:d.ShadingType.CLEAR,color:'auto'}:undefined),margins:{top:60,bottom:60,left:100,right:100},verticalAlign:d.VerticalAlign.CENTER,children:[new d.Paragraph({children:[new d.TextRun({text:String(t==null?'':t),bold:!!o.head||!!o.bold,size:o.head?18:19,font:FONT,color:o.head?'FFFFFF':'222222'})]})]});}
+  function table(rows){ return new d.Table({width:{size:100,type:d.WidthType.PERCENTAGE}, rows:rows}); }
+  function row(cells){ return new d.TableRow({children:cells}); }
+  function warnBox(){
+    return new d.Table({width:{size:100,type:d.WidthType.PERCENTAGE},rows:[new d.TableRow({children:[new d.TableCell({shading:{fill:'FFF6E0',type:d.ShadingType.CLEAR,color:'auto'},margins:{top:120,bottom:120,left:160,right:160},children:[
+      new d.Paragraph({children:[new d.TextRun({text:'⚠  MODÈLE À TITRE INDICATIF',bold:true,size:19,font:FONT,color:C.red})]}),
+      new d.Paragraph({spacing:{before:60},children:[new d.TextRun({text:'Ce document est généré automatiquement à partir de vos informations et de la réglementation en vigueur. Il doit être relu, complété et adapté à votre situation. Il ne constitue pas un conseil juridique et n\'engage pas la responsabilité de RTH NETGOCE.',size:18,font:FONT,color:'5D4037'})]})
+    ]})]})]});
+  }
+  return {d:d,C:C,FONT:FONT,p:p,runs:runs,h1:h1,h2:h2,li:li,spacer:spacer,cell:cell,table:table,row:row,warnBox:warnBox};
+}
+
+// enveloppe : page de garde + en-tête/pied + corps
+function buildDoc(title, bodyFn){
+  var f=collectFiche();
+  var X=DX(), d=X.d;
+  var head=(f.raisonSociale||'Société')+(f.siret?' — SIRET '+f.siret:'');
+  var cover=[
+    new d.Paragraph({spacing:{before:200,after:20},children:[new d.TextRun({text:V(f.raisonSociale),bold:true,size:40,font:X.FONT,color:X.C.ink})]}),
+    X.p((f.formeJuridique?f.formeJuridique+' · ':'')+(f.adresse||''),{color:X.C.dim,size:19}),
+    X.p((f.siret?'SIRET '+f.siret:'')+(f.rcsVille?' · RCS '+f.rcsVille:'')+(f.tva?' · TVA '+f.tva:''),{color:X.C.dim,size:19}),
+    new d.Paragraph({spacing:{before:520,after:60},children:[new d.TextRun({text:title,bold:true,size:36,font:X.FONT,color:X.C.indigo})]}),
+    X.p('Établi le '+today(),{color:X.C.dim,size:20}),
+    new d.Paragraph({spacing:{before:40,after:200},children:[new d.TextRun({text:'',size:2})]}),
+    X.warnBox(),
+    new d.Paragraph({children:[new d.PageBreak()]})
+  ];
+  var body=bodyFn(X,f);
+  var doc=new d.Document({
+    styles:{default:{document:{run:{font:X.FONT,size:21}}}},
+    sections:[{
+      properties:{page:{size:{width:11906,height:16838},margin:{top:1134,right:1134,bottom:1134,left:1134}}},
+      headers:{default:new d.Header({children:[new d.Paragraph({border:{bottom:{style:d.BorderStyle.SINGLE,size:4,color:X.C.indigo}},spacing:{after:80},children:[new d.TextRun({text:head,font:X.FONT,size:16,color:'888888'})]})]})},
+      footers:{default:new d.Footer({children:[new d.Paragraph({border:{top:{style:d.BorderStyle.SINGLE,size:4,color:X.C.indigo}},spacing:{before:80},children:[
+        new d.TextRun({text:'Document généré avec Clarté · RTH NETGOCE — Page ',font:X.FONT,size:15,color:'999999'}),
+        new d.TextRun({children:[d.PageNumber.CURRENT],font:X.FONT,size:15,color:'999999'}),
+        new d.TextRun({text:'/',font:X.FONT,size:15,color:'999999'}),
+        new d.TextRun({children:[d.PageNumber.TOTAL_PAGES],font:X.FONT,size:15,color:'999999'})
+      ]})]})},
+      children: cover.concat(body)
+    }]
+  });
+  return doc;
+}
+
+function generate(docDef){
+  ensureDocx(function(){
+    try{
+      var f=collectFiche();
+      if(!f.raisonSociale){ toast('Renseignez au moins la raison sociale.','err'); $('raisonSociale').focus(); return; }
+      var doc=buildDoc(docDef.title, docDef.body);
+      window.docx.Packer.toBlob(doc).then(function(blob){
+        downloadBlob(blob, docDef.file.replace('{soc}', (f.raisonSociale||'societe').replace(/[^\w-]+/g,'_'))+'.docx');
+        toast('✅ '+docDef.title+' téléchargé','ok');
+      }).catch(function(e){ toast('Erreur : '+e.message,'err'); console.error(e); });
+    }catch(e){ toast('Erreur : '+e.message,'err'); console.error(e); }
+  });
+}
+
+/* ================= CATALOGUE DES DOCUMENTS ================= */
+function listSousTraitants(f){ return (f.sousTraitants||'').split('\n').map(function(l){return l.trim();}).filter(Boolean); }
+function listIA(f){ return (f.iaOutils||'').split('\n').map(function(l){return l.trim();}).filter(Boolean); }
+function dpoLine(f){ if(f.dpoDesigne||f.dpoNom) return (f.dpoNom?V(f.dpoNom):'{{ Nom du DPO }}')+(f.dpoEmail?' ('+f.dpoEmail+')':''); return 'Aucun DPO désigné — référent : '+V(f.emailRgpd); }
+
+var DOCS=[
+ {id:'registre',cat:'rg',icon:'📗',title:'Registre des activités de traitement',
+  desc:"Le document obligatoire (art. 30) qui liste vos traitements de données.",
+  need:"ⓘ Complétez chaque ligne (finalité, durée) selon vos traitements réels.",
+  file:'Registre_traitements_{soc}',
+  body:function(X,f){
+    var rows=[X.row([X.cell('Traitement',{head:1,w:2400}),X.cell('Finalité',{head:1}),X.cell('Personnes',{head:1}),X.cell('Données',{head:1}),X.cell('Base légale',{head:1}),X.cell('Conservation',{head:1})])];
+    var base=[
+      ['Gestion des clients','Exécution des contrats, facturation','Clients','Identité, coordonnées, historique','Exécution du contrat','Durée de la relation + 5 ans'],
+      ['Prospection commerciale','Envoi d\'offres, newsletter','Prospects','Identité, email','Consentement / intérêt légitime','3 ans sans contact'],
+      ['Gestion des salariés','Administration du personnel, paie','Salariés','Identité, RIB, contrat','Obligation légale / contrat','Durée du contrat + délais légaux'],
+      ['Recrutement','Traitement des candidatures','Candidats','CV, coordonnées','Consentement','2 ans après le dernier contact'],
+      ['Gestion des fournisseurs','Achats, comptabilité','Fournisseurs','Identité, coordonnées, RIB','Exécution du contrat','Durée + obligations comptables (10 ans)']
+    ];
+    base.forEach(function(r){ rows.push(X.row(r.map(function(c){return X.cell(c);}))); });
+    return [X.h2('Objet'),
+      X.p('Le présent registre recense les activités de traitement de données à caractère personnel mises en œuvre par '+V(f.raisonSociale)+', conformément à l\'article 30 du RGPD.'),
+      X.p('Responsable du traitement : '+V(f.raisonSociale)+', '+V(f.adresse)+'. Contact : '+V(f.emailRgpd)+'. '+dpoLine(f)+'.'),
+      X.h2('Traitements recensés'), X.table(rows), X.spacer(),
+      X.p('Transferts hors UE : '+(f.hebergeurPays&&/UE|France|Europe/i.test(f.hebergeurPays)?'aucun (hébergement '+f.hebergeurPays+').':'{{ à préciser selon vos outils }}'),{italic:true}),
+      X.h2('Sous-traitants'),
+      (function(){ var st=listSousTraitants(f); if(!st.length) return X.p('{{ Lister vos sous-traitants — voir la fiche société }}',{italic:true});
+        var rr=[X.row([X.cell('Sous-traitant',{head:1}),X.cell('Rôle',{head:1}),X.cell('Localisation',{head:1})])];
+        st.forEach(function(l){ var parts=l.split('—').map(function(x){return x.trim();}); rr.push(X.row([X.cell(parts[0]||l),X.cell(parts[1]||''),X.cell(parts[2]||'')])); });
+        return X.table(rr);
+      })()
+    ];
+  }},
+
+ {id:'confidentialite',cat:'rg',icon:'🔒',title:'Politique de confidentialité',
+  desc:"L'information des personnes sur l'usage de leurs données (art. 13-14).",
+  need:"ⓘ Vérifiez les finalités et durées propres à votre activité.",
+  file:'Politique_confidentialite_{soc}',
+  body:function(X,f){ return [
+    X.h2('1. Responsable du traitement'),
+    X.p(V(f.raisonSociale)+(f.formeJuridique?', '+f.formeJuridique:'')+', dont le siège est situé '+V(f.adresse)+(f.siret?', immatriculée sous le SIRET '+f.siret:'')+'. Contact : '+V(f.emailRgpd)+'.'),
+    X.p(dpoLine(f)+'.'),
+    X.h2('2. Données collectées et finalités'),
+    X.p('Nous traitons les catégories de données suivantes : '+((f.donnees&&f.donnees.length)?f.donnees.join(', '):'{{ catégories — voir fiche }}')+'.'),
+    X.li('Fournir nos produits et services et gérer la relation client ;'),
+    X.li('Répondre à vos demandes et assurer le support ;'),
+    X.li('Respecter nos obligations légales (comptables, sociales) ;'),
+    X.li('Le cas échéant, vous adresser des informations commerciales (avec votre consentement).'),
+    X.h2('3. Bases légales'),
+    X.p('Selon les traitements : exécution du contrat, respect d\'une obligation légale, intérêt légitime, ou votre consentement (art. 6 RGPD).'),
+    X.h2('4. Destinataires'),
+    X.p('Vos données sont destinées aux services internes habilités et, le cas échéant, à nos sous-traitants (hébergeur, outils de gestion), encadrés par contrat. Site hébergé par '+V(f.hebergeur)+(f.hebergeurPays?' ('+f.hebergeurPays+')':'')+'.'),
+    X.h2('5. Durées de conservation'),
+    X.p('Les données sont conservées le temps nécessaire aux finalités, puis archivées ou supprimées conformément aux délais légaux (voir notre politique de durées de conservation).'),
+    X.h2('6. Vos droits'),
+    X.p('Vous disposez des droits d\'accès, de rectification, d\'effacement, d\'opposition, de limitation et de portabilité (art. 15 à 22 RGPD), ainsi que du droit de retirer votre consentement. Pour les exercer : '+V(f.emailRgpd)+'. Réclamation possible auprès de la CNIL (www.cnil.fr).'),
+    X.h2('7. Cookies'),
+    X.p('Notre site '+V(f.siteWeb)+' dépose des cookies soumis à votre consentement préalable pour les cookies non essentiels. Vous pouvez gérer vos préférences à tout moment.')
+  ];}},
+
+ {id:'mentions',cat:'rg',icon:'📄',title:'Mentions légales',
+  desc:"Obligation légale pour tout site professionnel (LCEN).",
+  need:"ⓘ Complétez l'hébergeur et le directeur de la publication.",
+  file:'Mentions_legales_{soc}',
+  body:function(X,f){ return [
+    X.h2('Éditeur'),
+    X.p(V(f.raisonSociale)+(f.formeJuridique?' — '+f.formeJuridique:'')+(f.capital?', au capital de '+f.capital+' €':'')+'.'),
+    X.p('SIRET : '+V(f.siret)+(f.rcsVille?' — RCS '+f.rcsVille:'')+(f.tva?'. TVA : '+f.tva:'')+'.'),
+    X.p('Siège : '+V(f.adresse)+'.'),
+    X.p('Directeur de la publication : '+V(f.representant)+(f.qualite?' ('+f.qualite+')':'')+'.'),
+    X.p('Contact : '+V(f.emailRgpd)+'.'),
+    X.h2('Hébergement'),
+    X.p('Site hébergé par '+V(f.hebergeur)+(f.hebergeurPays?', '+f.hebergeurPays:'')+'.'),
+    X.h2('Propriété intellectuelle'),
+    X.p('L\'ensemble des contenus du site est protégé. Toute reproduction non autorisée est interdite.'),
+    X.h2('Données personnelles'),
+    X.p('Voir la politique de confidentialité. Réclamation possible auprès de la CNIL (www.cnil.fr).'),
+    X.h2('Droit applicable'),
+    X.p('Droit français. Tout litige relève des tribunaux compétents de '+V(f.ville)+'.')
+  ];}},
+
+ {id:'droits',cat:'rg',icon:'⚖️',title:'Procédure — droits des personnes',
+  desc:"Comment recevoir et traiter une demande d'accès, d'effacement…",
+  need:"ⓘ Désignez le responsable interne du suivi des demandes.",
+  file:'Procedure_droits_{soc}',
+  body:function(X,f){ return [
+    X.h2('Objet'),
+    X.p('Décrire la marche à suivre pour traiter les demandes d\'exercice des droits (accès, rectification, effacement, limitation, opposition, portabilité) dans le délai légal d\'un mois (art. 12 RGPD).'),
+    X.h2('1. Réception'),
+    X.li('Canal de réception : '+V(f.emailRgpd)+' ;'),
+    X.li('Enregistrer la date de réception (départ du délai d\'un mois) ;'),
+    X.li('Vérifier l\'identité du demandeur (sans excès de zèle).'),
+    X.h2('2. Qualification'),
+    X.li('Identifier le droit exercé et les traitements concernés ;'),
+    X.li('Vérifier l\'existence éventuelle d\'une obligation légale de conservation.'),
+    X.h2('3. Réponse'),
+    X.li('Répondre dans un délai d\'un mois (prorogeable de deux mois si complexe, en informant la personne) ;'),
+    X.li('Motiver tout refus et rappeler la voie de recours (CNIL).'),
+    X.h2('4. Traçabilité'),
+    X.p('Consigner chaque demande et la réponse apportée dans un registre des demandes (preuve de conformité).'),
+    X.p('Responsable du suivi : '+dpoLine(f)+'.')
+  ];}},
+
+ {id:'violation',cat:'rg',icon:'🚨',title:'Procédure — violation de données',
+  desc:"Réagir à une fuite et notifier la CNIL sous 72 h (art. 33-34).",
+  need:"ⓘ Adaptez la chaîne d'alerte interne.",
+  file:'Procedure_violation_{soc}',
+  body:function(X,f){ return [
+    X.h2('Objet'),
+    X.p('Organiser la détection, la qualification et la notification des violations de données personnelles (art. 33 et 34 RGPD).'),
+    X.h2('1. Détection & alerte'),
+    X.li('Toute personne constatant un incident alerte immédiatement '+dpoLine(f)+' ;'),
+    X.li('Consigner : date, nature, données et personnes concernées, cause présumée.'),
+    X.h2('2. Qualification (sous 24 h)'),
+    X.li('Évaluer le risque pour les droits et libertés des personnes ;'),
+    X.li('Contenir l\'incident (couper l\'accès, corriger la faille).'),
+    X.h2('3. Notification'),
+    X.li('À la CNIL sous 72 h si risque pour les personnes (notification en ligne sur cnil.fr) ;'),
+    X.li('Aux personnes concernées sans délai si risque élevé (art. 34).'),
+    X.h2('4. Registre des violations'),
+    X.p('Toute violation est consignée dans un registre interne, qu\'elle soit notifiée ou non.')
+  ];}},
+
+ {id:'conservation',cat:'rg',icon:'⏳',title:'Politique de durées de conservation',
+  desc:"Combien de temps conserver chaque donnée, puis purger.",
+  need:"ⓘ Ajustez les durées à vos obligations sectorielles.",
+  file:'Durees_conservation_{soc}',
+  body:function(X,f){
+    var rows=[X.row([X.cell('Donnée',{head:1}),X.cell('Durée en base active',{head:1}),X.cell('Archivage / purge',{head:1})])];
+    [['Données clients','Durée de la relation contractuelle','+ 5 ans (prescription), puis suppression'],
+     ['Données prospects','—','3 ans sans contact, puis suppression'],
+     ['Données salariés','Durée du contrat','Selon délais légaux (5 ans et +)'],
+     ['Candidatures (CV)','—','2 ans après le dernier contact'],
+     ['Pièces comptables','—','10 ans (obligation légale)'],
+     ['Cookies / traceurs','13 mois maximum','Expiration automatique'],
+     ['Logs de connexion','—','6 à 12 mois']
+    ].forEach(function(r){ rows.push(X.row(r.map(function(c){return X.cell(c);}))); });
+    return [X.h2('Principe'),
+      X.p('Les données ne sont conservées que le temps nécessaire aux finalités poursuivies, puis archivées puis supprimées. Responsable : '+V(f.raisonSociale)+'.'),
+      X.h2('Tableau des durées'), X.table(rows), X.spacer(),
+      X.p('Une purge périodique est réalisée pour supprimer les données au-delà de ces durées.',{italic:true})
+    ];
+  }},
+
+ {id:'cookies',cat:'rg',icon:'🍪',title:'Politique cookies',
+  desc:"Information et gestion du consentement aux cookies.",
+  need:"ⓘ Listez vos cookies réels (mesure d'audience, réseaux sociaux…).",
+  file:'Politique_cookies_{soc}',
+  body:function(X,f){ return [
+    X.h2('Qu\'est-ce qu\'un cookie ?'),
+    X.p('Un cookie est un fichier déposé sur votre terminal lors de la visite du site '+V(f.siteWeb)+'. Certains sont nécessaires au fonctionnement, d\'autres sont soumis à votre consentement.'),
+    X.h2('Cookies utilisés'),
+    X.li('Cookies strictement nécessaires (fonctionnement, sécurité) — sans consentement ;'),
+    X.li('Cookies de mesure d\'audience — {{ préciser l\'outil, ex. Matomo }} ;'),
+    X.li('Cookies tiers (réseaux sociaux, publicité) — {{ le cas échéant }}.'),
+    X.h2('Votre consentement'),
+    X.p('Un bandeau vous permet d\'accepter ou de refuser les cookies non essentiels, et de modifier votre choix à tout moment.'),
+    X.h2('Contact'),
+    X.p('Pour toute question : '+V(f.emailRgpd)+'.')
+  ];}},
+
+ {id:'politiqueIA',cat:'ia',icon:'🤖',title:"Politique d'usage de l'IA",
+  desc:"Encadrer l'utilisation de l'IA dans l'entreprise (AI Act).",
+  need:"ⓘ Adaptez aux outils réellement utilisés.",
+  file:'Politique_usage_IA_{soc}',
+  body:function(X,f){ return [
+    X.h2('Objet et champ d\'application'),
+    X.p('La présente politique encadre l\'utilisation des systèmes d\'intelligence artificielle au sein de '+V(f.raisonSociale)+', dans le respect du règlement (UE) 2024/1689 (AI Act) et du RGPD.'),
+    X.h2('Principes'),
+    X.li('Transparence : informer les personnes lorsqu\'elles interagissent avec une IA ou reçoivent un contenu généré par IA ;'),
+    X.li('Supervision humaine : une décision produisant des effets significatifs ne peut être entièrement automatisée ;'),
+    X.li('Protection des données : ne pas soumettre de données personnelles ou confidentielles à des outils non maîtrisés ;'),
+    X.li('Non-discrimination : vigilance sur les biais (recrutement, scoring).'),
+    X.h2('Usages autorisés'),
+    (function(){ var ia=listIA(f); if(!ia.length) return X.p('{{ Lister les outils d\'IA autorisés — voir la fiche société }}',{italic:true});
+      return {__multi:ia.map(function(l){return X.li(l);})}; })(),
+    X.h2('Usages interdits'),
+    X.li('Pratiques prohibées par l\'AI Act (notation sociale, manipulation, catégorisation biométrique sensible) ;'),
+    X.li('Saisie de données personnelles sensibles dans un outil d\'IA grand public.'),
+    X.h2('Responsabilités'),
+    X.p('Référent IA / RGPD : '+dpoLine(f)+'. Tout nouvel usage d\'IA doit lui être signalé pour évaluation.')
+  ].reduce(function(acc,el){ if(el&&el.__multi){ el.__multi.forEach(function(x){acc.push(x);}); } else acc.push(el); return acc; },[]);}},
+
+ {id:'cartoIA',cat:'ia',icon:'🗺️',title:"Cartographie des systèmes d'IA",
+  desc:"Recenser vos IA et classer leur niveau de risque (AI Act).",
+  need:"ⓘ Classez chaque outil (risque minimal / limité / élevé).",
+  file:'Cartographie_IA_{soc}',
+  body:function(X,f){
+    var rows=[X.row([X.cell('Système d\'IA',{head:1}),X.cell('Usage',{head:1}),X.cell('Données utilisées',{head:1}),X.cell('Niveau de risque',{head:1}),X.cell('Mesures',{head:1})])];
+    var ia=listIA(f);
+    if(ia.length){ ia.forEach(function(l){ var parts=l.split('—').map(function(x){return x.trim();}); rows.push(X.row([X.cell(parts[0]||l),X.cell(parts[1]||''),X.cell('{{ à préciser }}'),X.cell('{{ limité / élevé }}'),X.cell('{{ transparence, supervision }}')])); }); }
+    else { rows.push(X.row([X.cell('{{ Outil }}'),X.cell('{{ Usage }}'),X.cell('{{ Données }}'),X.cell('{{ Risque }}'),X.cell('{{ Mesures }}')])); }
+    return [X.h2('Objet'),
+      X.p('Recenser les systèmes d\'IA utilisés par '+V(f.raisonSociale)+' et évaluer leur niveau de risque au sens de l\'AI Act (risque inacceptable, élevé, limité, minimal).'),
+      X.h2('Inventaire'), X.table(rows), X.spacer(),
+      X.p('Rappel : les IA à « risque limité » (chatbots, IA générative) sont soumises à une obligation de transparence ; les IA à « risque élevé » à des obligations renforcées.',{italic:true})
+    ];
+  }},
+
+ {id:'dpa',cat:'gv',icon:'🤝',title:'Clauses de sous-traitance (DPA)',
+  desc:"Encadrer un prestataire qui traite vos données (art. 28).",
+  need:"ⓘ À annexer à chaque contrat de sous-traitant.",
+  file:'Clauses_sous_traitance_{soc}',
+  body:function(X,f){ return [
+    X.h2('Parties'),
+    X.p('Responsable de traitement : '+V(f.raisonSociale)+', '+V(f.adresse)+'.'),
+    X.p('Sous-traitant : {{ Raison sociale, adresse du prestataire }}.'),
+    X.h2('Objet'),
+    X.p('Le sous-traitant traite des données personnelles pour le compte du responsable, conformément à l\'article 28 du RGPD.'),
+    X.h2('Obligations du sous-traitant'),
+    X.li('Traiter les données uniquement sur instruction documentée du responsable ;'),
+    X.li('Garantir la confidentialité (personnel habilité et engagé) ;'),
+    X.li('Mettre en œuvre des mesures de sécurité appropriées ;'),
+    X.li('N\'engager un sous-traitant ultérieur qu\'avec autorisation ;'),
+    X.li('Aider le responsable pour les demandes de droits et les violations ;'),
+    X.li('Supprimer ou restituer les données en fin de contrat ;'),
+    X.li('Mettre à disposition les informations nécessaires aux audits.'),
+    X.h2('Localisation & transferts'),
+    X.p('Localisation des données : {{ pays }}. Tout transfert hors UE est encadré par des garanties appropriées (clauses contractuelles types).'),
+    X.h2('Signatures'),
+    X.p('Fait à '+V(f.ville)+', le '+today()+'.  —  Le responsable : '+V(f.representant)+'   |   Le sous-traitant : {{ Nom }}.')
+  ];}},
+
+ {id:'aipd',cat:'gv',icon:'🧭',title:"Analyse d'impact (AIPD) — modèle",
+  desc:"Évaluer un traitement à risque élevé (art. 35).",
+  need:"ⓘ À réaliser pour chaque traitement à risque élevé.",
+  file:'AIPD_modele_{soc}',
+  body:function(X,f){ return [
+    X.h2('1. Description du traitement'),
+    X.li('Finalité : {{ … }}'),
+    X.li('Données et personnes concernées : {{ … }}'),
+    X.li('Destinataires et durées : {{ … }}'),
+    X.h2('2. Nécessité et proportionnalité'),
+    X.li('Base légale : {{ … }}'),
+    X.li('Minimisation des données : {{ … }}'),
+    X.li('Information et droits des personnes : {{ … }}'),
+    X.h2('3. Risques'),
+    X.p('Pour chaque risque (accès illégitime, modification, disparition des données) : évaluer gravité et vraisemblance, puis les mesures.'),
+    X.h2('4. Mesures'),
+    X.li('Sécurité : chiffrement, contrôle d\'accès, sauvegardes ;'),
+    X.li('Organisationnelles : habilitations, sensibilisation, contrats.'),
+    X.h2('5. Validation'),
+    X.p('Avis du DPO/référent : '+dpoLine(f)+'. Décision du responsable : '+V(f.representant)+'. Date : '+today()+'.')
+  ];}},
+
+ {id:'attestation',cat:'gv',icon:'✅',title:'Synthèse de conformité',
+  desc:"Récapitulatif de votre démarche RGPD & AI Act.",
+  need:"ⓘ À dater et faire évoluer avec votre conformité.",
+  file:'Synthese_conformite_{soc}',
+  body:function(X,f){ return [
+    X.h2('Entreprise'),
+    X.p(V(f.raisonSociale)+' — '+V(f.adresse)+(f.siret?' — SIRET '+f.siret:'')+'.'),
+    X.p('Référent conformité : '+dpoLine(f)+'.'),
+    X.h2('Documents en place'),
+    X.li('Registre des activités de traitement (art. 30) ;'),
+    X.li('Politique de confidentialité et mentions légales ;'),
+    X.li('Procédures : droits des personnes, violations de données ;'),
+    X.li('Politique de durées de conservation, politique cookies ;'),
+    X.li('Politique d\'usage de l\'IA et cartographie des systèmes d\'IA (AI Act) ;'),
+    X.li('Clauses de sous-traitance (art. 28).'),
+    X.h2('Engagement'),
+    X.p(V(f.raisonSociale)+' s\'engage dans une démarche de conformité continue au RGPD et à l\'AI Act, et met à jour sa documentation à chaque évolution significative de ses activités.'),
+    X.p('Établi le '+today()+' à '+V(f.ville)+'.',{italic:true})
+  ];}}
+];
+
+function renderDocs(){
+  var g=$('docsGrid'); g.innerHTML='';
+  var catLabel={rg:'RGPD',ia:'AI Act',gv:'Gouvernance'};
+  DOCS.forEach(function(doc){
+    var el=document.createElement('div'); el.className='doc';
+    el.innerHTML='<div class="ic">'+doc.icon+'</div><span class="cat '+doc.cat+'">'+catLabel[doc.cat]+'</span>'
+      +'<h3>'+doc.title+'</h3><p>'+doc.desc+'</p>'
+      +'<div class="need">'+doc.need+'</div>'
+      +'<button class="btn btn-ghost">⬇ Générer (.docx)</button>';
+    el.querySelector('button').onclick=function(){ generate(doc); };
+    g.appendChild(el);
+  });
+}
+
+/* pack complet : un seul .docx avec tous les documents */
+function genPack(){
+  ensureDocx(function(){
+    try{
+      var f=collectFiche();
+      if(!f.raisonSociale){ toast('Renseignez au moins la raison sociale.','err'); $('raisonSociale').focus(); return; }
+      var X=DX(), d=X.d;
+      var children=[
+        new d.Paragraph({spacing:{before:300,after:20},children:[new d.TextRun({text:V(f.raisonSociale),bold:true,size:44,font:X.FONT,color:X.C.ink})]}),
+        X.p((f.formeJuridique?f.formeJuridique+' · ':'')+V(f.adresse),{color:X.C.dim,size:19}),
+        new d.Paragraph({spacing:{before:400,after:80},children:[new d.TextRun({text:'PACK CONFORMITÉ RGPD & AI ACT',bold:true,size:40,font:X.FONT,color:X.C.indigo})]}),
+        X.p('Établi le '+today(),{color:X.C.dim,size:20}),
+        new d.Paragraph({spacing:{before:120,after:160},children:[new d.TextRun({text:''})]}),
+        X.warnBox(),
+        new d.Paragraph({children:[new d.PageBreak()]})
+      ];
+      DOCS.forEach(function(doc,i){
+        children.push(new d.Paragraph({spacing:{before:200,after:160},children:[new d.TextRun({text:doc.title,bold:true,size:34,font:X.FONT,color:X.C.indigo})]}));
+        doc.body(X,f).forEach(function(el){ children.push(el); });
+        if(i<DOCS.length-1) children.push(new d.Paragraph({children:[new d.PageBreak()]}));
+      });
+      var head=(f.raisonSociale||'Société')+(f.siret?' — SIRET '+f.siret:'');
+      var doc=new d.Document({styles:{default:{document:{run:{font:X.FONT,size:21}}}},sections:[{
+        properties:{page:{size:{width:11906,height:16838},margin:{top:1134,right:1134,bottom:1134,left:1134}}},
+        headers:{default:new d.Header({children:[new d.Paragraph({border:{bottom:{style:d.BorderStyle.SINGLE,size:4,color:X.C.indigo}},spacing:{after:80},children:[new d.TextRun({text:head,font:X.FONT,size:16,color:'888888'})]})]})},
+        footers:{default:new d.Footer({children:[new d.Paragraph({border:{top:{style:d.BorderStyle.SINGLE,size:4,color:X.C.indigo}},spacing:{before:80},children:[new d.TextRun({text:'Pack conformité généré avec Clarté · RTH NETGOCE — Page ',font:X.FONT,size:15,color:'999999'}),new d.TextRun({children:[d.PageNumber.CURRENT],font:X.FONT,size:15,color:'999999'}),new d.TextRun({text:'/',font:X.FONT,size:15,color:'999999'}),new d.TextRun({children:[d.PageNumber.TOTAL_PAGES],font:X.FONT,size:15,color:'999999'})]})]})},
+        children:children
+      }]});
+      window.docx.Packer.toBlob(doc).then(function(blob){ downloadBlob(blob,'Pack_conformite_'+(f.raisonSociale||'societe').replace(/[^\w-]+/g,'_')+'.docx'); toast('✅ Pack complet téléchargé','ok'); }).catch(function(e){ toast('Erreur : '+e.message,'err'); console.error(e); });
+    }catch(e){ toast('Erreur : '+e.message,'err'); console.error(e); }
+  });
+}
+
+/* interactions checkboxes visuelles */
+document.addEventListener('change',function(e){ if(e.target&&e.target.type==='checkbox'){ var lab=e.target.closest('.chk'); if(lab) lab.classList.toggle('on',e.target.checked); } });
+document.addEventListener('DOMContentLoaded',function(){ loadFiche(); document.querySelectorAll('.chk input:checked').forEach(function(c){var l=c.closest('.chk'); if(l)l.classList.add('on');}); renderDocs(); });
+</script>
+</body>
+</html>
