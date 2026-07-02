@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Le Contrôle — Testez vos connaissances RGPD & AI Act | RTH NETGOCE</title>
-<meta name="description" content="Passez un contrôle RGPD & AI Act simulé en 3 minutes. Testez vos connaissances, recevez votre score et vos points sensibles par email. Par RTH NETGOCE.">
+<title>Le Contrôle — Auto-diagnostic RGPD & AI Act | RTH NETGOCE</title>
+<meta name="description" content="Auto-évaluez la conformité RGPD & AI Act de votre entreprise en 15 points (données, IA, gouvernance). Score, niveau de risque et pré-diagnostic par email. Par RTH NETGOCE.">
 <link rel="stylesheet" href="fonts/fonts.css">
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script>(function(){ try{ if(window.emailjs) emailjs.init({publicKey:'EpsrNibYc0mrPUXnR'}); }catch(e){} })();</script>
@@ -12,7 +12,7 @@
   :root{
     --paper:#f4f1e9;--paper2:#ebe6d8;--ink:#1a1a1a;--faint:#6b6459;--line:#d8d1bf;
     --red:#c0392b;--red2:#8e2a1f;--stamp:#b5342a;
-    --blue:#1f3a5f;--gold:#b8860b;--green:#2e7d32;
+    --blue:#1f3a5f;--gold:#b8860b;--green:#2e7d32;--purple:#5b3a8e;
     --card:#fffdf7;--shadow:0 12px 40px rgba(40,34,20,.14);
   }
   *{box-sizing:border-box;margin:0;padding:0}
@@ -58,14 +58,17 @@
   .pcount{font-size:12px;color:var(--faint);font-weight:700}
   .interim{margin-bottom:18px;padding:12px 14px;border-radius:12px;font-weight:800;font-size:13.5px;line-height:1.4}
   .interim .prov{display:block;margin-top:4px;font-weight:700;font-family:'JetBrains Mono',monospace;font-size:12px}
-  .inspector{display:flex;gap:12px;align-items:flex-start;margin-bottom:20px}
+  .inspector{display:flex;gap:12px;align-items:flex-start;margin-bottom:18px}
   .insp-ava{flex-shrink:0;width:40px;height:40px;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-size:19px}
   .insp-txt small{font-size:11px;color:var(--faint);text-transform:uppercase;letter-spacing:.06em;font-weight:700}
   .qtag{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.04em;padding:2px 8px;border-radius:100px;margin-bottom:10px}
-  .qtag.rg{background:#e7edf5;color:var(--blue)}.qtag.ia{background:#fbf1d8;color:var(--gold)}
-  .qtext{font-size:20px;font-weight:800;margin-bottom:20px;font-family:'Fraunces',serif}
+  .qtag.rg{background:#e7edf5;color:var(--blue)}
+  .qtag.ia{background:#f0e7fb;color:var(--purple)}
+  .qtag.gv{background:#e4f2e6;color:var(--green)}
+  .qtag.rq{background:#f7e3e0;color:var(--red)}
+  .qtext{font-size:19px;font-weight:800;margin-bottom:20px;font-family:'Fraunces',serif}
   .opts{display:flex;flex-direction:column;gap:10px}
-  .opt{text-align:left;background:var(--paper);border:1.5px solid var(--line);border-radius:10px;padding:14px 16px;font-family:inherit;font-size:15px;font-weight:600;color:var(--ink);cursor:pointer;transition:border-color .12s,background .12s,transform .1s;display:flex;align-items:center;gap:12px}
+  .opt{text-align:left;background:var(--paper);border:1.5px solid var(--line);border-radius:10px;padding:13px 15px;font-family:inherit;font-size:14.5px;font-weight:600;color:var(--ink);cursor:pointer;transition:border-color .12s,background .12s,transform .1s;display:flex;align-items:center;gap:12px}
   .opt:hover{border-color:var(--ink);background:#fff}
   .opt:active{transform:scale(.99)}
   .opt .k{flex-shrink:0;width:26px;height:26px;border-radius:7px;background:var(--paper2);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px}
@@ -90,10 +93,20 @@
   .vhead{padding:28px 34px;color:#fff;text-align:center;position:relative}
   .vhead .vst{position:absolute;top:16px;right:18px;transform:rotate(8deg);border:2.5px solid #fff;border-radius:7px;padding:4px 10px;font-size:11px;font-weight:800;letter-spacing:.06em;font-family:'JetBrains Mono',monospace;opacity:.9}
   .vhead small{text-transform:uppercase;letter-spacing:.1em;font-size:11px;opacity:.8;font-weight:700}
-  .vscore{font-family:'JetBrains Mono',monospace;font-size:40px;font-weight:700;margin:6px 0 2px}
+  .vscore{font-family:'JetBrains Mono',monospace;font-size:38px;font-weight:700;margin:6px 0 2px}
+  .vscore span{font-size:18px;opacity:.7}
   .vhead h2{font-size:26px;font-weight:800;font-family:'Fraunces',serif;margin:2px 0 4px}
   .vhead p{opacity:.9;font-size:14px}
   .vbody{padding:26px 34px}
+  .catbreak{margin-bottom:24px}
+  .catrow{margin-bottom:12px}
+  .catrow .lbl{display:flex;justify-content:space-between;font-size:12.5px;font-weight:800;margin-bottom:5px}
+  .catrow .lbl .sc{font-family:'JetBrains Mono',monospace;color:var(--faint)}
+  .catbar{height:8px;background:var(--paper2);border-radius:10px;overflow:hidden}
+  .catbar i{display:block;height:100%;border-radius:10px;transition:width .5s}
+  .reco{background:#eef3f8;border:1px solid #d3e0ee;border-radius:12px;padding:16px 18px;margin-bottom:22px}
+  .reco h3{font-size:14px;color:var(--blue);margin-bottom:6px}
+  .reco p{font-size:14px;color:#33475b}
   .expo{background:var(--paper);border:1px dashed var(--line);border-radius:10px;padding:18px;text-align:center;margin-bottom:24px}
   .expo small{font-size:11px;color:var(--faint);text-transform:uppercase;letter-spacing:.06em;font-weight:700}
   .expo .amt{font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:700;color:var(--red);margin:4px 0 2px}
@@ -162,12 +175,12 @@
         <div class="stamp">Contrôle</div>
         <div class="from">Autorité de contrôle — Convocation</div>
         <h1 class="serif">Vous venez de recevoir un contrôle.</h1>
-        <div class="obj">Objet : vérification de votre conformité RGPD &amp; règlement IA.</div>
-        <p>10 questions d'inspecteur. Dans la vraie vie, vous auriez un mois pour répondre. Ici, vous avez 3 minutes pour savoir si vous tiendriez.</p>
+        <div class="obj">Objet : auto-évaluation de votre conformité RGPD &amp; règlement IA.</div>
+        <p>16 points de contrôle : protection des données, intelligence artificielle, gouvernance — et le prix d'une erreur. En moins de 5 minutes, situez votre entreprise.</p>
         <button class="cta" onclick="startQuiz()">Passer le contrôle →</button>
       </div>
     </div>
-    <div class="reassure">🕒 3 minutes · 10 questions · <b>score et points sensibles envoyés par email</b>.</div>
+    <div class="reassure">🕒 Moins de 5 minutes · 16 points · <b>score et pré-diagnostic envoyés par email</b>.</div>
   </div>
 </section>
 
@@ -176,12 +189,12 @@
   <div class="card">
     <div class="progress">
       <div class="bar"><i id="bar"></i></div>
-      <span class="pcount" id="pcount">1 / 10</span>
+      <span class="pcount" id="pcount">1 / 16</span>
     </div>
     <div id="interim"></div>
     <div class="inspector">
       <div class="insp-ava">🕵️</div>
-      <div class="insp-txt"><small>L'inspecteur</small><br><span id="insp" style="font-size:13px;color:var(--faint)">Commençons.</span></div>
+      <div class="insp-txt"><small>L'inspecteur vérifie</small><br><span id="insp" style="font-size:13px;color:var(--faint)">—</span></div>
     </div>
     <div id="qtag"></div>
     <div class="qtext serif" id="qtext"></div>
@@ -189,11 +202,11 @@
   </div>
 </section>
 
-<!-- FORMULAIRE (voir le résultat) -->
+<!-- FORMULAIRE -->
 <section id="signup">
   <div class="card">
     <h2 class="formtitle">Votre contrôle est terminé.</h2>
-    <p class="formsub">Pour recevoir votre <b>score</b>, vos <b>points sensibles</b> et votre <b>pré-diagnostic</b>, indiquez où vous l'envoyer. Un code de validation vous sera adressé.</p>
+    <p class="formsub">Pour recevoir votre <b>score</b>, votre <b>détail par famille</b> et vos <b>points sensibles</b>, indiquez où l'envoyer. Un code de validation vous sera adressé.</p>
     <div class="formgrid">
       <div class="fld full"><label for="business">Entreprise</label><input id="business" type="text" autocomplete="organization" placeholder="Nom de votre entreprise"></div>
       <div class="fld"><label for="activity">Secteur d'activité</label>
@@ -234,7 +247,7 @@
   </div>
 </section>
 
-<!-- VERDICT / RÉSULTAT -->
+<!-- VERDICT -->
 <section id="verdict">
   <div class="vcard">
     <div class="vhead" id="vhead">
@@ -245,6 +258,11 @@
       <p id="vsub"></p>
     </div>
     <div class="vbody">
+      <div class="catbreak" id="catbreak"></div>
+      <div class="reco">
+        <h3>Notre recommandation</h3>
+        <p id="reco"></p>
+      </div>
       <div class="expo">
         <small>Votre exposition estimée au risque</small>
         <div class="amt mono" id="vamount"></div>
@@ -337,69 +355,102 @@
     <b>RTH NETGOCE</b> — Conformité RGPD &amp; AI Act · 49 rue de Douai, 75009 Paris · r.t.h@orange.fr<br>
     SIRET 444 244 776 00019 · RCS Paris · Autorité : CNIL — cnil.fr<br>
     <a href="index.html" style="color:var(--paper)">Accueil</a> · <a href="mentions.html" style="color:var(--paper)">Mentions légales</a> · <a href="politique-confidentialite.html" style="color:var(--paper)">Confidentialité</a>
-    <p class="disc">« Le Contrôle » est un outil pédagogique de sensibilisation, sans valeur de conseil juridique. Les fourchettes affichées illustrent un risque théorique (réf. RGPD — Règl. UE 2016/679 ; AI Act — Règl. UE 2024/1689) et ne préjugent d'aucune sanction. Les informations que vous transmettez servent à établir votre pré-diagnostic et à vous recontacter (voir notre politique de confidentialité).</p>
+    <p class="disc">« Le Contrôle » est un outil pédagogique d'auto-évaluation, sans valeur de conseil juridique. Les fourchettes affichées illustrent un risque théorique (réf. RGPD — Règl. UE 2016/679 ; AI Act — Règl. UE 2024/1689) et ne préjugent d'aucune sanction. Les informations que vous transmettez servent à établir votre pré-diagnostic et à vous recontacter (voir notre politique de confidentialité).</p>
   </div>
 </footer>
 
 <script>
-/* ===== LE CONTRÔLE — QCM de connaissances RGPD & AI Act ===== */
+/* ===== LE CONTRÔLE — auto-diagnostic RGPD / AI Act / Gouvernance (15 points) ===== */
 var QUESTIONS = [
-  {cat:'rg',tag:'VIOLATION',insp:"Une fuite de données survient chez vous.",
-   q:"Sous quel délai devez-vous notifier une violation de données à la CNIL ?",
-   opts:["24 heures","72 heures","1 semaine","Il n'y a pas d'obligation"],correct:1,
-   label:{t:"Délai de notification de violation",s:"C'est 72 h maximum (art. 33 RGPD) — au-delà, sanction aggravée."}},
+  {cat:'RGPD',insp:"Vos traitements de données.",
+   q:"Disposez-vous d'un registre des activités de traitement (art. 30 RGPD) à jour ?",
+   a:[{t:"Oui, tenu à jour et documenté",p:3},{t:"Oui, mais pas toujours à jour ou complet",p:1},{t:"Non / je ne sais pas ce que c'est",p:0}],
+   gap:{t:"Registre des traitements",s:"Document obligatoire (art. 30) — le 1er réclamé en contrôle."}},
 
-  {cat:'rg',tag:'SANCTION',insp:"Parlons des risques financiers.",
-   q:"À combien peut monter une amende RGPD, au maximum ?",
-   opts:["10 000 €","150 000 €","20 M€ ou 4 % du CA mondial","Il n'y a pas d'amende"],correct:2,
-   label:{t:"Risque financier sous-estimé",s:"Jusqu'à 20 M€ ou 4 % du CA mondial (art. 83 RGPD)."}},
+  {cat:'RGPD',insp:"L'information des personnes.",
+   q:"Informez-vous les personnes sur l'usage de leurs données et recueillez-vous leur consentement quand c'est nécessaire ?",
+   a:[{t:"Oui : politique claire + consentement explicite",p:3},{t:"En partie, le consentement est parfois informel",p:1},{t:"Non, pas systématiquement",p:0}],
+   gap:{t:"Information & consentement",s:"Transparence et base légale (art. 6, 12-14 RGPD)."}},
 
-  {cat:'rg',tag:'DROITS',insp:"Un client vous écrit pour ses données.",
-   q:"Sous quel délai devez-vous répondre à une demande d'accès ou d'effacement ?",
-   opts:["48 heures","1 mois","6 mois","Ce n'est pas obligatoire"],correct:1,
-   label:{t:"Réponse aux droits des personnes",s:"Vous avez 1 mois pour répondre (art. 12 RGPD)."}},
+  {cat:'RGPD',insp:"Les droits de vos clients.",
+   q:"Avez-vous des procédures pour gérer les demandes (accès, rectification, effacement, portabilité) ?",
+   a:[{t:"Oui, procédure documentée, délai respecté",p:3},{t:"Au cas par cas, sans procédure formalisée",p:1},{t:"Non, nous ne savons pas comment faire",p:0}],
+   gap:{t:"Exercice des droits",s:"Réponse due sous 1 mois (art. 15-22 RGPD)."}},
 
-  {cat:'rg',tag:'REGISTRE',insp:"Montrez-moi vos documents.",
-   q:"Quel document doit recenser tous vos traitements de données ?",
-   opts:["Le bilan comptable","Le registre des activités de traitement","Le règlement intérieur","L'extrait K-bis"],correct:1,
-   label:{t:"Registre des traitements",s:"Document obligatoire (art. 30 RGPD) — le 1er réclamé en contrôle."}},
+  {cat:'RGPD',insp:"Une fuite de données arrive.",
+   q:"En cas de violation de données, savez-vous réagir sous 72 heures ?",
+   a:[{t:"Oui, plan d'incident + équipe formée",p:3},{t:"Idée générale, mais pas de plan formalisé",p:1},{t:"Non, nous ne sommes pas préparés",p:0}],
+   gap:{t:"Gestion des violations",s:"Notification à la CNIL sous 72 h (art. 33)."}},
 
-  {cat:'rg',tag:'COOKIES',insp:"Ouvrons votre site web.",
-   q:"Avant de déposer un cookie publicitaire, vous devez…",
-   opts:["simplement informer le visiteur","ne rien faire de particulier","recueillir son consentement AVANT le dépôt","attendre 30 jours"],correct:2,
-   label:{t:"Cookies & consentement",s:"Le consentement doit être recueilli AVANT le dépôt — motif fréquent de sanction CNIL."}},
+  {cat:'RGPD',insp:"Vos traitements sensibles.",
+   q:"Réalisez-vous des analyses d'impact (AIPD) pour les traitements à risque élevé ?",
+   a:[{t:"Oui, systématiquement pour les traitements à risque",p:3},{t:"Rarement / seulement pour les projets majeurs",p:1},{t:"Non / je ne sais pas ce qu'est une AIPD",p:0}],
+   gap:{t:"Analyse d'impact (AIPD)",s:"Obligatoire si le traitement présente un risque élevé (art. 35)."}},
 
-  {cat:'rg',tag:'SOUS-TRAITANTS',insp:"Qui d'autre touche à vos données ?",
-   q:"Le contrat qui encadre un prestataire traitant vos données s'appelle…",
-   opts:["un NDA","un DPA (accord de traitement)","une CGV","un CDI"],correct:1,
-   label:{t:"Contrats sous-traitants",s:"Un DPA est obligatoire avec chaque sous-traitant (art. 28 RGPD)."}},
+  {cat:'AI Act',insp:"Vos usages d'intelligence artificielle.",
+   q:"Utilisez-vous des systèmes d'IA (chatbot, analyse, IA générative, tri de CV) ?",
+   a:[{t:"Oui, plusieurs systèmes — et j'en ai conscience",p:3},{t:"Oui, de façon limitée (ex. ChatGPT)",p:1},{t:"Non, je pense ne pas en utiliser",p:0}],
+   gap:{t:"Recensement des usages d'IA",s:"Savoir ce qu'on utilise : la première étape de l'AI Act."}},
 
-  {cat:'ia',tag:'AI ACT',insp:"Passons à l'intelligence artificielle.",
-   q:"L'AI Act, c'est le règlement européen numéro…",
-   opts:["2016/679","2024/1689","2002/58","2018/1807"],correct:1,
-   label:{t:"Cadre de l'AI Act",s:"Règlement (UE) 2024/1689 — à connaître dès que vous utilisez une IA."}},
+  {cat:'AI Act',insp:"La cartographie de vos IA.",
+   q:"Avez-vous cartographié vos systèmes d'IA et évalué leur niveau de risque (AI Act) ?",
+   a:[{t:"Oui, cartographie + classification des risques",p:3},{t:"Systèmes identifiés, risques pas encore classés",p:1},{t:"Non, sujet pas encore abordé",p:0}],
+   gap:{t:"Cartographie & risques IA",s:"Classer chaque usage par niveau de risque (AI Act)."}},
 
-  {cat:'ia',tag:'TRANSPARENCE',insp:"Vous utilisez un chatbot ?",
-   q:"Selon l'AI Act, une IA qui dialogue avec vos clients doit…",
-   opts:["ne rien signaler","informer l'utilisateur qu'il parle à une IA","être interdite au public","être déclarée à la CNIL"],correct:1,
-   label:{t:"Transparence des IA",s:"L'utilisateur doit être informé qu'il interagit avec une IA (AI Act)."}},
+  {cat:'AI Act',insp:"La formation de vos équipes.",
+   q:"Vos équipes sont-elles formées à un usage responsable de l'IA (littératie IA) ?",
+   a:[{t:"Oui, formations régulières",p:3},{t:"Quelques personnes sensibilisées, pas toutes",p:1},{t:"Non, aucune formation",p:0}],
+   gap:{t:"Littératie IA",s:"Former/sensibiliser le personnel est obligatoire (AI Act, art. 4)."}},
 
-  {cat:'rg',tag:'AIPD',insp:"Vos traitements sensibles, maintenant.",
-   q:"Une analyse d'impact (AIPD) est obligatoire pour…",
-   opts:["aucun traitement","tous les traitements","les traitements à risque élevé","les entreprises de + de 250 salariés"],correct:2,
-   label:{t:"Analyse d'impact (AIPD)",s:"Obligatoire pour les traitements à risque élevé (art. 35 RGPD)."}},
+  {cat:'AI Act',insp:"La transparence de vos IA.",
+   q:"Signalez-vous les contenus générés par IA et les interactions avec un chatbot ?",
+   a:[{t:"Oui, politique de transparence appliquée",p:3},{t:"On y réfléchit, pas encore systématique",p:1},{t:"Non",p:0}],
+   gap:{t:"Transparence des IA",s:"L'utilisateur doit savoir qu'il interagit avec une IA (AI Act)."}},
 
-  {cat:'ia',tag:'COMPÉTENCES',insp:"Dernière question. Vos équipes.",
-   q:"Depuis février 2025, l'AI Act impose aux entreprises qui utilisent l'IA…",
-   opts:["rien de particulier","de former et sensibiliser le personnel à l'IA","d'interdire ChatGPT","de payer une taxe IA"],correct:1,
-   label:{t:"Littératie IA",s:"Former/sensibiliser le personnel à l'IA est obligatoire (AI Act, art. 4)."}}
+  {cat:'AI Act',insp:"Les pratiques interdites.",
+   q:"Avez-vous vérifié que vos IA n'emploient pas de pratiques interdites par l'AI Act ?",
+   a:[{t:"Oui, audit de conformité réalisé",p:3},{t:"Connaissance générale, mais pas d'audit",p:1},{t:"Non, pas au courant de ces pratiques",p:0}],
+   gap:{t:"Pratiques interdites",s:"Certains usages d'IA sont purement prohibés (AI Act)."}},
+
+  {cat:'Gouvernance',insp:"Le pilotage de votre conformité.",
+   q:"Avez-vous désigné un Délégué à la protection des données (DPO), interne ou externe ?",
+   a:[{t:"Oui, un DPO désigné et actif",p:3},{t:"Un référent interne, mais pas de DPO formel",p:1},{t:"Non, pas de DPO",p:0}],
+   gap:{t:"Pilotage (DPO / référent)",s:"Un pilote identifié de la conformité (art. 37-39)."}},
+
+  {cat:'Gouvernance',insp:"Vos nouveaux projets.",
+   q:"Intégrez-vous la conformité RGPD &amp; IA dès la conception de vos projets ?",
+   a:[{t:"Oui, c'est une étape clé de nos projets",p:3},{t:"On essaie, mais pas toujours systématique",p:1},{t:"Non, la conformité vient après",p:0}],
+   gap:{t:"Conformité dès la conception",s:"Privacy by design & by default (art. 25)."}},
+
+  {cat:'Gouvernance',insp:"Votre veille réglementaire.",
+   q:"Faites-vous une veille active sur le RGPD et l'AI Act ?",
+   a:[{t:"Oui, processus de veille régulier",p:3},{t:"Suivi informel de l'actualité",p:1},{t:"Non, pas de veille spécifique",p:0}],
+   gap:{t:"Veille réglementaire",s:"Anticiper les évolutions (échéances AI Act 2025-2026)."}},
+
+  {cat:'Gouvernance',insp:"Vos prestataires.",
+   q:"Vos contrats sous-traitants incluent-ils des clauses de conformité RGPD &amp; IA ?",
+   a:[{t:"Oui, tous à jour avec ces clauses",p:3},{t:"Certains à jour, d'autres non",p:1},{t:"Non, jamais vérifié",p:0}],
+   gap:{t:"Clauses sous-traitants",s:"Un contrat (DPA) est obligatoire avec chaque sous-traitant (art. 28)."}},
+
+  {cat:'Gouvernance',insp:"Votre vision de la conformité.",
+   q:"Voyez-vous la conformité comme un avantage concurrentiel et un facteur de confiance ?",
+   a:[{t:"Oui, c'est un pilier de notre stratégie",p:3},{t:"On en est conscient, mais on ne l'exploite pas",p:1},{t:"Non, plutôt comme une contrainte",p:0}],
+   gap:{t:"Conformité comme atout",s:"Un argument de confiance, pas seulement une contrainte."}},
+
+  {cat:'RISQUE',insp:"Dernière question. Le prix d'une erreur.",
+   q:"Savez-vous à combien peut monter une amende en cas de non-conformité ?",
+   a:[{t:"Oui : jusqu'à 20 M€ ou 4 % du CA (RGPD), 35 M€ ou 7 % (AI Act)",p:3},{t:"Vaguement, je sais que c'est lourd",p:1},{t:"Non, aucune idée",p:0}],
+   gap:{t:"Connaissance du risque encouru",s:"Jusqu'à 20 M€ ou 4 % du CA (RGPD) ; 35 M€ ou 7 % du CA (AI Act)."}}
 ];
 
-var idx=0, score=0, failed=[], code="";
+var CATS=['RGPD','AI Act','Gouvernance'];
+var CATMETA={'RGPD':{cls:'rg',emo:'🔐'},'AI Act':{cls:'ia',emo:'🤖'},'Gouvernance':{cls:'gv',emo:'🏛️'},'RISQUE':{cls:'rq',emo:'⚖️'}};
+
+var idx=0, score=0, failed=[], catScore={}, code="";
 function $(id){ return document.getElementById(id); }
 function show(id){ ['hero','quiz','signup','validation','verdict'].forEach(function(s){ var el=$(s); if(el) el.classList.toggle('on', s===id); }); if(id==='hero'){var h=$('hero'); if(h) h.style.display='block';} }
 
-function startQuiz(){ idx=0;score=0;failed=[];code=""; $('hero').style.display='none'; show('quiz'); render(); window.scrollTo(0,0); }
+function startQuiz(){ idx=0;score=0;failed=[];code=""; catScore={}; CATS.forEach(function(c){catScore[c]=0;}); $('hero').style.display='none'; show('quiz'); render(); window.scrollTo(0,0); }
 
 function interim(){
   var box=$('interim');
@@ -409,8 +460,8 @@ function interim(){
   box.style.border = '1px solid '+(bad?'rgba(192,57,43,.2)':'rgba(46,125,50,.2)');
   box.style.color = bad?'#c0392b':'#2e7d32';
   box.className='interim';
-  box.innerHTML=(bad?'⚠️ Attention : au moins une lacune détectée dans vos premières réponses.':'✅ Bon départ, vos premières réponses tiennent la route.')
-    +'<span class="prov">Diagnostic provisoire : '+score+' / '+idx+' bonnes réponses</span>';
+  box.innerHTML=(bad?'⚠️ Attention : au moins un point sensible détecté dans vos premières réponses.':'✅ Bon départ, vos premières réponses tiennent la route.')
+    +'<span class="prov">Diagnostic provisoire : '+score+' / '+(idx*3)+' points</span>';
 }
 
 function render(){
@@ -419,22 +470,24 @@ function render(){
   $('pcount').textContent=(idx+1)+' / '+QUESTIONS.length;
   interim();
   $('insp').textContent=Q.insp;
-  $('qtag').innerHTML='<span class="qtag '+Q.cat+'">'+(Q.cat==='ia'?'🤖 AI ACT':'🔐 RGPD')+' · '+Q.tag+'</span>';
-  $('qtext').textContent=Q.q;
+  var m=CATMETA[Q.cat];
+  $('qtag').innerHTML='<span class="qtag '+m.cls+'">'+m.emo+' '+Q.cat.toUpperCase()+'</span>';
+  $('qtext').innerHTML=Q.q;
   var box=$('opts'); box.innerHTML='';
-  var keys=['A','B','C','D'];
-  Q.opts.forEach(function(o,i){
+  var keys=['A','B','C'];
+  Q.a.forEach(function(o,i){
     var b=document.createElement('button');
     b.className='opt';
-    b.innerHTML='<span class="k">'+keys[i]+'</span>'+o;
+    b.innerHTML='<span class="k">'+keys[i]+'</span>'+o.t;
     b.onclick=function(){ answer(i,Q); };
     box.appendChild(b);
   });
 }
 
 function answer(i,Q){
-  if(i===Q.correct) score++;
-  else failed.push(Q.label);
+  var pts=Q.a[i].p;
+  score+=pts; catScore[Q.cat]+=pts;
+  if(pts<3) failed.push({t:Q.gap.t, s:Q.gap.s, sev:(pts===0?'ko':'mid')});
   idx++;
   if(idx>=QUESTIONS.length){ $('bar').style.width='100%'; show('signup'); window.scrollTo(0,0); }
   else render();
@@ -495,24 +548,51 @@ function validateEmail(){
 
 function showResults(){
   show('verdict');
-  var head=$('vhead'), t, sub, amt, color, st;
-  if(score<=3){ t="Vous tombez."; sub="Dossier fragile : de nombreuses obligations ne sont pas maîtrisées."; amt="≈ 15 000 € et +"; color="linear-gradient(135deg,#c0392b,#8e2a1f)"; st="Risque élevé"; }
-  else if(score<=6){ t="Ça vacille."; sub="Plusieurs lacunes qu'un contrôle exploiterait sans peine."; amt="≈ 2 000 – 15 000 €"; color="linear-gradient(135deg,#b8860b,#8a6100)"; st="Risque moyen"; }
-  else if(score<=8){ t="Presque."; sub="Bon niveau, mais des points doivent encore être consolidés."; amt="≈ 0 – 3 000 €"; color="linear-gradient(135deg,#c9971a,#8a6100)"; st="Vigilance"; }
-  else { t="Vous tenez."; sub="Excellent niveau. Sécurisons ensemble les derniers détails."; amt="≈ 0 – 1 500 €"; color="linear-gradient(135deg,#2e7d32,#1b5e20)"; st="Faible risque"; }
+  var max=QUESTIONS.length*3; // 48
+  var pct=Math.round(score/max*100);
+  var head=$('vhead'), t, sub, amt, color, st, reco;
+  if(pct<=33){
+    t="Urgence."; st="Risque élevé"; color="linear-gradient(135deg,#c0392b,#8e2a1f)"; amt="≈ 15 000 € et +";
+    sub="Des lacunes majeures : en l'état, un contrôle serait à haut risque.";
+    reco="Votre entreprise présente des lacunes importantes en RGPD et AI Act. La formule Essentiel permet une prise en main rapide ; la formule Conformité, une mise en règle complète.";
+  } else if(pct<=67){
+    t="Vulnérabilité."; st="Risque moyen"; color="linear-gradient(135deg,#d68910,#9a6a0e)"; amt="≈ 2 000 – 15 000 €";
+    sub="Des démarches sont engagées, mais des zones d'ombre subsistent.";
+    reco="Vous avez initié votre conformité, mais des angles morts demeurent. La formule Conformité est idéale pour structurer la démarche et combler les manques.";
+  } else {
+    t="Sur la bonne voie."; st="Faible risque"; color="linear-gradient(135deg,#2e7d32,#1b5e20)"; amt="≈ 0 – 3 000 €";
+    sub="Bon niveau global. Sécurisons les derniers points et la durée.";
+    reco="Votre entreprise est globalement en bonne voie. La formule Sérénité vous offre un accompagnement continu et une veille réglementaire proactive.";
+  }
   head.style.background=color;
   head.querySelector('.vst').textContent=st;
-  $('vscore').textContent=score+' / '+QUESTIONS.length;
+  $('vscore').innerHTML=score+' <span>/ '+max+'</span> · '+pct+'%';
   $('vtitle').textContent=t;
   $('vsub').textContent=sub;
   $('vamount').textContent=amt;
+  $('reco').textContent=reco;
+
+  // détail par famille
+  var cb=$('catbreak'); cb.innerHTML='';
+  CATS.forEach(function(c){
+    var cm=5*3; // 5 questions * 3
+    var v=catScore[c]||0; var p=Math.round(v/cm*100);
+    var col = p>=67?'var(--green)':p>=34?'#d68910':'var(--red)';
+    var row=document.createElement('div'); row.className='catrow';
+    row.innerHTML='<div class="lbl"><span>'+CATMETA[c].emo+' '+c+'</span><span class="sc">'+v+' / '+cm+'</span></div>'
+      +'<div class="catbar"><i style="width:'+p+'%;background:'+col+'"></i></div>';
+    cb.appendChild(row);
+  });
+
+  // points sensibles
   var H=$('holes'); H.innerHTML='';
-  var list = failed.length? failed : [{t:"Aucune lacune majeure",s:"Beau parcours. On sécurise le reste ensemble."}];
+  var list = failed.length? failed : [{t:"Aucun point sensible",s:"Beau parcours. On sécurise les détails ensemble.",sev:'ok'}];
   var seen={};
   list.filter(function(h){ if(seen[h.t])return false; seen[h.t]=1; return true; }).forEach(function(h){
-    var col = failed.length? '#c0392b':'#2e7d32';
+    var col = h.sev==='ko'?'#c0392b':h.sev==='mid'?'#d68910':'#2e7d32';
+    var ic = h.sev==='ko'?'!':h.sev==='mid'?'~':'✓';
     var d=document.createElement('div'); d.className='hole';
-    d.innerHTML='<span class="hi" style="background:'+col+'">'+(failed.length?'!':'✓')+'</span><div><b>'+h.t+'</b><span>'+h.s+'</span></div>';
+    d.innerHTML='<span class="hi" style="background:'+col+'">'+ic+'</span><div><b>'+h.t+'</b><span>'+h.s+'</span></div>';
     H.appendChild(d);
   });
   window.scrollTo(0,0);
