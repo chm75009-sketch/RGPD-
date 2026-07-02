@@ -77,6 +77,10 @@
   .opt:hover{border-color:var(--ink);background:#fff}
   .opt:active{transform:scale(.99)}
   .opt .k{flex-shrink:0;width:26px;height:26px;border-radius:7px;background:var(--paper2);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px}
+  .qnav{margin-top:18px;padding-top:14px;border-top:1px solid var(--line)}
+  .backbtn{background:none;border:none;color:var(--faint);font-family:inherit;font-size:13.5px;font-weight:800;cursor:pointer;padding:4px 2px;display:inline-flex;align-items:center;gap:6px}
+  .backbtn:hover{color:var(--ink)}
+  .backbtn.hide{display:none}
 
   /* FORMULAIRE */
   .card h2.formtitle{font-family:'Fraunces',serif;font-size:24px;font-weight:800;margin-bottom:6px}
@@ -167,8 +171,8 @@
 
 <div class="letterhead">
   <div class="wrap">
-    <span class="mono">RTH NETGOCE · Conformité RGPD &amp; AI Act</span>
-    <span class="ref mono">RÉF. CTRL-2026</span>
+    <a class="mono" href="index.html" style="color:var(--blue);text-decoration:none;font-weight:700">← Accueil</a>
+    <span class="ref mono">RTH NETGOCE · RÉF. CTRL-2026</span>
   </div>
 </div>
 
@@ -204,6 +208,7 @@
     <div id="qtag"></div>
     <div class="qtext serif" id="qtext"></div>
     <div class="opts" id="opts"></div>
+    <div class="qnav"><button class="backbtn hide" id="qback" onclick="prevQuestion()">← Précédent</button></div>
   </div>
 </section>
 
@@ -235,6 +240,7 @@
     </div>
     <div class="err" id="signup-error"></div>
     <button class="cta" id="show-score-btn" style="width:100%;justify-content:center">Recevoir mon score →</button>
+    <div style="text-align:center;margin-top:14px"><button class="backbtn" onclick="backToQuiz()">← Retour aux questions</button></div>
     <p class="privnote">🔐 Vos informations servent à établir votre pré-diagnostic et à vous recontacter. Elles ne sont ni vendues ni cédées. Voir la <a href="politique-confidentialite.html">politique de confidentialité</a>.</p>
   </div>
 </section>
@@ -456,11 +462,11 @@ var EMAILJS_READY = false;
 var CATS=['RGPD','AI Act','Gouvernance'];
 var CATMETA={'RGPD':{cls:'rg',emo:'🔐'},'AI Act':{cls:'ia',emo:'🤖'},'Gouvernance':{cls:'gv',emo:'🏛️'},'RISQUE':{cls:'rq',emo:'⚖️'}};
 
-var idx=0, score=0, failed=[], catScore={}, code="";
+var idx=0, score=0, failed=[], catScore={}, code="", answerLog=[];
 function $(id){ return document.getElementById(id); }
 function show(id){ ['hero','quiz','signup','validation','verdict'].forEach(function(s){ var el=$(s); if(el) el.classList.toggle('on', s===id); }); if(id==='hero'){var h=$('hero'); if(h) h.style.display='block';} }
 
-function startQuiz(){ idx=0;score=0;failed=[];code=""; catScore={}; CATS.forEach(function(c){catScore[c]=0;}); $('hero').style.display='none'; show('quiz'); render(); window.scrollTo(0,0); }
+function startQuiz(){ idx=0;score=0;failed=[];code="";answerLog=[]; catScore={}; CATS.forEach(function(c){catScore[c]=0;}); $('hero').style.display='none'; show('quiz'); render(); window.scrollTo(0,0); }
 
 function interim(){
   var box=$('interim');
@@ -492,16 +498,28 @@ function render(){
     b.onclick=function(){ answer(i,Q); };
     box.appendChild(b);
   });
+  var qb=$('qback'); if(qb) qb.classList.toggle('hide', idx===0);
 }
 
 function answer(i,Q){
   var pts=Q.a[i].p;
   score+=pts; catScore[Q.cat]+=pts;
-  if(pts<3) failed.push({t:Q.gap.t, s:Q.gap.s, sev:(pts===0?'ko':'mid')});
+  var fo=null;
+  if(pts<3){ fo={t:Q.gap.t, s:Q.gap.s, sev:(pts===0?'ko':'mid')}; failed.push(fo); }
+  answerLog.push({p:pts, cat:Q.cat, fo:fo});
   idx++;
   if(idx>=QUESTIONS.length){ $('bar').style.width='100%'; show('signup'); window.scrollTo(0,0); }
   else render();
 }
+
+function prevQuestion(){
+  if(idx<=0) return;
+  idx--;
+  var h=answerLog.pop();
+  if(h){ score-=h.p; catScore[h.cat]-=h.p; if(h.fo){ var k=failed.indexOf(h.fo); if(k>=0) failed.splice(k,1); } }
+  render(); window.scrollTo(0,0);
+}
+function backToQuiz(){ show('quiz'); prevQuestion(); }
 
 function submitSignup(){
   var bn=$('business'), at=$('activity'), cn=$('contact-name'), cs=$('city-signup'), em=$('email-signup'), ph=$('phone-signup');
