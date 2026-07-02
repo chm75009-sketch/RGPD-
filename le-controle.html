@@ -2,348 +2,437 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#153e35">
-<meta name="description" content="Le Contrôle — passez un contrôle CNIL / AI Act simulé de votre entreprise en 3 minutes. Résultat calculé dans votre navigateur, aucune donnée collectée.">
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" href="favicon.svg" type="image/svg+xml">
-<title>Le Contrôle — Test de conformité CNIL & AI Act | Clarté</title>
-<!--
-  CLARTÉ — « Le Contrôle ». Aucune dépendance externe (pas de Google Fonts,
-  pas de CDN, pas d'analytics, pas de cookie). Simulateur 100 % côté navigateur.
-  Ne PAS ajouter de <script src="https://…"> : casserait la page « miroir ».
--->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Le Contrôle — Tiendrez-vous 3 minutes face à la CNIL ? | RTH NETGOCE</title>
+<meta name="description" content="Passez un contrôle RGPD & AI Act simulé de votre entreprise en 3 minutes. Gratuit, sans email, aucune donnée collectée. Par RTH NETGOCE.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,600;9..144,700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
-:root{
-  --navy:#153e35; --navy2:#1f5649; --teal:#2d6f60; --teal2:#3b8a77;
-  --ok:#2a9a57; --warn:#b79029; --danger:#d84f43;
-  --bg:#f5f2ea; --card:#fff; --border:#dfe6e0;
-  --text:#17211d; --muted:#65716b; --ink:#0f1c18;
-  --serif:'Iowan Old Style','Palatino Linotype','Palatino','Book Antiqua',Georgia,serif;
-  --sans:system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
-  color-scheme: light only;
-}
-*{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{background:var(--bg);font-family:var(--sans);color:var(--text);line-height:1.55;-webkit-font-smoothing:antialiased}
-a{color:inherit}
-.wrap{max-width:1080px;margin:0 auto;padding:0 22px}
-.eyebrow{display:inline-flex;align-items:center;gap:8px;padding:7px 13px;border-radius:999px;background:rgba(255,255,255,.9);border:1px solid rgba(31,86,73,.14);color:var(--navy2);font-size:.72rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase}
-h1,h2,h3{font-family:var(--serif);color:var(--navy);line-height:1.12;font-weight:600}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;border:none;border-radius:999px;padding:14px 28px;font-family:var(--sans);font-weight:800;font-size:.98rem;cursor:pointer;text-decoration:none;transition:transform .15s,box-shadow .15s,opacity .15s}
-.btn-primary{background:linear-gradient(135deg,var(--teal),var(--navy));color:#fff;box-shadow:0 10px 30px rgba(21,62,53,.22)}
-.btn-primary:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(21,62,53,.3)}
-.btn-ghost{background:#fff;color:var(--navy);border:1.5px solid var(--border)}
-.btn-ghost:hover{border-color:var(--teal)}
-.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+  :root{
+    --paper:#f4f1e9;--paper2:#ebe6d8;--ink:#1a1a1a;--faint:#6b6459;--line:#d8d1bf;
+    --red:#c0392b;--red2:#8e2a1f;--stamp:#b5342a;
+    --blue:#1f3a5f;--gold:#b8860b;--green:#2e7d32;
+    --card:#fffdf7;--shadow:0 12px 40px rgba(40,34,20,.14);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:'Manrope',system-ui,sans-serif;color:var(--ink);background:var(--paper);line-height:1.6;
+    background-image:radial-gradient(circle at 1px 1px,rgba(0,0,0,.035) 1px,transparent 0);background-size:22px 22px}
+  .mono{font-family:'JetBrains Mono',monospace}
+  .serif{font-family:'Fraunces',Georgia,serif}
+  .wrap{max-width:760px;margin:0 auto;padding:0 22px}
+  h1,h2,h3{line-height:1.12;letter-spacing:-.02em}
+  a{color:var(--blue)}
 
-/* ── NAV ── */
-.nav{position:sticky;top:0;z-index:50;background:rgba(245,242,234,.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
-.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:60px}
-.brand{display:flex;align-items:center;gap:10px;font-weight:900;color:var(--navy);letter-spacing:.02em;text-decoration:none}
-.brand .mark{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--navy),var(--teal));display:grid;place-items:center;color:#fff;font-family:var(--serif);font-size:1rem}
-.nolog{font-size:.72rem;color:var(--muted);font-weight:700;display:inline-flex;gap:6px;align-items:center}
-.nolog .dot{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 4px rgba(42,154,87,.15)}
-@media(max-width:680px){.nolog{display:none}}
+  /* top strip = official letterhead */
+  .letterhead{border-bottom:2px solid var(--ink);background:var(--paper2)}
+  .letterhead .wrap{display:flex;justify-content:space-between;align-items:center;padding:12px 22px;font-size:12px}
+  .letterhead .mono{letter-spacing:.06em;text-transform:uppercase;color:var(--faint);font-weight:700}
+  .letterhead .ref{color:var(--faint)}
 
-section{padding:64px 0}
-.sec-head{text-align:center;max-width:680px;margin:0 auto 34px}
-.sec-head h2{font-size:clamp(1.7rem,4.5vw,2.4rem);margin:14px 0 10px}
-.sec-head p{color:var(--muted);font-size:1.02rem}
+  /* HERO — la convocation */
+  .hero{padding:56px 0 40px}
+  .envelope{max-width:640px;margin:0 auto;background:var(--card);border:1px solid var(--line);border-radius:6px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+  .envelope::before{content:'';position:absolute;left:0;top:0;bottom:0;width:6px;background:repeating-linear-gradient(45deg,var(--red) 0 12px,#fff 12px 24px)}
+  .env-inner{padding:38px 40px 40px 46px}
+  .stamp{position:absolute;top:26px;right:28px;transform:rotate(-11deg);border:3px solid var(--stamp);color:var(--stamp);border-radius:8px;padding:6px 12px;font-weight:800;font-size:13px;letter-spacing:.08em;text-transform:uppercase;opacity:.82;font-family:'JetBrains Mono',monospace}
+  .env-inner .from{font-size:12px;color:var(--faint);text-transform:uppercase;letter-spacing:.08em;font-weight:700;margin-bottom:22px}
+  .env-inner h1{font-size:clamp(26px,4.4vw,40px);font-weight:700;margin-bottom:16px}
+  .env-inner .obj{font-size:15px;color:var(--faint);margin-bottom:8px}
+  .env-inner p{font-size:15.5px;margin-bottom:22px;max-width:520px}
+  .cta{display:inline-flex;align-items:center;gap:10px;background:var(--ink);color:var(--paper);border:none;font-family:inherit;font-weight:800;font-size:16px;padding:16px 26px;border-radius:8px;cursor:pointer;transition:transform .12s,background .15s}
+  .cta:hover{background:var(--red2)}
+  .cta:active{transform:translateY(1px)}
+  .reassure{text-align:center;margin-top:22px;font-size:12.5px;color:var(--faint)}
+  .reassure b{color:var(--ink)}
 
-/* ── INTRO ── */
-.intro{padding:56px 0 10px;text-align:center}
-.intro .wrap{max-width:760px}
-.intro h1{font-size:clamp(1.9rem,5.5vw,3rem);margin:16px 0 12px}
-.intro p{color:var(--muted);font-size:1.1rem;max-width:600px;margin:0 auto}
+  /* QUIZ */
+  #quiz{display:none;padding:20px 0 60px}
+  #quiz.on{display:block}
+  .qcard{max-width:640px;margin:0 auto;background:var(--card);border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow);padding:32px 34px}
+  .progress{display:flex;align-items:center;gap:12px;margin-bottom:26px}
+  .bar{flex:1;height:7px;background:var(--paper2);border-radius:10px;overflow:hidden}
+  .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--red),var(--gold));transition:width .35s}
+  .pcount{font-size:12px;color:var(--faint);font-weight:700}
+  .inspector{display:flex;gap:12px;align-items:flex-start;margin-bottom:22px}
+  .insp-ava{flex-shrink:0;width:40px;height:40px;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-size:19px}
+  .insp-txt small{font-size:11px;color:var(--faint);text-transform:uppercase;letter-spacing:.06em;font-weight:700}
+  .qtag{display:inline-block;font-size:10.5px;font-weight:800;letter-spacing:.04em;padding:2px 8px;border-radius:100px;margin-bottom:10px}
+  .qtag.rg{background:#e7edf5;color:var(--blue)}.qtag.ia{background:#fbf1d8;color:var(--gold)}
+  .qtext{font-size:20px;font-weight:800;margin-bottom:20px;font-family:'Fraunces',serif}
+  .opts{display:flex;flex-direction:column;gap:10px}
+  .opt{text-align:left;background:var(--paper);border:1.5px solid var(--line);border-radius:10px;padding:14px 16px;font-family:inherit;font-size:15px;font-weight:600;color:var(--ink);cursor:pointer;transition:border-color .12s,background .12s,transform .1s;display:flex;align-items:center;gap:12px}
+  .opt:hover{border-color:var(--ink);background:#fff}
+  .opt:active{transform:scale(.99)}
+  .opt .k{flex-shrink:0;width:26px;height:26px;border-radius:7px;background:var(--paper2);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px}
 
-/* ── SIMULATEUR ── */
-#simulateur{background:var(--navy);color:#fff}
-#simulateur h2,#simulateur .eyebrow{color:#fff}
-#simulateur .eyebrow{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.16);color:#dfeee9}
-#simulateur .sec-head p{color:rgba(255,255,255,.7)}
-.quiz{max-width:640px;margin:0 auto;background:#fff;color:var(--text);border-radius:20px;padding:30px 28px;box-shadow:0 30px 80px rgba(0,0,0,.35)}
-.q-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
-.q-count{font-size:.74rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--teal)}
-.q-bar{height:6px;background:#eef1ef;border-radius:999px;overflow:hidden;margin-bottom:22px}
-.q-bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--teal),var(--navy));border-radius:999px;transition:width .35s}
-.q-inspector{font-size:.78rem;color:var(--muted);font-style:italic;margin-bottom:6px}
-.q-text{font-family:var(--serif);font-size:1.32rem;color:var(--navy);margin-bottom:20px;line-height:1.25}
-.q-opts{display:grid;gap:10px}
-.opt{display:flex;align-items:center;gap:12px;padding:14px 16px;border:1.6px solid var(--border);border-radius:12px;background:#fafbfa;cursor:pointer;font-weight:600;font-size:.96rem;transition:all .15s;text-align:left;font-family:var(--sans);color:var(--text)}
-.opt:hover{border-color:var(--teal);background:#fff}
-.opt.sel{border-color:var(--navy);background:#eef5f2}
-.opt .tick{width:22px;height:22px;border-radius:50%;border:2px solid var(--border);flex:none;display:grid;place-items:center;font-size:.7rem;color:#fff}
-.opt.sel .tick{background:var(--navy);border-color:var(--navy)}
-.q-nav{display:flex;justify-content:space-between;margin-top:24px;gap:10px}
+  /* VERDICT */
+  #verdict{display:none;padding:30px 0 60px}
+  #verdict.on{display:block}
+  .vcard{max-width:640px;margin:0 auto;background:var(--card);border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow);overflow:hidden}
+  .vhead{padding:30px 34px;color:#fff;text-align:center;position:relative}
+  .vhead .vst{position:absolute;top:16px;right:18px;transform:rotate(8deg);border:2.5px solid #fff;border-radius:7px;padding:4px 10px;font-size:11px;font-weight:800;letter-spacing:.06em;font-family:'JetBrains Mono',monospace;opacity:.9}
+  .vhead small{text-transform:uppercase;letter-spacing:.1em;font-size:11px;opacity:.8;font-weight:700}
+  .vhead h2{font-size:34px;font-weight:800;font-family:'Fraunces',serif;margin:6px 0 4px}
+  .vhead p{opacity:.85;font-size:14px}
+  .vbody{padding:28px 34px}
+  .expo{background:var(--paper);border:1px dashed var(--line);border-radius:10px;padding:18px;text-align:center;margin-bottom:24px}
+  .expo small{font-size:11px;color:var(--faint);text-transform:uppercase;letter-spacing:.06em;font-weight:700}
+  .expo .amt{font-family:'JetBrains Mono',monospace;font-size:30px;font-weight:700;color:var(--red);margin:4px 0 2px}
+  .expo em{font-size:11.5px;color:var(--faint);font-style:normal}
+  .holes h3{font-size:15px;margin-bottom:12px}
+  .hole{display:flex;gap:12px;padding:12px 0;border-top:1px solid var(--line);font-size:14px}
+  .hole .hi{flex-shrink:0;width:24px;height:24px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff}
+  .hole b{display:block;font-size:14px}.hole span{font-size:12.5px;color:var(--faint)}
+  .vcta{margin-top:26px;text-align:center}
+  .vcta .cta{background:var(--red2)}.vcta .cta:hover{background:var(--ink)}
+  .vcta .again{display:block;margin-top:14px;font-size:12.5px;color:var(--faint);background:none;border:none;cursor:pointer;width:100%;font-family:inherit}
 
-/* ── VERDICT ── */
-.verdict{max-width:760px;margin:0 auto}
-.score-card{background:#fff;border-radius:22px;padding:34px 30px;box-shadow:0 20px 60px rgba(21,62,53,.1);text-align:center;border:1px solid var(--border)}
-.gauge{position:relative;width:180px;height:180px;margin:6px auto 12px}
-.gauge svg{transform:rotate(-90deg)}
-.gauge .num{position:absolute;inset:0;display:grid;place-content:center;text-align:center}
-.gauge .num b{font-size:2.6rem;font-family:var(--serif);color:var(--navy);display:block;line-height:1}
-.gauge .num span{font-size:.72rem;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);font-weight:800}
-.risk-pill{display:inline-flex;align-items:center;gap:8px;padding:8px 18px;border-radius:999px;font-weight:800;font-size:.92rem;margin:4px 0 6px}
-.risk-hi{background:rgba(216,79,67,.12);color:var(--danger)}
-.risk-mid{background:rgba(183,144,41,.14);color:var(--warn)}
-.risk-lo{background:rgba(42,154,87,.14);color:var(--ok)}
-.euro{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:24px 0}
-.euro .box{background:var(--bg);border:1px solid var(--border);border-radius:16px;padding:18px}
-.euro .box .k{font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:800;margin-bottom:6px}
-.euro .box .v{font-size:1.7rem;font-weight:900;color:var(--navy);font-family:var(--serif)}
-.euro .box.warnbox .v{color:var(--danger)}
-.ca-row{margin:8px 0 4px}
-.ca-row label{font-size:.82rem;color:var(--muted);font-weight:700;display:block;margin-bottom:5px}
-.ca-row input{padding:11px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:.95rem;width:220px;font-family:var(--sans)}
-.gaps{text-align:left;margin-top:26px}
-.gaps h3{font-size:1.15rem;margin-bottom:12px}
-.gap{display:flex;gap:12px;padding:13px 0;border-top:1px solid var(--border);font-size:.94rem}
-.gap .ic{flex:none;width:24px;height:24px;border-radius:7px;display:grid;place-items:center;font-size:.8rem;font-weight:900;color:#fff}
-.gap.ko .ic{background:var(--danger)}
-.gap.mid .ic{background:var(--warn)}
-.gap.ok .ic{background:var(--ok)}
-.gap b{color:var(--navy)}
-.disclaimer{font-size:.78rem;color:var(--muted);margin-top:20px;font-style:italic}
-.verdict-cta{text-align:center;margin-top:26px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+  /* MIRROR */
+  .mirror{background:var(--ink);color:var(--paper);padding:60px 0}
+  .mirror .wrap{text-align:center}
+  .mirror .tag{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#c9b98a;font-weight:800}
+  .mirror h2{font-size:clamp(24px,3.5vw,34px);font-weight:800;font-family:'Fraunces',serif;margin:12px 0 20px}
+  .mtable{max-width:460px;margin:0 auto;text-align:left;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);border-radius:12px;overflow:hidden;font-family:'JetBrains Mono',monospace;font-size:13.5px}
+  .mtable div{display:flex;justify-content:space-between;padding:12px 18px;border-top:1px solid rgba(255,255,255,.08)}
+  .mtable div:first-child{border-top:none}
+  .mtable span{color:#8e8a80}.mtable b{color:#7ed99a;font-weight:700}
+  .mirror .note{margin-top:20px;font-size:13px;color:rgba(255,255,255,.55);max-width:440px;margin-left:auto;margin-right:auto}
 
-/* ── MIROIR ── */
-#miroir{background:linear-gradient(180deg,#0f1c18,#153e35);color:#fff}
-#miroir h2{color:#fff}
-#miroir .eyebrow{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.16);color:#dfeee9}
-#miroir .sec-head p{color:rgba(255,255,255,.72)}
-.mirror-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:760px;margin:0 auto}
-.mcard{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:22px}
-.mcard .big{font-size:2.4rem;font-family:var(--serif);color:#fff;line-height:1;margin-bottom:6px}
-.mcard .lbl{font-size:.92rem;color:rgba(255,255,255,.82);font-weight:700}
-.mcard .chk{font-size:.78rem;color:#7fd6ab;font-weight:800;margin-top:8px;display:inline-flex;gap:6px;align-items:center}
-.mirror-note{max-width:640px;margin:26px auto 0;text-align:center;color:rgba(255,255,255,.78);font-size:.95rem}
-.mirror-note b{color:#fff}
-@media(max-width:560px){.mirror-grid{grid-template-columns:1fr}.euro{grid-template-columns:1fr}}
+  /* OFFER */
+  .offer{padding:66px 0}
+  .offer .wrap{text-align:center}
+  .offer .tag{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--red);font-weight:800}
+  .offer h2{font-size:clamp(24px,3.5vw,34px);font-weight:800;font-family:'Fraunces',serif;margin:12px 0 8px}
+  .offer .sub{color:var(--faint);margin-bottom:38px}
+  .plans{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;text-align:left}
+  @media(max-width:720px){.plans{grid-template-columns:1fr;max-width:400px;margin:0 auto}}
+  .plan{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px 22px;display:flex;flex-direction:column;position:relative}
+  .plan.pop{border:2px solid var(--ink)}
+  .plan .rib{position:absolute;top:-11px;left:22px;background:var(--ink);color:var(--paper);font-size:10.5px;font-weight:800;letter-spacing:.04em;padding:4px 11px;border-radius:100px}
+  .plan h3{font-size:18px;font-weight:800;margin-bottom:4px}
+  .plan .pd{font-size:12.5px;color:var(--faint);margin-bottom:16px;min-height:34px}
+  .plan .pr{font-family:'JetBrains Mono',monospace;font-size:26px;font-weight:700;margin-bottom:16px}
+  .plan .pr small{font-size:12px;color:var(--faint);font-weight:500}
+  .plan ul{list-style:none;display:flex;flex-direction:column;gap:8px;margin-bottom:20px;flex:1}
+  .plan li{font-size:13px;color:var(--faint);padding-left:20px;position:relative}
+  .plan li::before{content:'✓';position:absolute;left:0;color:var(--green);font-weight:800}
+  .plan .pbtn{display:block;text-align:center;background:var(--paper2);color:var(--ink);font-weight:800;font-size:13.5px;padding:11px;border-radius:9px;text-decoration:none}
+  .plan.pop .pbtn{background:var(--ink);color:var(--paper)}
+  .tnote{font-size:12px;color:var(--faint);margin-top:24px}
 
-footer{background:var(--navy);color:rgba(255,255,255,.75);padding:40px 0;font-size:.88rem}
-footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:center}
-footer a{color:rgba(255,255,255,.85);text-decoration:none;margin-right:16px}
-footer a:hover{color:#fff;text-decoration:underline}
-.hidden{display:none!important}
+  /* RDV / human */
+  .rdv{background:var(--paper2);padding:60px 0;border-top:1px solid var(--line)}
+  .rdvbox{max-width:600px;margin:0 auto;background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:34px;text-align:center}
+  .rdvbox .ava{width:76px;height:76px;border-radius:50%;margin:0 auto 14px;background:linear-gradient(135deg,var(--blue),#33507a);color:#fff;display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:800;font-family:'Fraunces',serif}
+  .rdvbox h2{font-size:24px;font-weight:800;font-family:'Fraunces',serif;margin-bottom:6px}
+  .rdvbox .who{font-size:13px;color:var(--faint);margin-bottom:20px}
+  .rdvbox p{font-size:15px;margin-bottom:24px;max-width:440px;margin-left:auto;margin-right:auto}
+  .rdv-cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+  .rdv-cta a{display:inline-flex;align-items:center;gap:9px;font-weight:800;font-size:15px;padding:14px 24px;border-radius:10px;text-decoration:none}
+  .rdv-cta .primary{background:var(--ink);color:var(--paper)}
+  .rdv-cta .sec{background:var(--paper);color:var(--ink);border:1.5px solid var(--line)}
+
+  footer{background:var(--ink);color:rgba(244,241,233,.6);padding:34px 0;font-size:12px;text-align:center;line-height:1.8}
+  footer b{color:var(--paper)}
+  .disc{font-size:10.5px;color:rgba(244,241,233,.35);max-width:640px;margin:12px auto 0;line-height:1.6}
 </style>
 </head>
 <body>
 
-<!-- ══ NAV ══ -->
-<nav class="nav"><div class="wrap">
-  <a class="brand" href="index.html"><span class="mark">C</span> Clarté</a>
-  <div style="display:flex;align-items:center;gap:16px">
-    <span class="nolog"><span class="dot"></span> 0 cookie · 0 tracker</span>
-    <a href="index.html#offre" class="btn btn-ghost" style="font-size:.86rem;padding:9px 18px">Les formules</a>
+<div class="letterhead">
+  <div class="wrap">
+    <span class="mono">RTH NETGOCE · Conformité RGPD &amp; AI Act</span>
+    <span class="ref mono">RÉF. CTRL-2026</span>
   </div>
-</div></nav>
+</div>
 
-<!-- ══ INTRO ══ -->
-<header class="intro"><div class="wrap">
-  <span class="eyebrow">⚖️ Simulation — Contrôle CNIL &amp; AI Act</span>
-  <h1>Vous venez de recevoir un contrôle.</h1>
-  <p>Un inspecteur se présente. Il a 10 questions. Répondez honnêtement — personne ne vous écoute, littéralement. Résultat en 3 minutes, calculé dans votre navigateur.</p>
-</div></header>
-
-<!-- ══ SIMULATEUR ══ -->
-<section id="simulateur">
-  <div class="sec-head">
-    <span class="eyebrow">L'interrogatoire</span>
-    <h2>Répondez à l'inspecteur.</h2>
-  </div>
-  <div class="quiz">
-    <div class="q-top">
-      <span class="q-count" id="qCount">Question 1 / 10</span>
-      <span class="q-count" id="qTheme" style="color:var(--muted)"></span>
+<!-- HERO : LA CONVOCATION -->
+<section class="hero" id="hero">
+  <div class="wrap">
+    <div class="envelope">
+      <div class="env-inner">
+        <div class="stamp">Contrôle</div>
+        <div class="from">Autorité de contrôle — Convocation</div>
+        <h1 class="serif">Vous venez de recevoir un contrôle.</h1>
+        <div class="obj">Objet : vérification de votre conformité RGPD &amp; règlement IA.</div>
+        <p>Vos données. Votre IA. Vos preuves. Dans la vraie vie, vous auriez un mois pour répondre. Ici, vous avez 3 minutes pour savoir si vous tiendriez.</p>
+        <button class="cta" onclick="startQuiz()">Passer le contrôle →</button>
+      </div>
     </div>
-    <div class="q-bar"><i id="qBar"></i></div>
-    <div class="q-inspector">👤 L'inspecteur demande :</div>
-    <div class="q-text" id="qText">…</div>
-    <div class="q-opts" id="qOpts"></div>
-    <div class="q-nav">
-      <button class="btn btn-ghost" id="qPrev" onclick="prevQ()">← Précédent</button>
-      <button class="btn btn-primary" id="qNext" onclick="nextQ()" disabled>Suivant →</button>
-    </div>
+    <div class="reassure">🔒 Gratuit · sans email · <b>aucune donnée collectée</b> — tout reste dans votre navigateur.</div>
   </div>
 </section>
 
-<!-- ══ VERDICT ══ -->
-<section id="verdict" class="hidden">
-  <div class="sec-head">
-    <span class="eyebrow">Le verdict</span>
-    <h2>Rapport de contrôle</h2>
-    <p>Voici ce qu'un contrôleur relèverait aujourd'hui.</p>
+<!-- QUIZ -->
+<section id="quiz">
+  <div class="qcard">
+    <div class="progress">
+      <div class="bar"><i id="bar"></i></div>
+      <span class="pcount" id="pcount">1 / 8</span>
+    </div>
+    <div class="inspector">
+      <div class="insp-ava">🕵️</div>
+      <div class="insp-txt"><small>L'inspecteur</small><br><span id="insp" style="font-size:13px;color:var(--faint)">Commençons.</span></div>
+    </div>
+    <div id="qtag"></div>
+    <div class="qtext serif" id="qtext"></div>
+    <div class="opts" id="opts"></div>
   </div>
-  <div class="verdict">
-    <div class="score-card">
-      <div class="gauge">
-        <svg width="180" height="180" viewBox="0 0 180 180">
-          <circle cx="90" cy="90" r="78" fill="none" stroke="#eef1ef" stroke-width="16"/>
-          <circle id="gaugeArc" cx="90" cy="90" r="78" fill="none" stroke="var(--teal)" stroke-width="16" stroke-linecap="round" stroke-dasharray="490" stroke-dashoffset="490"/>
-        </svg>
-        <div class="num"><b id="scorePct">0%</b><span>conforme</span></div>
-      </div>
-      <div id="riskPill" class="risk-pill risk-mid">Risque à évaluer</div>
-      <p id="riskLine" style="color:var(--muted);max-width:520px;margin:6px auto 0"></p>
+</section>
 
-      <div class="ca-row">
-        <label for="caInput">Votre chiffre d'affaires annuel (€) — optionnel</label>
-        <input type="number" id="caInput" min="0" step="1000" placeholder="Ex. 450 000" oninput="renderEuro()">
+<!-- VERDICT -->
+<section id="verdict">
+  <div class="vcard">
+    <div class="vhead" id="vhead">
+      <div class="vst">Dossier clôturé</div>
+      <small>Verdict du contrôle</small>
+      <h2 id="vtitle"></h2>
+      <p id="vsub"></p>
+    </div>
+    <div class="vbody">
+      <div class="expo">
+        <small>Votre exposition estimée au risque</small>
+        <div class="amt mono" id="vamount"></div>
+        <em>Fourchette indicative — un risque, pas une amende garantie.</em>
       </div>
-      <div class="euro">
-        <div class="box warnbox"><div class="k">Sanction maximale encourue</div><div class="v" id="euMax">—</div></div>
-        <div class="box"><div class="k">Fourchette réaliste (PME)</div><div class="v" id="euReal">—</div></div>
+      <div class="holes">
+        <h3>Vos points faibles</h3>
+        <div id="holes"></div>
       </div>
-
-      <div class="gaps">
-        <h3>Points relevés par le contrôle</h3>
-        <div id="gapList"></div>
-      </div>
-      <p class="disclaimer">Estimation pédagogique et non contractuelle. Les sanctions RGPD peuvent atteindre 20 M€ ou 4 % du CA mondial annuel (art. 83). L'AI Act prévoit jusqu'à 35 M€ ou 7 % du CA pour les pratiques interdites.</p>
-      <div class="verdict-cta">
-        <a href="index.html#offre" class="btn btn-primary">Corriger tout ça →</a>
-        <a href="#miroir" class="btn btn-ghost">Et vous, que savez-vous de moi ?</a>
+      <div class="vcta">
+        <button class="cta" onclick="goOffer()">Colmater ces trous →</button>
+        <button class="again" onclick="restart()">↺ Repasser le contrôle</button>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ══ MIROIR ══ -->
-<section id="miroir">
-  <div class="sec-head">
-    <span class="eyebrow">Le miroir</span>
-    <h2>Et nous&nbsp;? On ne sait rien de vous.</h2>
-    <p>On vient de sonder votre conformité. En retour, voici tout ce que ce site a collecté sur vous pendant votre visite.</p>
+<!-- MIRROR -->
+<section class="mirror">
+  <div class="wrap">
+    <div class="tag">Transparence radicale</div>
+    <h2 class="serif">Et nous, qu'avons-nous appris sur vous ?</h2>
+    <div class="mtable">
+      <div><span>Cookies déposés</span><b>0</b></div>
+      <div><span>Email demandé</span><b>Aucun</b></div>
+      <div><span>Données envoyées à un serveur</span><b>0</b></div>
+      <div><span>Traceurs publicitaires</span><b>Aucun</b></div>
+      <div><span>Ce que nous savons de vous</span><b>Rien.</b></div>
+    </div>
+    <p class="note">Ce site applique ce qu'il vend. Votre contrôle s'est joué entièrement dans votre navigateur. C'est ça, la conformité par la preuve.</p>
   </div>
-  <div class="mirror-grid">
-    <div class="mcard"><div class="big" id="mCookies">0</div><div class="lbl">cookie déposé</div><div class="chk">✓ <span id="mCookiesChk">vérifié en direct</span></div></div>
-    <div class="mcard"><div class="big" id="mTrackers">0</div><div class="lbl">tracker / pixel tiers</div><div class="chk">✓ <span>aucun script externe chargé</span></div></div>
-    <div class="mcard"><div class="big" id="mThird">0</div><div class="lbl">requête vers un tiers</div><div class="chk">✓ <span id="mThirdChk">mesuré dans votre navigateur</span></div></div>
-    <div class="mcard"><div class="big">0</div><div class="lbl">donnée envoyée à un serveur</div><div class="chk">✓ <span>tout est calculé chez vous</span></div></div>
-  </div>
-  <p class="mirror-note">Ce n'est pas un argument marketing, c'est <b>vérifiable</b> : ouvrez les outils de développement (onglet Réseau) et rechargez. Vous ne verrez aucun appel vers Google, Meta ou un outil d'analyse. <b>La conformité, ça se prouve.</b> C'est exactement ce que Clarté fait pour vous.</p>
-  <p style="text-align:center;margin-top:26px"><a href="index.html#offre" class="btn btn-primary">Découvrir les formules →</a></p>
 </section>
 
-<footer><div class="wrap">
-  <div>
-    <a href="index.html">Accueil</a>
-    <a href="mentions.html">Mentions légales</a>
-    <a href="politique-confidentialite.html">Confidentialité</a>
-    <a href="https://www.cnil.fr" target="_blank" rel="noopener">CNIL</a>
+<!-- OFFER -->
+<section class="offer" id="offre">
+  <div class="wrap">
+    <div class="tag">La mise en règle</div>
+    <h2 class="serif">On colmate. Une fois. Pour de bon.</h2>
+    <div class="sub">RGPD et IA réglés ensemble. Prix affichés. Sans jargon.</div>
+    <div class="plans">
+      <div class="plan">
+        <h3>Essentiel</h3>
+        <div class="pd">Pour démarrer et boucher les gros trous.</div>
+        <div class="pr">dès 890 € <small>HT</small></div>
+        <ul>
+          <li>Diagnostic complet</li>
+          <li>Registre des traitements</li>
+          <li>Mentions &amp; confidentialité</li>
+          <li>Cartographie IA simplifiée</li>
+          <li>Plan d'action</li>
+        </ul>
+        <a class="pbtn" href="#rdv">Choisir</a>
+      </div>
+      <div class="plan pop">
+        <div class="rib">★ Le plus choisi</div>
+        <h3>Conformité</h3>
+        <div class="pd">Tout en règle, dossier prêt pour un vrai contrôle.</div>
+        <div class="pr">dès 2 400 € <small>HT</small></div>
+        <ul>
+          <li>Tout Essentiel, approfondi</li>
+          <li>Audit sous-traitants</li>
+          <li>Politique d'usage de l'IA</li>
+          <li>Procédures droits &amp; fuite</li>
+          <li>Formation équipe</li>
+          <li>Attestation de conformité</li>
+        </ul>
+        <a class="pbtn" href="#rdv">Choisir</a>
+      </div>
+      <div class="plan">
+        <h3>Sérénité</h3>
+        <div class="pd">On vous garde en règle toute l'année.</div>
+        <div class="pr">dès 3 900 € <small>HT + suivi</small></div>
+        <ul>
+          <li>Tout Conformité</li>
+          <li>Référent conformité dédié</li>
+          <li>Veille des nouvelles règles</li>
+          <li>Aide en cas de contrôle</li>
+          <li>Revue annuelle</li>
+        </ul>
+        <a class="pbtn" href="#rdv">Choisir</a>
+      </div>
+    </div>
+    <div class="tnote">💡 Tarifs indicatifs HT, ajustés après le diagnostic. Devis gratuit.</div>
   </div>
-  <div>© <span id="year">2026</span> Clarté · RTH NETGOCE — <span class="nolog"><span class="dot"></span> ce site ne vous piste pas</span></div>
-</div></footer>
+</section>
+
+<!-- RDV -->
+<section class="rdv" id="rdv">
+  <div class="wrap">
+    <div class="rdvbox">
+      <div class="ava">L</div>
+      <h2 class="serif">Parlons de votre contrôle</h2>
+      <div class="who">Léa Chikhaoui-Auguste · RTH NETGOCE</div>
+      <p>Un vrai échange, une vraie personne. On regarde ensemble vos points faibles et le chemin le plus court pour être tranquille.</p>
+      <div class="rdv-cta">
+        <a class="primary" href="mailto:r.t.h@orange.fr?subject=Suite%20au%20Contr%C3%B4le%20-%20diagnostic%20RGPD%20%26%20IA&amp;body=Bonjour%2C%0A%0AJ'ai%20pass%C3%A9%20le%20Contr%C3%B4le%20sur%20votre%20site%20et%20je%20souhaite%20en%20parler.%0A%0A-%20Entreprise%20%3A%0A-%20Activit%C3%A9%20%3A%0A-%20T%C3%A9l%C3%A9phone%20%3A%0A%0AMerci.">✉️ Prendre rendez-vous</a>
+        <a class="sec" href="tel:+33661476165">📞 06 61 47 61 65</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <b>RTH NETGOCE</b> — Conformité RGPD &amp; AI Act · 49 rue de Douai, 75009 Paris · r.t.h@orange.fr<br>
+    SIRET 444 244 776 00019 · RCS Paris · Autorité : CNIL — cnil.fr
+    <p class="disc">« Le Contrôle » est un outil pédagogique de sensibilisation, sans valeur de conseil juridique. Les fourchettes affichées illustrent un risque théorique (réf. RGPD — Règl. UE 2016/679 ; AI Act — Règl. UE 2024/1689) et ne préjugent d'aucune sanction. Aucune donnée saisie n'est transmise ni conservée : le test s'exécute uniquement dans votre navigateur.</p>
+  </div>
+</footer>
 
 <script>
-/* ── Les 10 questions de l'inspecteur ── */
-const OPTS=[
-  {label:"Oui, en place et à jour", v:2},
-  {label:"En partie / je ne suis pas sûr(e)", v:1},
-  {label:"Non", v:0}
-];
-const QUESTIONS=[
-  {theme:"RGPD · Registre",q:"Tenez-vous un registre des activités de traitement (article 30 du RGPD) ?",gap:"Registre des traitements absent ou incomplet."},
-  {theme:"RGPD · Information",q:"Votre site a-t-il une politique de confidentialité claire et à jour, accessible à tous ?",gap:"Information des personnes insuffisante (politique de confidentialité)."},
-  {theme:"RGPD · Cookies",q:"Recueillez-vous le consentement AVANT de déposer des cookies non essentiels (analytics, pub) ?",gap:"Cookies déposés sans consentement valable (motif de sanction fréquent)."},
-  {theme:"RGPD · Gouvernance",q:"Avez-vous désigné un référent RGPD (ou un DPO) clairement identifié en interne ?",gap:"Aucun pilote de la conformité désigné."},
-  {theme:"RGPD · Sous-traitants",q:"Vos prestataires (hébergeur, CRM, outils) sont-ils encadrés par un contrat (DPA) et hébergés dans l'UE ?",gap:"Sous-traitants non encadrés / transferts hors UE non maîtrisés."},
-  {theme:"RGPD · Droits",q:"Sauriez-vous répondre à une demande d'accès ou d'effacement en moins d'un mois ?",gap:"Procédure d'exercice des droits inexistante (délai légal : 1 mois)."},
-  {theme:"RGPD · Sécurité",q:"En cas de fuite de données, sauriez-vous notifier la CNIL dans les 72 heures ?",gap:"Aucune procédure de gestion des violations (notification 72 h)."},
-  {theme:"RGPD · Analyse",q:"Avez-vous mené une analyse d'impact (AIPD) pour vos traitements les plus sensibles ?",gap:"AIPD manquante sur des traitements à risque élevé."},
-  {theme:"AI Act · Usage",q:"Utilisez-vous des outils d'IA (chatbot, scoring, tri de CV, IA générative) dans vos activités ?",gap:"Usages d'IA non recensés au regard de l'AI Act."},
-  {theme:"AI Act · Transparence",q:"Si oui, informez-vous les personnes qu'elles interagissent avec une IA, et documentez-vous les usages à risque ?",gap:"Obligation de transparence IA non respectée (AI Act)."}
+/* ===== LE CONTRÔLE — 100% client-side, rien n'est envoyé ===== */
+var QUESTIONS = [
+  { cat:'rg', tag:'DONNÉES', insp:'Montrez-moi vos fichiers.',
+    q:"Vous avez un fichier clients, prospects ou une newsletter ?",
+    opts:[
+      {t:"Oui, et je sais où et pourquoi",r:0},
+      {t:"Oui, mais un peu partout",r:2},
+      {t:"Aucune idée de ce qu'on stocke",r:3}
+    ], hole:{t:"Registre des traitements",s:"Sans lui (art. 30), le contrôle démarre mal."} },
+
+  { cat:'rg', tag:'RH', insp:'Et les CV que vous recevez ?',
+    q:"Où sont rangées les données RH et les CV ?",
+    opts:[
+      {t:"Dans un outil sécurisé, accès limité",r:0},
+      {t:"Dans une boîte mail",r:2},
+      {t:"Sur plusieurs postes, sans règle",r:3}
+    ], hole:{t:"Sécurité & accès",s:"Données RH mal rangées = fuite facile."} },
+
+  { cat:'rg', tag:'REGISTRE', insp:'Votre registre, s\'il vous plaît.',
+    q:"Avez-vous un registre des traitements à jour ?",
+    opts:[
+      {t:"Oui, tenu à jour",r:0},
+      {t:"J'en ai un vieux, jamais mis à jour",r:2},
+      {t:"Un registre… c'est quoi ?",r:3}
+    ], hole:{t:"Document obligatoire manquant",s:"Le 1er papier réclamé par la CNIL."} },
+
+  { cat:'rg', tag:'SITE WEB', insp:'Ouvrons votre site.',
+    q:"Votre site a-t-il un bandeau cookies correct ?",
+    opts:[
+      {t:"Oui, avec accepter/refuser",r:0},
+      {t:"Un bandeau basique, sans refus",r:2},
+      {t:"Pas de bandeau",r:3}
+    ], hole:{t:"Cookies & consentement",s:"Un motif de plainte très fréquent."} },
+
+  { cat:'ia', tag:'IA', insp:'Parlons intelligence artificielle.',
+    q:"Utilisez-vous une IA (ChatGPT, chatbot, tri de CV) ?",
+    opts:[
+      {t:"Non, aucune",r:0},
+      {t:"Oui, en interne surtout",r:1},
+      {t:"Oui, face aux clients (chatbot…)",r:2}
+    ], hole:{t:"Cartographie IA absente",s:"L'AI Act impose de classer vos usages."} },
+
+  { cat:'ia', tag:'ÉQUIPE', insp:'Vos équipes sont-elles formées ?',
+    q:"Votre personnel est-il formé à l'usage de l'IA ?",
+    opts:[
+      {t:"Oui, sensibilisé",r:0},
+      {t:"Non, pas vraiment",r:2},
+      {t:"On ne s'est jamais posé la question",r:3}
+    ], hole:{t:"Littératie IA (art. 4)",s:"Obligatoire depuis février 2025."} },
+
+  { cat:'rg', tag:'SOUS-TRAITANTS', insp:'Qui touche à vos données ?',
+    q:"Vos prestataires ont-ils un contrat RGPD ?",
+    opts:[
+      {t:"Oui, encadré (art. 28)",r:0},
+      {t:"Je ne sais pas",r:2},
+      {t:"Non, rien de signé",r:3}
+    ], hole:{t:"Contrats sous-traitants",s:"Votre responsabilité, même via un tiers."} },
+
+  { cat:'rg', tag:'INCIDENT', insp:'Dernière question. Une fuite arrive.',
+    q:"Sauriez-vous réagir à une fuite de données en 72 h ?",
+    opts:[
+      {t:"Oui, procédure écrite",r:0},
+      {t:"Vaguement",r:2},
+      {t:"Pas du tout",r:3}
+    ], hole:{t:"Procédure de violation",s:"Notifier sous 72 h, sinon sanction aggravée."} }
 ];
 
-let cur=0;
-const answers=new Array(QUESTIONS.length).fill(null);
+var idx=0, score=0, holes=[];
+var hero=document.getElementById('hero'),
+    quiz=document.getElementById('quiz'),
+    verdict=document.getElementById('verdict');
 
-function renderQ(){
-  const Q=QUESTIONS[cur];
-  document.getElementById('qCount').textContent=`Question ${cur+1} / ${QUESTIONS.length}`;
-  document.getElementById('qTheme').textContent=Q.theme;
-  document.getElementById('qText').textContent=Q.q;
-  document.getElementById('qBar').style.width=(cur/QUESTIONS.length)*100+'%';
-  const box=document.getElementById('qOpts');box.innerHTML='';
-  OPTS.forEach((o,i)=>{
-    const d=document.createElement('button');
-    d.className='opt'+(answers[cur]===i?' sel':'');
-    d.innerHTML=`<span class="tick">${answers[cur]===i?'✓':''}</span> ${o.label}`;
-    d.onclick=()=>{answers[cur]=i;renderQ();document.getElementById('qNext').disabled=false;};
-    box.appendChild(d);
+function startQuiz(){ idx=0;score=0;holes=[]; hero.style.display='none'; verdict.classList.remove('on'); quiz.classList.add('on'); render(); window.scrollTo(0,0); }
+
+function render(){
+  var Q=QUESTIONS[idx];
+  document.getElementById('bar').style.width=((idx)/QUESTIONS.length*100)+'%';
+  document.getElementById('pcount').textContent=(idx+1)+' / '+QUESTIONS.length;
+  document.getElementById('insp').textContent=Q.insp;
+  document.getElementById('qtag').innerHTML='<span class="qtag '+Q.cat+'">'+(Q.cat==='ia'?'🤖 AI ACT':'🔐 RGPD')+' · '+Q.tag+'</span>';
+  document.getElementById('qtext').textContent=Q.q;
+  var box=document.getElementById('opts'); box.innerHTML='';
+  var keys=['A','B','C'];
+  Q.opts.forEach(function(o,i){
+    var b=document.createElement('button');
+    b.className='opt';
+    b.innerHTML='<span class="k">'+keys[i]+'</span>'+o.t;
+    b.onclick=function(){ answer(o.r,Q.hole); };
+    box.appendChild(b);
   });
-  document.getElementById('qPrev').style.visibility=cur===0?'hidden':'visible';
-  document.getElementById('qNext').disabled=answers[cur]===null;
-  document.getElementById('qNext').textContent=cur===QUESTIONS.length-1?'Voir mon verdict ✓':'Suivant →';
 }
-function nextQ(){
-  if(answers[cur]===null)return;
-  if(cur<QUESTIONS.length-1){cur++;renderQ();}else{showVerdict();}
+
+function answer(r,hole){
+  score+=r;
+  if(r>=2) holes.push(hole);
+  idx++;
+  if(idx>=QUESTIONS.length) showVerdict();
+  else render();
 }
-function prevQ(){if(cur>0){cur--;renderQ();}}
 
 function showVerdict(){
-  const pts=answers.reduce((s,a)=>s+(a===null?0:OPTS[a].v),0);
-  const max=QUESTIONS.length*2;
-  const pct=Math.round(pts/max*100);
-  const v=document.getElementById('verdict');v.classList.remove('hidden');
-  const circ=2*Math.PI*78;
-  const arc=document.getElementById('gaugeArc');
-  arc.setAttribute('stroke-dasharray',circ);
-  arc.setAttribute('stroke-dashoffset',circ*(1-pct/100));
-  arc.setAttribute('stroke',pct>=75?'var(--ok)':pct>=45?'var(--warn)':'var(--danger)');
-  document.getElementById('scorePct').textContent=pct+'%';
-  const pill=document.getElementById('riskPill');const line=document.getElementById('riskLine');
-  if(pct>=75){pill.className='risk-pill risk-lo';pill.textContent='✓ Risque maîtrisé';line.textContent="Bonne base. Quelques ajustements sécuriseraient totalement un contrôle.";}
-  else if(pct>=45){pill.className='risk-pill risk-mid';pill.textContent='⚠ Risque modéré';line.textContent="Des manques exploitables lors d'un contrôle. À corriger sans tarder.";}
-  else{pill.className='risk-pill risk-hi';pill.textContent='⛔ Risque élevé';line.textContent="En l'état, un contrôle relèverait plusieurs non-conformités sérieuses.";}
-  const list=document.getElementById('gapList');list.innerHTML='';
-  QUESTIONS.forEach((Q,i)=>{
-    const a=answers[i];
-    const cls=a===2?'ok':a===1?'mid':'ko';
-    const ic=a===2?'✓':a===1?'~':'!';
-    const txt=a===2?`<b>Conforme.</b> ${Q.theme}`:Q.gap;
-    const d=document.createElement('div');d.className='gap '+cls;
-    d.innerHTML=`<span class="ic">${ic}</span><div>${txt}</div>`;
-    list.appendChild(d);
+  quiz.classList.remove('on');
+  verdict.classList.add('on');
+  var max=QUESTIONS.reduce(function(a,q){return a+Math.max.apply(null,q.opts.map(function(o){return o.r;}));},0);
+  var pct=score/max; // 0 = clean, 1 = catastrophe
+  var head=document.getElementById('vhead'), t, sub, amt, color, st;
+  if(pct<=0.22){ t="Vous tenez.";  sub="Solide, mais un contrôle réel gratte plus fort."; amt="≈ 0 – 1 500 €"; color="linear-gradient(135deg,#2e7d32,#1b5e20)"; st="Faible risque"; }
+  else if(pct<=0.55){ t="Ça vacille."; sub="Plusieurs trous. Un contrôle vous mettrait en difficulté."; amt="≈ 2 000 – 15 000 €"; color="linear-gradient(135deg,#b8860b,#8a6100)"; st="Risque moyen"; }
+  else { t="Vous tombez."; sub="Dossier vide. Vous êtes exposé, dès aujourd'hui."; amt="≈ 15 000 € et +"; color="linear-gradient(135deg,#c0392b,#8e2a1f)"; st="Risque élevé"; }
+  head.style.background=color;
+  head.querySelector('.vst').textContent=st;
+  document.getElementById('vtitle').textContent=t;
+  document.getElementById('vsub').textContent=sub;
+  document.getElementById('vamount').textContent=amt;
+  var H=document.getElementById('holes'); H.innerHTML='';
+  var list = holes.length? holes : [{t:"Aucun trou majeur",s:"Beau parcours. On sécurise le reste ensemble."}];
+  // dédoublonnage simple
+  var seen={};
+  list.filter(function(h){ if(seen[h.t])return false; seen[h.t]=1; return true; }).forEach(function(h){
+    var col = holes.length? '#c0392b':'#2e7d32';
+    var d=document.createElement('div'); d.className='hole';
+    d.innerHTML='<span class="hi" style="background:'+col+'">'+(holes.length?'!':'✓')+'</span><div><b>'+h.t+'</b><span>'+h.s+'</span></div>';
+    H.appendChild(d);
   });
-  window._gapCount=answers.filter(a=>a!==2).length;
-  renderEuro();
-  v.scrollIntoView({behavior:'smooth'});
-}
-function fmt(n){return new Intl.NumberFormat('fr-FR').format(Math.round(n))+' €';}
-function renderEuro(){
-  const ca=parseFloat(document.getElementById('caInput').value)||0;
-  const legalMax=ca>0?Math.min(20000000,ca*0.04):20000000;
-  document.getElementById('euMax').textContent=ca>0?fmt(legalMax):"20 M€ ou 4% CA";
-  const gaps=window._gapCount||0;
-  if(gaps===0){document.getElementById('euReal').textContent="≈ 0 €";return;}
-  document.getElementById('euReal').textContent=`${fmt(gaps*1500)} – ${fmt(gaps*6000)}`;
+  document.getElementById('bar').style.width='100%';
+  window.scrollTo(0,0);
 }
 
-/* ── Miroir : vérifications RÉELLES ── */
-function runMirror(){
-  const cookies=document.cookie?document.cookie.split(';').filter(Boolean).length:0;
-  document.getElementById('mCookies').textContent=cookies;
-  if(cookies>0)document.getElementById('mCookiesChk').textContent='cookies détectés';
-  try{
-    const here=location.origin;
-    const res=performance.getEntriesByType('resource')||[];
-    const third=res.filter(r=>{try{return new URL(r.name).origin!==here;}catch(e){return false;}}).length;
-    document.getElementById('mThird').textContent=third;
-    document.getElementById('mTrackers').textContent=third;
-    if(third>0)document.getElementById('mThirdChk').textContent='requêtes tierces détectées';
-  }catch(e){}
-}
-function init(){
-  document.getElementById('year').textContent=new Date().getFullYear();
-  renderQ();
-  runMirror();
-}
-if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));}
-document.addEventListener('DOMContentLoaded',init);
+function goOffer(){ document.getElementById('offre').scrollIntoView({behavior:'smooth'}); }
+function restart(){ verdict.classList.remove('on'); hero.style.display='block'; window.scrollTo(0,0); }
 </script>
 </body>
 </html>

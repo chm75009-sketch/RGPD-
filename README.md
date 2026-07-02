@@ -1,67 +1,42 @@
 # Clarté — Conformité RGPD & AI Act
 
-Prestation de mise en conformité **RGPD + AI Act** pour les TPE/PME (tous secteurs).
-Site vitrine + simulateur « Le Contrôle ».
+Site vitrine + simulateur « Le Contrôle » pour la prestation de mise en conformité
+**RGPD + AI Act** destinée aux TPE/PME.
 
 - **Éditeur :** RTH NETGOCE — Léa Chikhaoui-Auguste
 - **Contact :** r.t.h@orange.fr · 06 61 47 61 65 · 49 rue de Douai, 75009 Paris
 - **SIRET :** 444 244 776 00019
 
-> **Le concept (idée de Fable) :** le visiteur passe un *contrôle CNIL/AI Act simulé*
-> de son entreprise en 3 minutes. Puis le site lui-même **prouve** la conformité
-> qu'il vend : zéro cookie, rien envoyé, page « ce qu'on sait de vous : rien ».
+> **Concept (idée de Fable) :** le visiteur passe un *contrôle CNIL / AI Act simulé*
+> de son entreprise en 3 minutes → verdict + risque en euros → offre → prise de RDV.
+> Le site se veut « preuve par l'exemple » (transparence radicale, page miroir).
 
 ## Les 2 fichiers
 
 | Fichier | Rôle |
 |---|---|
-| `index.html` | **Page de vente** : accroche « Vous venez de recevoir un contrôle », méthode R‑G‑P‑D, 3 formules, prise de RDV. |
-| `le-controle.html` | **Le test interactif** : simulateur (10 questions) → verdict + risque en € → page « miroir ». |
+| `index.html` | **Page de vente premium** : hero, enjeux, 2 piliers RGPD/IA, timeline AI Act, méthode, offre (3 formules), FAQ, contact. |
+| `le-controle.html` | **Le test interactif** : convocation → quiz (RGPD + AI Act) → verdict + exposition en € → page « miroir ». |
 
-Fichiers **autonomes** : aucune dépendance externe (pas de Google Fonts, pas de CDN,
-pas d'analytics, pas de cookie). Tout est inline/local, le simulateur tourne 100 %
-dans le navigateur.
+Les deux pages sont **autonomes** (un seul fichier chacune, HTML/CSS/JS inline).
 
-> ⚠️ **Ne jamais ajouter** de `<script src="https://…">`, de police Google Fonts,
-> ni d'outil de mesure : la page « miroir » deviendrait mensongère (le compteur
-> « requêtes tierces » ne serait plus à 0).
+## Les 3 formules
 
-## Le parcours (« Le Contrôle »)
+Essentiel **dès 890 € HT** · Conformité **dès 2 400 € HT** · Sérénité **dès 3 900 € HT + suivi**.
+(Tarifs indicatifs.)
 
-1. **Accueil** (`index.html`) — « Vous venez de recevoir un contrôle. »
-2. **Simulateur** (`le-controle.html`) — 10 questions d'inspecteur (RGPD + AI Act).
-3. **Verdict** — score de conformité, niveau de risque, exposition en euros.
-4. **Le miroir** — « On ne sait rien de vous » : compteurs vérifiés en direct (0 cookie, 0 tracker, 0 requête tierce).
-5. **Offre** — 3 formules + prise de rendez-vous.
+## Points d'attention connus (non corrigés — voir avec l'éditeur)
 
-## Méthode R · G · P · D
-
-**R**egarder (diagnostic) · **G**uider (plan d'action) · **P**rotéger (mise en conformité) · **D**éfendre (prêt en cas de contrôle).
-
-## Les 3 formules (tarifs indicatifs, « à partir de »)
-
-| Formule | Prix | Positionnement |
-|---|---|---|
-| Essentiel | dès **890 € HT** | diagnostic RGPD + IA |
-| Conformité | dès **2 400 € HT** | **le plus populaire** — mise en conformité complète |
-| Sérénité | dès **3 900 € HT** | + suivi dans la durée |
-
-Modifiables dans `index.html`, section « OFFRE ».
-
-## Personnalisation
-
-Objet `CONFIG` en haut du `<script>` de `index.html` (déjà renseigné) :
-`contactEmail`, `contactTel`, `humain`, `humainRole`, `bookingUrl` (optionnel).
-
-> Pour un agenda de RDV, éviter Calendly/Cal.com hébergés (scripts tiers = trackers).
-> Privilégier le `mailto` par défaut ou un agenda auto-hébergé.
+- **Polices Google Fonts distantes** (`fonts.googleapis.com` / `gstatic.com`) : cela
+  transmet l'IP du visiteur à Google (jugé non conforme au RGPD, LG München 2022).
+  Comme la page « miroir » affiche « 0 donnée envoyée / transparence radicale »,
+  il est recommandé d'**héberger les polices en local** pour tenir la promesse.
+- **Pas de lien entre les 2 pages** (`index.html` ⇄ `le-controle.html`) : à câbler
+  si le parcours doit être continu.
+- **Pages légales** : les mentions légales et la politique de confidentialité sont
+  évoquées mais n'existent pas encore en pages dédiées.
 
 ## Mise en ligne
 
 Site 100 % statique → GitHub Pages, Netlify ou tout hébergeur de fichiers.
 Aucune base de données requise.
-
-## `docs/`
-
-Modèles de documents RGPD réutilisables (registre, procédures, durées de conservation)
-pour les livrables clients.
