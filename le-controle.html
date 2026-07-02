@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#153e35">
+<meta name="description" content="Le Contrôle — passez un contrôle CNIL / AI Act simulé de votre entreprise en 3 minutes. Résultat calculé dans votre navigateur, aucune donnée collectée.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<title>Le Contrôle — Test de conformité CNIL & AI Act | Clarté</title>
+<!--
+  CLARTÉ — « Le Contrôle ». Aucune dépendance externe (pas de Google Fonts,
+  pas de CDN, pas d'analytics, pas de cookie). Simulateur 100 % côté navigateur.
+  Ne PAS ajouter de <script src="https://…"> : casserait la page « miroir ».
+-->
+<style>
+:root{
+  --navy:#153e35; --navy2:#1f5649; --teal:#2d6f60; --teal2:#3b8a77;
+  --ok:#2a9a57; --warn:#b79029; --danger:#d84f43;
+  --bg:#f5f2ea; --card:#fff; --border:#dfe6e0;
+  --text:#17211d; --muted:#65716b; --ink:#0f1c18;
+  --serif:'Iowan Old Style','Palatino Linotype','Palatino','Book Antiqua',Georgia,serif;
+  --sans:system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  color-scheme: light only;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);font-family:var(--sans);color:var(--text);line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+.wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;padding:7px 13px;border-radius:999px;background:rgba(255,255,255,.9);border:1px solid rgba(31,86,73,.14);color:var(--navy2);font-size:.72rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase}
+h1,h2,h3{font-family:var(--serif);color:var(--navy);line-height:1.12;font-weight:600}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;border:none;border-radius:999px;padding:14px 28px;font-family:var(--sans);font-weight:800;font-size:.98rem;cursor:pointer;text-decoration:none;transition:transform .15s,box-shadow .15s,opacity .15s}
+.btn-primary{background:linear-gradient(135deg,var(--teal),var(--navy));color:#fff;box-shadow:0 10px 30px rgba(21,62,53,.22)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(21,62,53,.3)}
+.btn-ghost{background:#fff;color:var(--navy);border:1.5px solid var(--border)}
+.btn-ghost:hover{border-color:var(--teal)}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+
+/* ── NAV ── */
+.nav{position:sticky;top:0;z-index:50;background:rgba(245,242,234,.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:60px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:900;color:var(--navy);letter-spacing:.02em;text-decoration:none}
+.brand .mark{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--navy),var(--teal));display:grid;place-items:center;color:#fff;font-family:var(--serif);font-size:1rem}
+.nolog{font-size:.72rem;color:var(--muted);font-weight:700;display:inline-flex;gap:6px;align-items:center}
+.nolog .dot{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 4px rgba(42,154,87,.15)}
+@media(max-width:680px){.nolog{display:none}}
+
+section{padding:64px 0}
+.sec-head{text-align:center;max-width:680px;margin:0 auto 34px}
+.sec-head h2{font-size:clamp(1.7rem,4.5vw,2.4rem);margin:14px 0 10px}
+.sec-head p{color:var(--muted);font-size:1.02rem}
+
+/* ── INTRO ── */
+.intro{padding:56px 0 10px;text-align:center}
+.intro .wrap{max-width:760px}
+.intro h1{font-size:clamp(1.9rem,5.5vw,3rem);margin:16px 0 12px}
+.intro p{color:var(--muted);font-size:1.1rem;max-width:600px;margin:0 auto}
+
+/* ── SIMULATEUR ── */
+#simulateur{background:var(--navy);color:#fff}
+#simulateur h2,#simulateur .eyebrow{color:#fff}
+#simulateur .eyebrow{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.16);color:#dfeee9}
+#simulateur .sec-head p{color:rgba(255,255,255,.7)}
+.quiz{max-width:640px;margin:0 auto;background:#fff;color:var(--text);border-radius:20px;padding:30px 28px;box-shadow:0 30px 80px rgba(0,0,0,.35)}
+.q-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.q-count{font-size:.74rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--teal)}
+.q-bar{height:6px;background:#eef1ef;border-radius:999px;overflow:hidden;margin-bottom:22px}
+.q-bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--teal),var(--navy));border-radius:999px;transition:width .35s}
+.q-inspector{font-size:.78rem;color:var(--muted);font-style:italic;margin-bottom:6px}
+.q-text{font-family:var(--serif);font-size:1.32rem;color:var(--navy);margin-bottom:20px;line-height:1.25}
+.q-opts{display:grid;gap:10px}
+.opt{display:flex;align-items:center;gap:12px;padding:14px 16px;border:1.6px solid var(--border);border-radius:12px;background:#fafbfa;cursor:pointer;font-weight:600;font-size:.96rem;transition:all .15s;text-align:left;font-family:var(--sans);color:var(--text)}
+.opt:hover{border-color:var(--teal);background:#fff}
+.opt.sel{border-color:var(--navy);background:#eef5f2}
+.opt .tick{width:22px;height:22px;border-radius:50%;border:2px solid var(--border);flex:none;display:grid;place-items:center;font-size:.7rem;color:#fff}
+.opt.sel .tick{background:var(--navy);border-color:var(--navy)}
+.q-nav{display:flex;justify-content:space-between;margin-top:24px;gap:10px}
+
+/* ── VERDICT ── */
+.verdict{max-width:760px;margin:0 auto}
+.score-card{background:#fff;border-radius:22px;padding:34px 30px;box-shadow:0 20px 60px rgba(21,62,53,.1);text-align:center;border:1px solid var(--border)}
+.gauge{position:relative;width:180px;height:180px;margin:6px auto 12px}
+.gauge svg{transform:rotate(-90deg)}
+.gauge .num{position:absolute;inset:0;display:grid;place-content:center;text-align:center}
+.gauge .num b{font-size:2.6rem;font-family:var(--serif);color:var(--navy);display:block;line-height:1}
+.gauge .num span{font-size:.72rem;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);font-weight:800}
+.risk-pill{display:inline-flex;align-items:center;gap:8px;padding:8px 18px;border-radius:999px;font-weight:800;font-size:.92rem;margin:4px 0 6px}
+.risk-hi{background:rgba(216,79,67,.12);color:var(--danger)}
+.risk-mid{background:rgba(183,144,41,.14);color:var(--warn)}
+.risk-lo{background:rgba(42,154,87,.14);color:var(--ok)}
+.euro{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:24px 0}
+.euro .box{background:var(--bg);border:1px solid var(--border);border-radius:16px;padding:18px}
+.euro .box .k{font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:800;margin-bottom:6px}
+.euro .box .v{font-size:1.7rem;font-weight:900;color:var(--navy);font-family:var(--serif)}
+.euro .box.warnbox .v{color:var(--danger)}
+.ca-row{margin:8px 0 4px}
+.ca-row label{font-size:.82rem;color:var(--muted);font-weight:700;display:block;margin-bottom:5px}
+.ca-row input{padding:11px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:.95rem;width:220px;font-family:var(--sans)}
+.gaps{text-align:left;margin-top:26px}
+.gaps h3{font-size:1.15rem;margin-bottom:12px}
+.gap{display:flex;gap:12px;padding:13px 0;border-top:1px solid var(--border);font-size:.94rem}
+.gap .ic{flex:none;width:24px;height:24px;border-radius:7px;display:grid;place-items:center;font-size:.8rem;font-weight:900;color:#fff}
+.gap.ko .ic{background:var(--danger)}
+.gap.mid .ic{background:var(--warn)}
+.gap.ok .ic{background:var(--ok)}
+.gap b{color:var(--navy)}
+.disclaimer{font-size:.78rem;color:var(--muted);margin-top:20px;font-style:italic}
+.verdict-cta{text-align:center;margin-top:26px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+
+/* ── MIROIR ── */
+#miroir{background:linear-gradient(180deg,#0f1c18,#153e35);color:#fff}
+#miroir h2{color:#fff}
+#miroir .eyebrow{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.16);color:#dfeee9}
+#miroir .sec-head p{color:rgba(255,255,255,.72)}
+.mirror-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:760px;margin:0 auto}
+.mcard{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:22px}
+.mcard .big{font-size:2.4rem;font-family:var(--serif);color:#fff;line-height:1;margin-bottom:6px}
+.mcard .lbl{font-size:.92rem;color:rgba(255,255,255,.82);font-weight:700}
+.mcard .chk{font-size:.78rem;color:#7fd6ab;font-weight:800;margin-top:8px;display:inline-flex;gap:6px;align-items:center}
+.mirror-note{max-width:640px;margin:26px auto 0;text-align:center;color:rgba(255,255,255,.78);font-size:.95rem}
+.mirror-note b{color:#fff}
+@media(max-width:560px){.mirror-grid{grid-template-columns:1fr}.euro{grid-template-columns:1fr}}
+
+footer{background:var(--navy);color:rgba(255,255,255,.75);padding:40px 0;font-size:.88rem}
+footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:center}
+footer a{color:rgba(255,255,255,.85);text-decoration:none;margin-right:16px}
+footer a:hover{color:#fff;text-decoration:underline}
+.hidden{display:none!important}
+</style>
+</head>
+<body>
+
+<!-- ══ NAV ══ -->
+<nav class="nav"><div class="wrap">
+  <a class="brand" href="index.html"><span class="mark">C</span> Clarté</a>
+  <div style="display:flex;align-items:center;gap:16px">
+    <span class="nolog"><span class="dot"></span> 0 cookie · 0 tracker</span>
+    <a href="index.html#offre" class="btn btn-ghost" style="font-size:.86rem;padding:9px 18px">Les formules</a>
+  </div>
+</div></nav>
+
+<!-- ══ INTRO ══ -->
+<header class="intro"><div class="wrap">
+  <span class="eyebrow">⚖️ Simulation — Contrôle CNIL &amp; AI Act</span>
+  <h1>Vous venez de recevoir un contrôle.</h1>
+  <p>Un inspecteur se présente. Il a 10 questions. Répondez honnêtement — personne ne vous écoute, littéralement. Résultat en 3 minutes, calculé dans votre navigateur.</p>
+</div></header>
+
+<!-- ══ SIMULATEUR ══ -->
+<section id="simulateur">
+  <div class="sec-head">
+    <span class="eyebrow">L'interrogatoire</span>
+    <h2>Répondez à l'inspecteur.</h2>
+  </div>
+  <div class="quiz">
+    <div class="q-top">
+      <span class="q-count" id="qCount">Question 1 / 10</span>
+      <span class="q-count" id="qTheme" style="color:var(--muted)"></span>
+    </div>
+    <div class="q-bar"><i id="qBar"></i></div>
+    <div class="q-inspector">👤 L'inspecteur demande :</div>
+    <div class="q-text" id="qText">…</div>
+    <div class="q-opts" id="qOpts"></div>
+    <div class="q-nav">
+      <button class="btn btn-ghost" id="qPrev" onclick="prevQ()">← Précédent</button>
+      <button class="btn btn-primary" id="qNext" onclick="nextQ()" disabled>Suivant →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ══ VERDICT ══ -->
+<section id="verdict" class="hidden">
+  <div class="sec-head">
+    <span class="eyebrow">Le verdict</span>
+    <h2>Rapport de contrôle</h2>
+    <p>Voici ce qu'un contrôleur relèverait aujourd'hui.</p>
+  </div>
+  <div class="verdict">
+    <div class="score-card">
+      <div class="gauge">
+        <svg width="180" height="180" viewBox="0 0 180 180">
+          <circle cx="90" cy="90" r="78" fill="none" stroke="#eef1ef" stroke-width="16"/>
+          <circle id="gaugeArc" cx="90" cy="90" r="78" fill="none" stroke="var(--teal)" stroke-width="16" stroke-linecap="round" stroke-dasharray="490" stroke-dashoffset="490"/>
+        </svg>
+        <div class="num"><b id="scorePct">0%</b><span>conforme</span></div>
+      </div>
+      <div id="riskPill" class="risk-pill risk-mid">Risque à évaluer</div>
+      <p id="riskLine" style="color:var(--muted);max-width:520px;margin:6px auto 0"></p>
+
+      <div class="ca-row">
+        <label for="caInput">Votre chiffre d'affaires annuel (€) — optionnel</label>
+        <input type="number" id="caInput" min="0" step="1000" placeholder="Ex. 450 000" oninput="renderEuro()">
+      </div>
+      <div class="euro">
+        <div class="box warnbox"><div class="k">Sanction maximale encourue</div><div class="v" id="euMax">—</div></div>
+        <div class="box"><div class="k">Fourchette réaliste (PME)</div><div class="v" id="euReal">—</div></div>
+      </div>
+
+      <div class="gaps">
+        <h3>Points relevés par le contrôle</h3>
+        <div id="gapList"></div>
+      </div>
+      <p class="disclaimer">Estimation pédagogique et non contractuelle. Les sanctions RGPD peuvent atteindre 20 M€ ou 4 % du CA mondial annuel (art. 83). L'AI Act prévoit jusqu'à 35 M€ ou 7 % du CA pour les pratiques interdites.</p>
+      <div class="verdict-cta">
+        <a href="index.html#offre" class="btn btn-primary">Corriger tout ça →</a>
+        <a href="#miroir" class="btn btn-ghost">Et vous, que savez-vous de moi ?</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ MIROIR ══ -->
+<section id="miroir">
+  <div class="sec-head">
+    <span class="eyebrow">Le miroir</span>
+    <h2>Et nous&nbsp;? On ne sait rien de vous.</h2>
+    <p>On vient de sonder votre conformité. En retour, voici tout ce que ce site a collecté sur vous pendant votre visite.</p>
+  </div>
+  <div class="mirror-grid">
+    <div class="mcard"><div class="big" id="mCookies">0</div><div class="lbl">cookie déposé</div><div class="chk">✓ <span id="mCookiesChk">vérifié en direct</span></div></div>
+    <div class="mcard"><div class="big" id="mTrackers">0</div><div class="lbl">tracker / pixel tiers</div><div class="chk">✓ <span>aucun script externe chargé</span></div></div>
+    <div class="mcard"><div class="big" id="mThird">0</div><div class="lbl">requête vers un tiers</div><div class="chk">✓ <span id="mThirdChk">mesuré dans votre navigateur</span></div></div>
+    <div class="mcard"><div class="big">0</div><div class="lbl">donnée envoyée à un serveur</div><div class="chk">✓ <span>tout est calculé chez vous</span></div></div>
+  </div>
+  <p class="mirror-note">Ce n'est pas un argument marketing, c'est <b>vérifiable</b> : ouvrez les outils de développement (onglet Réseau) et rechargez. Vous ne verrez aucun appel vers Google, Meta ou un outil d'analyse. <b>La conformité, ça se prouve.</b> C'est exactement ce que Clarté fait pour vous.</p>
+  <p style="text-align:center;margin-top:26px"><a href="index.html#offre" class="btn btn-primary">Découvrir les formules →</a></p>
+</section>
+
+<footer><div class="wrap">
+  <div>
+    <a href="index.html">Accueil</a>
+    <a href="mentions.html">Mentions légales</a>
+    <a href="politique-confidentialite.html">Confidentialité</a>
+    <a href="https://www.cnil.fr" target="_blank" rel="noopener">CNIL</a>
+  </div>
+  <div>© <span id="year">2026</span> Clarté · RTH NETGOCE — <span class="nolog"><span class="dot"></span> ce site ne vous piste pas</span></div>
+</div></footer>
+
+<script>
+/* ── Les 10 questions de l'inspecteur ── */
+const OPTS=[
+  {label:"Oui, en place et à jour", v:2},
+  {label:"En partie / je ne suis pas sûr(e)", v:1},
+  {label:"Non", v:0}
+];
+const QUESTIONS=[
+  {theme:"RGPD · Registre",q:"Tenez-vous un registre des activités de traitement (article 30 du RGPD) ?",gap:"Registre des traitements absent ou incomplet."},
+  {theme:"RGPD · Information",q:"Votre site a-t-il une politique de confidentialité claire et à jour, accessible à tous ?",gap:"Information des personnes insuffisante (politique de confidentialité)."},
+  {theme:"RGPD · Cookies",q:"Recueillez-vous le consentement AVANT de déposer des cookies non essentiels (analytics, pub) ?",gap:"Cookies déposés sans consentement valable (motif de sanction fréquent)."},
+  {theme:"RGPD · Gouvernance",q:"Avez-vous désigné un référent RGPD (ou un DPO) clairement identifié en interne ?",gap:"Aucun pilote de la conformité désigné."},
+  {theme:"RGPD · Sous-traitants",q:"Vos prestataires (hébergeur, CRM, outils) sont-ils encadrés par un contrat (DPA) et hébergés dans l'UE ?",gap:"Sous-traitants non encadrés / transferts hors UE non maîtrisés."},
+  {theme:"RGPD · Droits",q:"Sauriez-vous répondre à une demande d'accès ou d'effacement en moins d'un mois ?",gap:"Procédure d'exercice des droits inexistante (délai légal : 1 mois)."},
+  {theme:"RGPD · Sécurité",q:"En cas de fuite de données, sauriez-vous notifier la CNIL dans les 72 heures ?",gap:"Aucune procédure de gestion des violations (notification 72 h)."},
+  {theme:"RGPD · Analyse",q:"Avez-vous mené une analyse d'impact (AIPD) pour vos traitements les plus sensibles ?",gap:"AIPD manquante sur des traitements à risque élevé."},
+  {theme:"AI Act · Usage",q:"Utilisez-vous des outils d'IA (chatbot, scoring, tri de CV, IA générative) dans vos activités ?",gap:"Usages d'IA non recensés au regard de l'AI Act."},
+  {theme:"AI Act · Transparence",q:"Si oui, informez-vous les personnes qu'elles interagissent avec une IA, et documentez-vous les usages à risque ?",gap:"Obligation de transparence IA non respectée (AI Act)."}
+];
+
+let cur=0;
+const answers=new Array(QUESTIONS.length).fill(null);
+
+function renderQ(){
+  const Q=QUESTIONS[cur];
+  document.getElementById('qCount').textContent=`Question ${cur+1} / ${QUESTIONS.length}`;
+  document.getElementById('qTheme').textContent=Q.theme;
+  document.getElementById('qText').textContent=Q.q;
+  document.getElementById('qBar').style.width=(cur/QUESTIONS.length)*100+'%';
+  const box=document.getElementById('qOpts');box.innerHTML='';
+  OPTS.forEach((o,i)=>{
+    const d=document.createElement('button');
+    d.className='opt'+(answers[cur]===i?' sel':'');
+    d.innerHTML=`<span class="tick">${answers[cur]===i?'✓':''}</span> ${o.label}`;
+    d.onclick=()=>{answers[cur]=i;renderQ();document.getElementById('qNext').disabled=false;};
+    box.appendChild(d);
+  });
+  document.getElementById('qPrev').style.visibility=cur===0?'hidden':'visible';
+  document.getElementById('qNext').disabled=answers[cur]===null;
+  document.getElementById('qNext').textContent=cur===QUESTIONS.length-1?'Voir mon verdict ✓':'Suivant →';
+}
+function nextQ(){
+  if(answers[cur]===null)return;
+  if(cur<QUESTIONS.length-1){cur++;renderQ();}else{showVerdict();}
+}
+function prevQ(){if(cur>0){cur--;renderQ();}}
+
+function showVerdict(){
+  const pts=answers.reduce((s,a)=>s+(a===null?0:OPTS[a].v),0);
+  const max=QUESTIONS.length*2;
+  const pct=Math.round(pts/max*100);
+  const v=document.getElementById('verdict');v.classList.remove('hidden');
+  const circ=2*Math.PI*78;
+  const arc=document.getElementById('gaugeArc');
+  arc.setAttribute('stroke-dasharray',circ);
+  arc.setAttribute('stroke-dashoffset',circ*(1-pct/100));
+  arc.setAttribute('stroke',pct>=75?'var(--ok)':pct>=45?'var(--warn)':'var(--danger)');
+  document.getElementById('scorePct').textContent=pct+'%';
+  const pill=document.getElementById('riskPill');const line=document.getElementById('riskLine');
+  if(pct>=75){pill.className='risk-pill risk-lo';pill.textContent='✓ Risque maîtrisé';line.textContent="Bonne base. Quelques ajustements sécuriseraient totalement un contrôle.";}
+  else if(pct>=45){pill.className='risk-pill risk-mid';pill.textContent='⚠ Risque modéré';line.textContent="Des manques exploitables lors d'un contrôle. À corriger sans tarder.";}
+  else{pill.className='risk-pill risk-hi';pill.textContent='⛔ Risque élevé';line.textContent="En l'état, un contrôle relèverait plusieurs non-conformités sérieuses.";}
+  const list=document.getElementById('gapList');list.innerHTML='';
+  QUESTIONS.forEach((Q,i)=>{
+    const a=answers[i];
+    const cls=a===2?'ok':a===1?'mid':'ko';
+    const ic=a===2?'✓':a===1?'~':'!';
+    const txt=a===2?`<b>Conforme.</b> ${Q.theme}`:Q.gap;
+    const d=document.createElement('div');d.className='gap '+cls;
+    d.innerHTML=`<span class="ic">${ic}</span><div>${txt}</div>`;
+    list.appendChild(d);
+  });
+  window._gapCount=answers.filter(a=>a!==2).length;
+  renderEuro();
+  v.scrollIntoView({behavior:'smooth'});
+}
+function fmt(n){return new Intl.NumberFormat('fr-FR').format(Math.round(n))+' €';}
+function renderEuro(){
+  const ca=parseFloat(document.getElementById('caInput').value)||0;
+  const legalMax=ca>0?Math.min(20000000,ca*0.04):20000000;
+  document.getElementById('euMax').textContent=ca>0?fmt(legalMax):"20 M€ ou 4% CA";
+  const gaps=window._gapCount||0;
+  if(gaps===0){document.getElementById('euReal').textContent="≈ 0 €";return;}
+  document.getElementById('euReal').textContent=`${fmt(gaps*1500)} – ${fmt(gaps*6000)}`;
+}
+
+/* ── Miroir : vérifications RÉELLES ── */
+function runMirror(){
+  const cookies=document.cookie?document.cookie.split(';').filter(Boolean).length:0;
+  document.getElementById('mCookies').textContent=cookies;
+  if(cookies>0)document.getElementById('mCookiesChk').textContent='cookies détectés';
+  try{
+    const here=location.origin;
+    const res=performance.getEntriesByType('resource')||[];
+    const third=res.filter(r=>{try{return new URL(r.name).origin!==here;}catch(e){return false;}}).length;
+    document.getElementById('mThird').textContent=third;
+    document.getElementById('mTrackers').textContent=third;
+    if(third>0)document.getElementById('mThirdChk').textContent='requêtes tierces détectées';
+  }catch(e){}
+}
+function init(){
+  document.getElementById('year').textContent=new Date().getFullYear();
+  renderQ();
+  runMirror();
+}
+if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));}
+document.addEventListener('DOMContentLoaded',init);
+</script>
+</body>
+</html>

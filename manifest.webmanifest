@@ -1,0 +1,13 @@
+{
+  "name": "Clarté — RGPD & AI Act",
+  "short_name": "Clarté",
+  "description": "Conformité RGPD & AI Act pour TPE/PME. Passez le contrôle simulé. Aucune donnée collectée.",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#f5f2ea",
+  "theme_color": "#153e35",
+  "lang": "fr",
+  "icons": [
+    { "src": "favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
