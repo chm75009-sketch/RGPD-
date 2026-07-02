@@ -216,7 +216,7 @@
 </div></footer>
 
 <div class="toast" id="toast"></div>
-<div style="position:fixed;bottom:8px;right:10px;z-index:9999;font:700 10px/1 system-ui,sans-serif;color:#7a7f95;background:rgba(255,255,255,.82);border:1px solid #e7e9f3;padding:4px 8px;border-radius:8px;pointer-events:none">Clarté · MàJ 02/07 · b14</div>
+<div style="position:fixed;bottom:8px;right:10px;z-index:9999;font:700 10px/1 system-ui,sans-serif;color:#7a7f95;background:rgba(255,255,255,.82);border:1px solid #e7e9f3;padding:4px 8px;border-radius:8px;pointer-events:none">Clarté · MàJ 02/07 · b15</div>
 
 <script>
 /* ================= FICHE SOCIÉTÉ (localStorage) ================= */
@@ -285,7 +285,13 @@ function DX(){
   function li(t){return new d.Paragraph({bullet:{level:0},spacing:{before:20,after:20},children:[new d.TextRun({text:t,size:21,font:FONT,color:'222222'})]});}
   function spacer(){return new d.Paragraph({spacing:{before:60,after:60},children:[new d.TextRun({text:''})]});}
   function cell(t,o){o=o||{};return new d.TableCell({width:o.w?{size:o.w,type:d.WidthType.DXA}:undefined,shading:o.head?{fill:C.indigo,type:d.ShadingType.CLEAR,color:'auto'}:(o.shade?{fill:o.shade,type:d.ShadingType.CLEAR,color:'auto'}:undefined),margins:{top:60,bottom:60,left:100,right:100},verticalAlign:d.VerticalAlign.CENTER,children:[new d.Paragraph({children:[new d.TextRun({text:String(t==null?'':t),bold:!!o.head||!!o.bold,size:o.head?18:19,font:FONT,color:o.head?'FFFFFF':'222222'})]})]});}
-  function table(rows){ return new d.Table({width:{size:100,type:d.WidthType.PERCENTAGE}, rows:rows}); }
+  function table(rows, spec){
+    var cw=[], i;
+    if(Object.prototype.toString.call(spec)==='[object Array]'){ cw=spec; }
+    else { var n=spec||2, each=Math.floor(9600/n); for(i=0;i<n;i++) cw.push(each); }
+    var tot=0; for(i=0;i<cw.length;i++) tot+=cw[i];
+    return new d.Table({ width:{size:tot,type:d.WidthType.DXA}, columnWidths:cw, layout:d.TableLayoutType.FIXED, rows:rows });
+  }
   function row(cells){ return new d.TableRow({children:cells}); }
   function warnBox(){
     return new d.Table({width:{size:100,type:d.WidthType.PERCENTAGE},rows:[new d.TableRow({children:[new d.TableCell({shading:{fill:'FFF6E0',type:d.ShadingType.CLEAR,color:'auto'},margins:{top:120,bottom:120,left:160,right:160},children:[
@@ -354,7 +360,7 @@ var DOCS=[
   need:"ⓘ Complétez chaque ligne (finalité, durée) selon vos traitements réels.",
   file:'Registre_traitements_{soc}',
   body:function(X,f){
-    var rows=[X.row([X.cell('Traitement',{head:1,w:2400}),X.cell('Finalité',{head:1}),X.cell('Personnes',{head:1}),X.cell('Données',{head:1}),X.cell('Base légale',{head:1}),X.cell('Conservation',{head:1})])];
+    var rows=[X.row([X.cell('Traitement',{head:1}),X.cell('Finalité',{head:1}),X.cell('Personnes',{head:1}),X.cell('Données',{head:1}),X.cell('Base légale',{head:1}),X.cell('Conservation',{head:1})])];
     var base=[
       ['Gestion des clients','Exécution des contrats, facturation','Clients','Identité, coordonnées, historique','Exécution du contrat','Durée de la relation + 5 ans'],
       ['Prospection commerciale','Envoi d\'offres, newsletter','Prospects','Identité, email','Consentement / intérêt légitime','3 ans sans contact'],
@@ -366,13 +372,13 @@ var DOCS=[
     return [X.h2('Objet'),
       X.p('Le présent registre recense les activités de traitement de données à caractère personnel mises en œuvre par '+V(f.raisonSociale)+', conformément à l\'article 30 du RGPD.'),
       X.p('Responsable du traitement : '+V(f.raisonSociale)+', '+V(f.adresse)+'. Contact : '+V(f.emailRgpd)+'. '+dpoLine(f)+'.'),
-      X.h2('Traitements recensés'), X.table(rows), X.spacer(),
+      X.h2('Traitements recensés'), X.table(rows,[1600,2000,1200,1900,1400,1500]), X.spacer(),
       X.p('Transferts hors UE : '+(f.hebergeurPays&&/UE|France|Europe/i.test(f.hebergeurPays)?'aucun (hébergement '+f.hebergeurPays+').':'{{ à préciser selon vos outils }}'),{italic:true}),
       X.h2('Sous-traitants'),
       (function(){ var st=listSousTraitants(f); if(!st.length) return X.p('{{ Lister vos sous-traitants — voir la fiche société }}',{italic:true});
         var rr=[X.row([X.cell('Sous-traitant',{head:1}),X.cell('Rôle',{head:1}),X.cell('Localisation',{head:1})])];
         st.forEach(function(l){ var parts=l.split('—').map(function(x){return x.trim();}); rr.push(X.row([X.cell(parts[0]||l),X.cell(parts[1]||''),X.cell(parts[2]||'')])); });
-        return X.table(rr);
+        return X.table(rr,[3200,3200,3200]);
       })()
     ];
   }},
@@ -482,7 +488,7 @@ var DOCS=[
     ].forEach(function(r){ rows.push(X.row(r.map(function(c){return X.cell(c);}))); });
     return [X.h2('Principe'),
       X.p('Les données ne sont conservées que le temps nécessaire aux finalités poursuivies, puis archivées puis supprimées. Responsable : '+V(f.raisonSociale)+'.'),
-      X.h2('Tableau des durées'), X.table(rows), X.spacer(),
+      X.h2('Tableau des durées'), X.table(rows,[3000,3300,3300]), X.spacer(),
       X.p('Une purge périodique est réalisée pour supprimer les données au-delà de ces durées.',{italic:true})
     ];
   }},
@@ -537,7 +543,7 @@ var DOCS=[
     else { rows.push(X.row([X.cell('{{ Outil }}'),X.cell('{{ Usage }}'),X.cell('{{ Données }}'),X.cell('{{ Risque }}'),X.cell('{{ Mesures }}')])); }
     return [X.h2('Objet'),
       X.p('Recenser les systèmes d\'IA utilisés par '+V(f.raisonSociale)+' et évaluer leur niveau de risque au sens de l\'AI Act (risque inacceptable, élevé, limité, minimal).'),
-      X.h2('Inventaire'), X.table(rows), X.spacer(),
+      X.h2('Inventaire'), X.table(rows,[2100,2100,1700,1600,2100]), X.spacer(),
       X.p('Rappel : les IA à « risque limité » (chatbots, IA générative) sont soumises à une obligation de transparence ; les IA à « risque élevé » à des obligations renforcées.',{italic:true})
     ];
   }},
