@@ -223,7 +223,7 @@ function toast(msg,type){var t=$('toast');t.textContent=msg;t.className='toast s
 
 /* ===== ACCÈS (option B — verrouillage par code) =====
    À PERSONNALISER : premier = code maître (pour vous), les suivants = codes remis aux clients. */
-var ACCESS_CODES=['RTH75-MAITRE','CLARTE-2026'];
+var ACCESS_CODES=['RTH75','826700'];
 function isUnlocked(){ try{ return localStorage.getItem('clarte_docs_unlocked')==='1'; }catch(e){ return false; } }
 function checkAccess(){ if(isUnlocked()) document.body.classList.remove('locked'); }
 function unlock(){
