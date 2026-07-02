@@ -284,7 +284,7 @@
         <div id="holes"></div>
       </div>
       <div class="vcta">
-        <button class="cta" onclick="goDevis()">Demander mon devis →</button>
+        <button class="cta" onclick="goDevis()">Être recontacté(e) →</button>
         <button class="again" onclick="restart()">↺ Repasser le contrôle</button>
       </div>
     </div>
@@ -309,7 +309,7 @@
           <li>Cartographie IA simplifiée</li>
           <li>Plan d'action</li>
         </ul>
-        <a class="pbtn" href="#rdv">Choisir</a>
+        <a class="pbtn" href="#rdv" onclick="pickFormule('Essentiel')">Choisir</a>
       </div>
       <div class="plan pop">
         <div class="rib">★ Le plus choisi</div>
@@ -324,7 +324,7 @@
           <li>Formation équipe</li>
           <li>Attestation de conformité</li>
         </ul>
-        <a class="pbtn" href="#rdv">Choisir</a>
+        <a class="pbtn" href="#rdv" onclick="pickFormule('Conformité')">Choisir</a>
       </div>
       <div class="plan">
         <h3>Sérénité</h3>
@@ -337,7 +337,7 @@
           <li>Aide en cas de contrôle</li>
           <li>Revue annuelle</li>
         </ul>
-        <a class="pbtn" href="#rdv">Choisir</a>
+        <a class="pbtn" href="#rdv" onclick="pickFormule('Sérénité')">Choisir</a>
       </div>
     </div>
     <div class="tnote">💡 Tarifs indicatifs HT, ajustés après le diagnostic. Devis gratuit et personnalisé.</div>
@@ -349,14 +349,30 @@
   <div class="wrap">
     <div class="rdvbox">
       <div class="ava">L</div>
-      <h2 class="serif">Demandez votre devis personnalisé</h2>
+      <h2 class="serif">Être recontacté(e)</h2>
       <div class="who">Léa Chikhaoui--Auguste · RTH NETGOCE</div>
-      <p>On regarde ensemble vos points sensibles et on établit un devis adapté à votre structure. Une vraie personne, pas un formulaire de plus.</p>
-      <div class="rdv-cta">
-        <a class="primary" href="mailto:r.t.h@orange.fr?subject=Demande%20de%20devis%20-%20Contr%C3%B4le%20RGPD%20%26%20IA&amp;body=Bonjour%2C%0A%0AJ'ai%20pass%C3%A9%20le%20Contr%C3%B4le%20sur%20votre%20site%20et%20je%20souhaite%20un%20devis.%0A%0A-%20Entreprise%20%3A%0A-%20Activit%C3%A9%20%3A%0A-%20T%C3%A9l%C3%A9phone%20%3A%0A%0AMerci.">✉️ Demander mon devis</a>
-        <a class="sec" href="tel:+33661476165">📞 06 61 47 61 65</a>
-      </div>
-      <div class="free">☎️ Premier échange de 20 minutes offert, sans engagement.</div>
+      <p>Laissez-nous vos coordonnées : on vous rappelle pour la formule choisie. Premier échange de 20 minutes offert, sans engagement.</p>
+      <form id="contactForm" onsubmit="return submitContact(event)" style="text-align:left;max-width:470px;margin:0 auto">
+        <div class="fld"><label for="cFormule">Formule qui vous intéresse</label>
+          <select id="cFormule">
+            <option>Essentiel — dès 890 € HT</option>
+            <option>Conformité — dès 2 400 € HT</option>
+            <option>Sérénité — dès 3 900 € HT</option>
+            <option value="À définir" selected>Je ne sais pas encore</option>
+          </select>
+        </div>
+        <div class="formgrid">
+          <div class="fld"><label for="cNom">Votre nom *</label><input id="cNom" type="text" autocomplete="name" placeholder="Prénom Nom"></div>
+          <div class="fld"><label for="cEnt">Entreprise</label><input id="cEnt" type="text" autocomplete="organization" placeholder="Votre société"></div>
+          <div class="fld"><label for="cEmail">Email *</label><input id="cEmail" type="email" autocomplete="email" placeholder="vous@entreprise.fr"></div>
+          <div class="fld"><label for="cTel">Téléphone *</label><input id="cTel" type="tel" autocomplete="tel" placeholder="06 …"></div>
+        </div>
+        <div class="fld"><label for="cMsg">Message (facultatif)</label><textarea id="cMsg" rows="2" style="padding:12px 14px;border:1.5px solid var(--line);border-radius:9px;font-family:inherit;font-size:15px;background:#fff;color:var(--ink);resize:vertical"></textarea></div>
+        <div class="err" id="cErr">Merci de renseigner votre nom, votre email et votre téléphone.</div>
+        <button type="submit" class="cta" style="width:100%;justify-content:center">Être recontacté(e) →</button>
+        <p id="cOk" style="display:none;color:var(--green);font-weight:700;text-align:center;margin-top:12px">✅ Merci ! Votre message s'ouvre dans votre messagerie — cliquez sur « Envoyer », ou appelez-nous directement.</p>
+      </form>
+      <div class="free" style="margin-top:16px">☎️ Ou appelez-nous : <a href="tel:+33661476165" style="color:var(--blue);font-weight:800">06 61 47 61 65</a></div>
     </div>
   </div>
 </section>
@@ -629,6 +645,23 @@ function showResults(){
 
 function goDevis(){ $('rdv').scrollIntoView({behavior:'smooth'}); }
 function restart(){ show('hero'); window.scrollTo(0,0); }
+
+function pickFormule(name){
+  var s=$('cFormule'); if(!s) return;
+  for(var i=0;i<s.options.length;i++){ if(s.options[i].text.indexOf(name)===0){ s.selectedIndex=i; break; } }
+}
+function submitContact(e){
+  e.preventDefault();
+  var f=$('cFormule').value, n=$('cNom').value.trim(), ent=$('cEnt').value.trim(), em=$('cEmail').value.trim(), tel=$('cTel').value.trim(), msg=$('cMsg').value.trim();
+  var err=$('cErr');
+  if(!n||!em||!tel){ err.style.display='block'; return false; }
+  err.style.display='none';
+  var subject=encodeURIComponent('Demande de contact — formule '+f);
+  var body=encodeURIComponent('Bonjour,\n\nJe souhaite être recontacté(e) au sujet de la formule « '+f+' ».\n\nNom : '+n+'\nEntreprise : '+ent+'\nEmail : '+em+'\nTéléphone : '+tel+'\n'+(msg?('\nMessage : '+msg+'\n'):'')+'\nMerci.');
+  window.location.href='mailto:r.t.h@orange.fr?subject='+subject+'&body='+body;
+  $('cOk').style.display='block';
+  return false;
+}
 
 document.addEventListener('DOMContentLoaded',function(){
   var b=$('show-score-btn'); if(b) b.addEventListener('click',submitSignup);

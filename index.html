@@ -182,6 +182,16 @@
   .final .hero-cta{margin-bottom:10px}
   .final small{display:block;color:rgba(255,255,255,.5);font-size:12.5px;margin-top:18px}
   @media(max-width:620px){.final{padding:42px 24px}}
+  .cform{max-width:490px;margin:6px auto 0;text-align:left;display:grid;gap:12px}
+  .cform .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media(max-width:520px){.cform .row{grid-template-columns:1fr}}
+  .cform label{display:block;font-size:11px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:5px}
+  .cform input,.cform select,.cform textarea{width:100%;padding:12px 14px;border:1.5px solid rgba(255,255,255,.18);border-radius:11px;background:rgba(255,255,255,.06);color:#fff;font-family:inherit;font-size:14.5px}
+  .cform input::placeholder,.cform textarea::placeholder{color:rgba(255,255,255,.4)}
+  .cform select option{color:#111}
+  .cform input:focus,.cform select:focus,.cform textarea:focus{outline:none;border-color:var(--indigo2);background:rgba(255,255,255,.1)}
+  .cform .cerr{display:none;color:#ffb4b0;font-size:13px;font-weight:700}
+  .cform .cok{display:none;color:#7ee0a0;font-size:14px;font-weight:700;text-align:center}
 
   /* FOOTER */
   footer{background:var(--ink);color:rgba(255,255,255,.62);padding:52px 0 40px;font-size:13px}
@@ -345,7 +355,7 @@
           <li><span class="ck">✓</span> Cartographie IA simplifiée</li>
           <li><span class="ck">✓</span> Plan d'action priorisé</li>
         </ul>
-        <a class="btn btn-ghost" href="#contact">Choisir Essentiel</a>
+        <a class="btn btn-ghost" href="#contact" onclick="pickFormule('Essentiel')">Choisir Essentiel</a>
       </div>
 
       <!-- CONFORMITÉ (POP) -->
@@ -364,7 +374,7 @@
           <li><span class="ck">✓</span> Formation « littératie IA » (1 session équipe)</li>
           <li><span class="ck">✓</span> Attestation de conformité</li>
         </ul>
-        <a class="btn btn-primary" href="#contact">Choisir Conformité</a>
+        <a class="btn btn-primary" href="#contact" onclick="pickFormule('Conformité')">Choisir Conformité</a>
       </div>
 
       <!-- SÉRÉNITÉ -->
@@ -381,7 +391,7 @@
           <li><span class="ck">✓</span> Revue annuelle &amp; mise à jour des documents</li>
           <li><span class="ck">✓</span> Point de contact prioritaire</li>
         </ul>
-        <a class="btn btn-ghost" href="#contact">Parler à un expert</a>
+        <a class="btn btn-ghost" href="#contact" onclick="pickFormule('Sérénité')">Choisir Sérénité</a>
       </div>
     </div>
     <p class="tarif-note">💡 Tarifs indicatifs HT, à personnaliser selon la taille et l'activité de votre structure. Devis gratuit après un premier échange.</p>
@@ -468,14 +478,29 @@
 <section id="contact">
   <div class="wrap">
     <div class="final reveal">
-      <h2>Faites le premier pas vers la conformité, dès aujourd'hui</h2>
-      <p>Commencez par notre test de conformité — gratuit, 3 minutes, résultat immédiat — puis recevez un devis personnalisé. Sans engagement.</p>
-      <div class="hero-cta">
-        <a class="btn btn-primary btn-lg" href="le-controle.html">Tester ma conformité (3 min)</a>
-        <a class="btn btn-light btn-lg" href="mailto:r.t.h@orange.fr?subject=Demande%20de%20devis%20Clart%C3%A9%20(RGPD%20%2B%20AI%20Act)&amp;body=Bonjour%2C%0A%0AJe%20souhaite%20recevoir%20un%20devis%20pour%20la%20mise%20en%20conformit%C3%A9%20RGPD%20%26%20AI%20Act%20de%20mon%20entreprise.%0A%0A-%20Nom%20de%20l'entreprise%20%3A%0A-%20Secteur%20d'activit%C3%A9%20%3A%0A-%20Effectif%20approximatif%20%3A%0A-%20Utilisez-vous%20des%20outils%20d'IA%20(lesquels)%20%3A%0A-%20T%C3%A9l%C3%A9phone%20%3A%0A%0AMerci%20!">✉️ Demander un devis</a>
-        <a class="btn btn-light btn-lg" href="tel:+33661476165">📞 06 61 47 61 65</a>
-      </div>
-      <small>Réponse sous 48 h ouvrées · RTH NETGOCE · r.t.h@orange.fr</small>
+      <h2>Parlons de votre conformité</h2>
+      <p>Choisissez une formule ou laissez-nous vos coordonnées : on vous recontacte pour un premier échange de 20 minutes, offert et sans engagement.</p>
+      <form class="cform" id="contactForm" onsubmit="return submitContact(event)">
+        <div><label for="cFormule">Formule qui vous intéresse</label>
+          <select id="cFormule">
+            <option>Essentiel — dès 890 € HT</option>
+            <option>Conformité — dès 2 400 € HT</option>
+            <option>Sérénité — dès 3 900 € HT</option>
+            <option value="À définir" selected>Je ne sais pas encore</option>
+          </select>
+        </div>
+        <div class="row">
+          <div><label for="cNom">Votre nom *</label><input id="cNom" type="text" autocomplete="name" placeholder="Prénom Nom"></div>
+          <div><label for="cEnt">Entreprise</label><input id="cEnt" type="text" autocomplete="organization" placeholder="Votre société"></div>
+          <div><label for="cEmail">Email *</label><input id="cEmail" type="email" autocomplete="email" placeholder="vous@entreprise.fr"></div>
+          <div><label for="cTel">Téléphone *</label><input id="cTel" type="tel" autocomplete="tel" placeholder="06 …"></div>
+        </div>
+        <div><label for="cMsg">Message (facultatif)</label><textarea id="cMsg" rows="2" placeholder="Votre besoin en quelques mots"></textarea></div>
+        <div class="cerr" id="cErr">Merci de renseigner votre nom, votre email et votre téléphone.</div>
+        <button type="submit" class="btn btn-primary btn-lg" style="width:100%;justify-content:center">Être recontacté(e) →</button>
+        <p class="cok" id="cOk">✅ Merci ! Votre message s'ouvre dans votre messagerie — cliquez sur « Envoyer », ou appelez-nous.</p>
+      </form>
+      <small>Ou testez d'abord : <a href="le-controle.html" style="color:#c9d0ff">Le Contrôle (3 min)</a> · 📞 <a href="tel:+33661476165" style="color:#c9d0ff">06 61 47 61 65</a> · RTH NETGOCE</small>
     </div>
   </div>
 </section>
@@ -537,6 +562,26 @@
     entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
   }, { threshold:.12 });
   document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+
+  // Formule sélectionnée + fiche de contact
+  function pickFormule(name){
+    var s=document.getElementById('cFormule'); if(!s) return;
+    for(var i=0;i<s.options.length;i++){ if(s.options[i].text.indexOf(name)===0){ s.selectedIndex=i; break; } }
+  }
+  window.pickFormule=pickFormule;
+  window.submitContact=function(e){
+    e.preventDefault();
+    var g=function(id){return document.getElementById(id);};
+    var f=g('cFormule').value, n=g('cNom').value.trim(), ent=g('cEnt').value.trim(), em=g('cEmail').value.trim(), tel=g('cTel').value.trim(), msg=g('cMsg').value.trim();
+    var err=g('cErr');
+    if(!n||!em||!tel){ err.style.display='block'; return false; }
+    err.style.display='none';
+    var subject=encodeURIComponent('Demande de contact — formule '+f);
+    var body=encodeURIComponent('Bonjour,\n\nJe souhaite être recontacté(e) au sujet de la formule « '+f+' ».\n\nNom : '+n+'\nEntreprise : '+ent+'\nEmail : '+em+'\nTéléphone : '+tel+'\n'+(msg?('\nMessage : '+msg+'\n'):'')+'\nMerci.');
+    window.location.href='mailto:r.t.h@orange.fr?subject='+subject+'&body='+body;
+    g('cOk').style.display='block';
+    return false;
+  };
 </script>
 </body>
 </html>
