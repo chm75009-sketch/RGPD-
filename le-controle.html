@@ -6,8 +6,13 @@
 <title>Le Contrôle — Auto-diagnostic RGPD & AI Act | RTH NETGOCE</title>
 <meta name="description" content="Auto-évaluez la conformité RGPD & AI Act de votre entreprise en 15 points (données, IA, gouvernance). Score, niveau de risque et pré-diagnostic par email. Par RTH NETGOCE.">
 <link rel="stylesheet" href="fonts/fonts.css">
+<!-- EmailJS désactivé pour l'instant. Pour l'activer : décommenter les 2 lignes
+     ci-dessous, renseigner le publicKey du compte EmailJS Clarté, et passer
+     EMAILJS_READY à true dans le script en bas de page.
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-<script>(function(){ try{ if(window.emailjs) emailjs.init({publicKey:'EpsrNibYc0mrPUXnR'}); }catch(e){} })();</script>
+<script>(function(){ try{ if(window.emailjs) emailjs.init({publicKey:'VOTRE_PUBLIC_KEY'}); }catch(e){} })();</script>
+-->
+
 <style>
   :root{
     --paper:#f4f1e9;--paper2:#ebe6d8;--ink:#1a1a1a;--faint:#6b6459;--line:#d8d1bf;
@@ -443,6 +448,11 @@ var QUESTIONS = [
    gap:{t:"Connaissance du risque encouru",s:"Jusqu'à 20 M€ ou 4 % du CA (RGPD) ; 35 M€ ou 7 % du CA (AI Act)."}}
 ];
 
+/* Passer à true une fois le compte EmailJS de Clarté configuré
+   (et décommenter le script EmailJS dans le <head>) pour réactiver
+   l'envoi du code de validation + l'e-mail de lead. */
+var EMAILJS_READY = false;
+
 var CATS=['RGPD','AI Act','Gouvernance'];
 var CATMETA={'RGPD':{cls:'rg',emo:'🔐'},'AI Act':{cls:'ia',emo:'🤖'},'Gouvernance':{cls:'gv',emo:'🏛️'},'RISQUE':{cls:'rq',emo:'⚖️'}};
 
@@ -511,6 +521,7 @@ function submitSignup(){
       score:score, fromQuiz:true
     }));
   }catch(e){}
+  if(!EMAILJS_READY){ btn.disabled=false; btn.textContent='Recevoir mon score →'; showResults(); return; }
   function goValidation(){
     btn.disabled=false; btn.textContent='Recevoir mon score →';
     show('validation');
