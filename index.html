@@ -63,6 +63,16 @@
     .burger{display:inline-flex}
   }
 
+  /* TICKER (bande défilante) */
+  .ticker{background:linear-gradient(90deg,#0c1024,#141a3a);overflow:hidden;white-space:nowrap;border-bottom:1px solid rgba(255,255,255,.08)}
+  .ticker-track{display:inline-flex;animation:tick 48s linear infinite}
+  .ticker:hover .ticker-track{animation-play-state:paused}
+  .ticker-item{padding:9px 0;font-size:13px;font-weight:700;color:rgba(255,255,255,.82);display:inline-flex;align-items:center;gap:7px;flex:none}
+  .ticker-item b{color:var(--gold)}
+  .ticker-item::after{content:'•';margin:0 22px;color:var(--indigo2)}
+  @keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+  @media(prefers-reduced-motion:reduce){.ticker-track{animation:none}}
+
   /* HERO */
   .hero{position:relative;overflow:hidden;background:radial-gradient(1100px 520px at 78% -8%,rgba(245,179,1,.20),transparent 55%),radial-gradient(900px 620px at 12% 8%,rgba(124,105,245,.20),transparent 55%),linear-gradient(180deg,#0c1024 0%,#141a3a 100%);color:#fff}
   .hero::after{content:'';position:absolute;inset:0;background:radial-gradient(700px 300px at 50% 120%,rgba(14,165,163,.16),transparent 60%);pointer-events:none}
@@ -230,6 +240,9 @@
 </style>
 </head>
 <body>
+
+<!-- BANDE DÉFILANTE -->
+<div class="ticker"><div class="ticker-track" id="tickerTrack"></div></div>
 
 <!-- NAV -->
 <header>
@@ -589,6 +602,21 @@
   // Menu mobile (hamburger)
   window.toggleMenu=function(){ var m=document.querySelector('.menu'); if(m) m.classList.toggle('open'); };
   document.querySelectorAll('.menu a').forEach(function(a){ a.addEventListener('click',function(){ var m=document.querySelector('.menu'); if(m) m.classList.remove('open'); }); });
+
+  // Bande défilante — chiffres & actus RGPD / AI Act
+  var TICKER=[
+    "⚖️ RGPD — jusqu'à <b>20 M€ ou 4 % du CA</b>",
+    "🤖 AI Act — jusqu'à <b>35 M€ ou 7 % du CA</b>",
+    "📊 CNIL 2025 — <b>486 M€</b> de sanctions · <b>83</b> décisions",
+    "🚨 Fuite de données — notifier la CNIL sous <b>72 h</b>",
+    "🍪 Cookies — <b>1er motif</b> de sanction en 2025",
+    "📅 AI Act — littératie IA <b>obligatoire depuis fév. 2025</b>",
+    "⏱️ Demande d'accès / effacement — réponse sous <b>1 mois</b>",
+    "🇫🇷 Free — <b>42 M€</b> (janvier 2026)",
+    "🤖 ChatGPT / OpenAI — <b>15 M€</b> (Garante, 2024)",
+    "🏛️ Paris 2026 — IA suspendue sans consultation du <b>CSE</b>"
+  ];
+  (function(){ var t=document.getElementById('tickerTrack'); if(!t) return; var h=TICKER.map(function(s){return '<span class="ticker-item">'+s+'</span>';}).join(''); t.innerHTML=h+h; })();
 
   // Formule sélectionnée + fiche de contact
   function pickFormule(name){

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#4f46e5">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" href="icon-192.png">
+<meta name="apple-mobile-web-app-title" content="Clarté">
+<script>if('serviceWorker' in navigator){addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});}</script>
+<title>Jurisprudence & actualités RGPD & AI Act | Clarté — RTH NETGOCE</title>
+<meta name="description" content="Les décisions et sanctions récentes en matière de RGPD et d'AI Act (CNIL, CJUE, Garante, tribunaux français). Veille par Clarté / RTH NETGOCE.">
+<link rel="stylesheet" href="fonts/fonts.css">
+<style>
+  :root{
+    --ink:#0c1024;--body:#3f4661;--dim:#8b93ad;--line:#e7e9f3;--bg2:#f7f8fc;--card:#fff;
+    --indigo:#4f46e5;--indigo2:#7c69f5;--indigo-ink:#3730a3;--indigo-soft:#eef0ff;
+    --gold:#f5b301;--gold-soft:#fff6e0;--green:#12a150;--red:#e5484d;--radius:16px;--shadow:0 10px 40px rgba(19,24,54,.08);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:'Manrope',system-ui,-apple-system,sans-serif;color:var(--ink);background:var(--bg2);line-height:1.6;-webkit-font-smoothing:antialiased}
+  a{color:var(--indigo);text-decoration:none}
+  .serif{font-family:'Fraunces',Georgia,serif;font-weight:600}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+  header.top{position:sticky;top:0;z-index:100;backdrop-filter:blur(14px);background:rgba(255,255,255,.85);border-bottom:1px solid var(--line)}
+  .nav{display:flex;align-items:center;justify-content:space-between;height:64px}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:18px;color:var(--ink)}
+  .brand .dot{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,var(--indigo),var(--indigo2));display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(79,70,229,.4)}
+  .back{font-size:14px;font-weight:700;color:var(--indigo-ink);background:var(--indigo-soft);padding:8px 15px;border-radius:11px}
+  /* Ticker */
+  .ticker{background:linear-gradient(90deg,#0c1024,#141a3a);overflow:hidden;white-space:nowrap;border-bottom:1px solid rgba(255,255,255,.08)}
+  .ticker-track{display:inline-flex;animation:tick 48s linear infinite}
+  .ticker:hover .ticker-track{animation-play-state:paused}
+  .ticker-item{padding:9px 0;font-size:13px;font-weight:700;color:rgba(255,255,255,.82);display:inline-flex;align-items:center;gap:7px;flex:none}
+  .ticker-item b{color:var(--gold)}
+  .ticker-item::after{content:'•';margin:0 22px;color:var(--indigo2)}
+  @keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+  @media(prefers-reduced-motion:reduce){.ticker-track{animation:none}}
+  /* Hero */
+  .hero{padding:48px 0 8px}
+  .hero .tag{display:inline-block;font-size:12px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--indigo);margin-bottom:10px}
+  .hero h1{font-size:clamp(28px,4.4vw,42px);font-weight:800;letter-spacing:-.02em;margin-bottom:10px}
+  .hero p{color:var(--body);font-size:16px;max-width:680px}
+  /* Stats strip */
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:30px 0 10px}
+  @media(max-width:720px){.stats{grid-template-columns:repeat(2,1fr)}}
+  .stat{background:var(--ink);color:#fff;border-radius:14px;padding:18px 16px;text-align:center}
+  .stat b{display:block;font-family:'Fraunces',serif;font-size:26px}
+  .stat b.g{color:var(--gold)}
+  .stat span{font-size:11.5px;color:rgba(255,255,255,.62);font-weight:600}
+  /* Sections */
+  section{padding:30px 0}
+  .sec-h{display:flex;align-items:center;gap:10px;font-size:20px;font-weight:800;margin-bottom:18px}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:760px){.grid{grid-template-columns:1fr}}
+  .jcard{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px;box-shadow:0 6px 22px rgba(19,24,54,.05)}
+  .jtop{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+  .jtag{font-size:10.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;padding:3px 9px;border-radius:100px}
+  .jtag.rg{background:#e7edf5;color:#1f3a5f}.jtag.ia{background:#f0e7fb;color:#5b3a8e}
+  .jdate{font-size:12px;font-weight:700;color:var(--dim)}
+  .jcard h3{font-size:16.5px;font-weight:800;margin-bottom:4px}
+  .jcard .court{font-size:12.5px;font-weight:700;color:var(--indigo);margin-bottom:8px}
+  .jcard p{font-size:14px;color:var(--body)}
+  .jcard .amt{color:var(--red);font-weight:800}
+  .disc{font-size:12px;color:var(--dim);margin:22px 0;line-height:1.6}
+  footer{background:var(--ink);color:rgba(255,255,255,.6);padding:30px 0;font-size:12.5px;text-align:center;margin-top:20px}
+  footer a{color:rgba(255,255,255,.8)}
+  .badge{position:fixed;bottom:8px;right:10px;z-index:9999;font:700 10px/1 system-ui,sans-serif;color:#7a7f95;background:rgba(255,255,255,.82);border:1px solid #e7e9f3;padding:4px 8px;border-radius:8px;pointer-events:none}
+</style>
+</head>
+<body>
+<div class="ticker"><div class="ticker-track" id="tickerTrack"></div></div>
+<header class="top">
+  <div class="wrap nav">
+    <a class="brand" href="index.html"><span class="dot"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9L17 7M7 17l-2.1 2.1" stroke="#fff" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="12" r="4" fill="#fff"/></svg></span> Clarté <span style="font-weight:600;color:var(--dim);font-size:11px">· Jurisprudence</span></a>
+    <a class="back" href="index.html">← Accueil</a>
+  </div>
+</header>
+
+<div class="hero"><div class="wrap">
+  <span class="tag">Veille juridique · RGPD &amp; AI Act</span>
+  <h1 class="serif">Jurisprudence &amp; actualités</h1>
+  <p>Les décisions et sanctions récentes qui font le droit de la donnée et de l'IA. Parce que la conformité, ça s'appuie sur des faits.</p>
+  <div class="stats">
+    <div class="stat"><b class="g">486 M€</b><span>Sanctions CNIL en 2025</span></div>
+    <div class="stat"><b class="g">83</b><span>Décisions CNIL en 2025</span></div>
+    <div class="stat"><b>20 M€ / 4%</b><span>Amende max. RGPD</span></div>
+    <div class="stat"><b>35 M€ / 7%</b><span>Amende max. AI Act</span></div>
+  </div>
+</div></div>
+
+<section><div class="wrap">
+  <div class="sec-h">🔐 RGPD — Sanctions CNIL (France)</div>
+  <div class="grid">
+    <article class="jcard">
+      <div class="jtop"><span class="jtag rg">CNIL</span><span class="jdate">Janvier 2026</span></div>
+      <h3>Free / Free Mobile — <span class="amt">42 M€</span></h3>
+      <div class="court">Délibération CNIL</div>
+      <p>Manquement à la sécurité des données (art. 32) et défaut de coopération. La CNIL fait de la « négligence cyber » un critère déterminant.</p>
+    </article>
+    <article class="jcard">
+      <div class="jtop"><span class="jtag rg">CNIL</span><span class="jdate">Bilan 2025</span></div>
+      <h3>486 M€ de sanctions, 83 décisions</h3>
+      <div class="court">Rapport annuel CNIL</div>
+      <p>Top des motifs : <b>cookies</b> (21 sanctions), surveillance des salariés, prospection sans base légale, failles de sécurité, durées de conservation. La procédure simplifiée (4-6 mois) vise de plus en plus les PME.</p>
+    </article>
+    <article class="jcard">
+      <div class="jtop"><span class="jtag rg">CNIL</span><span class="jdate">2022</span></div>
+      <h3>Clearview AI — <span class="amt">20 M€</span></h3>
+      <div class="court">Reconnaissance faciale</div>
+      <p>Collecte massive de photos (scraping) sans base légale ni information des personnes. Sanction maximale + astreintes.</p>
+    </article>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <div class="sec-h">🇪🇺 RGPD — Cour de justice de l'UE (CJUE)</div>
+  <div class="grid">
+    <article class="jcard">
+      <div class="jtop"><span class="jtag rg">CJUE</span><span class="jdate">4 sept. 2025</span></div>
+      <h3>Pseudonymisation</h3>
+      <div class="court">Aff. C-413/23 P</div>
+      <p>Une donnée <b>pseudonymisée reste une donnée personnelle</b> dès lors que celui qui la détient dispose de moyens de ré-identifier la personne, directement ou indirectement.</p>
+    </article>
+    <article class="jcard">
+      <div class="jtop"><span class="jtag rg">CJUE</span><span class="jdate">19 mars 2026</span></div>
+      <h3>Droit d'accès (art. 15)</h3>
+      <div class="court">Aff. C-526/24</div>
+      <p>Précise la finalité du droit d'accès : permettre à la personne de <b>vérifier la licéité</b> du traitement et de demander rectification ou effacement.</p>
+    </article>
+    <article class="jcard">
+      <div class="jtop"><span class="jtag rg">CJUE</span><span class="jdate">2023</span></div>
+      <h3>SCHUFA — scoring de crédit</h3>
+      <div class="court">Aff. C-634/21</div>
+      <p>Un <b>score</b> déterminant l'octroi d'un crédit constitue une <b>décision automatisée</b> (art. 22). Décision clé pour tous les usages d'IA de notation.</p>
+    </article>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <div class="sec-h">🤖 AI Act &amp; Intelligence artificielle</div>
+  <div class="grid">
+    <article class="jcard">
+      <div class="jtop"><span class="jtag ia">AI Act</span><span class="jdate">Depuis 2025</span></div>
+      <h3>Règlement (UE) 2024/1689</h3>
+      <div class="court">Calendrier d'application</div>
+      <p>Sanctions jusqu'à <b>35 M€ ou 7 % du CA</b>. Interdictions et <b>littératie IA</b> depuis fév. 2025, GPAI depuis août 2025, systèmes à haut risque au 2 août 2026.</p>
+    </article>
+    <article class="jcard">
+      <div class="jtop"><span class="jtag ia">Garante · Italie</span><span class="jdate">Déc. 2024</span></div>
+      <h3>OpenAI / ChatGPT — <span class="amt">15 M€</span></h3>
+      <div class="court">Autorité italienne</div>
+      <p>Absence de base légale, défaut de transparence et de vérification d'âge (protection des mineurs). Première grande sanction visant une IA générative.</p>
+    </article>
+    <article class="jcard">
+      <div class="jtop"><span class="jtag ia">Cour d'appel · Paris</span><span class="jdate">21 mai 2026</span></div>
+      <h3>IA suspendue sans consultation du CSE</h3>
+      <div class="court">Jurisprudence sociale</div>
+      <p>Confirmation de la <b>suspension d'outils d'IA</b> déployés sans consultation préalable du Comité social et économique. Signal fort pour tout projet d'IA en entreprise.</p>
+    </article>
+    <article class="jcard">
+      <div class="jtop"><span class="jtag ia">France</span><span class="jdate">1er août 2025</span></div>
+      <h3>La CNIL, autorité chef de file IA</h3>
+      <div class="court">Décret de désignation</div>
+      <p>La CNIL pilote l'application de l'AI Act en France (avec ANSSI, DGCCRF, ARCOM, Défenseur des droits). Premiers contrôles attendus au 2ᵉ semestre 2026.</p>
+    </article>
+  </div>
+  <p class="disc">⚠️ Veille à titre informatif, sans valeur de conseil juridique. Sources : CNIL, CJUE, autorités européennes, presse spécialisée. Mise à jour : juillet 2026. Besoin d'un point sur votre situation ? <a href="index.html#contact">Contactez Clarté</a>.</p>
+</div></section>
+
+<footer><div class="wrap">
+  <b style="color:#fff">Clarté</b> · RTH NETGOCE — Conformité RGPD &amp; AI Act · <a href="index.html">Accueil</a> · <a href="le-controle.html">Le Contrôle</a> · <a href="documents.html">Espace client</a> · <a href="mentions.html">Mentions légales</a>
+</div></footer>
+
+<div class="badge">Clarté · MàJ 02/07 · b18</div>
+
+<script>
+var TICKER=[
+  "⚖️ RGPD — jusqu'à <b>20 M€ ou 4 % du CA</b>",
+  "🤖 AI Act — jusqu'à <b>35 M€ ou 7 % du CA</b>",
+  "📊 CNIL 2025 — <b>486 M€</b> de sanctions · <b>83</b> décisions",
+  "🚨 Fuite de données — notifier la CNIL sous <b>72 h</b>",
+  "🍪 Cookies — <b>1er motif</b> de sanction en 2025",
+  "📅 AI Act — littératie IA <b>obligatoire depuis fév. 2025</b>",
+  "⏱️ Demande d'accès / effacement — réponse sous <b>1 mois</b>",
+  "🇫🇷 Free — <b>42 M€</b> (janvier 2026)",
+  "🤖 ChatGPT / OpenAI — <b>15 M€</b> (Garante, 2024)",
+  "🏛️ Paris 2026 — IA suspendue sans consultation du <b>CSE</b>"
+];
+(function(){ var t=document.getElementById('tickerTrack'); if(!t) return; var h=TICKER.map(function(s){return '<span class="ticker-item">'+s+'</span>';}).join(''); t.innerHTML=h+h; })();
+</script>
+</body>
+</html>
