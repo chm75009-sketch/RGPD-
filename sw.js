@@ -1,10 +1,11 @@
 /* Service worker Clarté — installation PWA + usage hors-ligne.
    Ne collecte rien. Bump CACHE à chaque mise à jour importante. */
-const CACHE = 'clarte-b17';
+const CACHE = 'clarte-b19';
 const ASSETS = [
   'index.html',
   'le-controle.html',
   'documents.html',
+  'jurisprudence.html',
   'mentions.html',
   'politique-confidentialite.html',
   'manifest.webmanifest',
