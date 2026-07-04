@@ -11,7 +11,35 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" href="icon-192.png">
 <meta name="apple-mobile-web-app-title" content="Clarté">
-<script>if('serviceWorker' in navigator){addEventListener('load',function(){var had=!!navigator.serviceWorker.controller;navigator.serviceWorker.register('sw.js',{updateViaCache:'none'}).then(function(reg){reg.update();setInterval(function(){reg.update();},60000);}).catch(function(){});var r=false;navigator.serviceWorker.addEventListener('controllerchange',function(){if(r||!had)return;r=true;location.reload();});});}</script>
+<script>
+/* Moteur de mise à jour automatique de l'appli.
+   Vérifie une nouvelle version : à l'ouverture, au retour sur la page,
+   et toutes les 60 s. Recharge la page automatiquement quand la nouvelle
+   version est prête. Plus aucune manipulation manuelle nécessaire. */
+(function(){
+  if(!('serviceWorker' in navigator)) return;
+  var had = !!navigator.serviceWorker.controller, reloaded = false;
+  navigator.serviceWorker.addEventListener('controllerchange', function(){
+    if(reloaded || !had) return; reloaded = true; location.reload();
+  });
+  addEventListener('load', function(){
+    navigator.serviceWorker.register('sw.js', {updateViaCache:'none'}).then(function(reg){
+      function check(){ try{ reg.update(); }catch(e){} }
+      function activate(w){ if(w && navigator.serviceWorker.controller){ try{ w.postMessage({type:'SKIP_WAITING'}); }catch(e){} } }
+      check();                                   // à l'ouverture
+      setInterval(check, 60000);                 // toutes les 60 s
+      document.addEventListener('visibilitychange', function(){ if(document.visibilityState==='visible') check(); });
+      addEventListener('focus', check);          // retour sur l'onglet/l'appli
+      addEventListener('pageshow', function(e){ if(e.persisted) check(); }); // retour arrière (bfcache)
+      activate(reg.waiting);                      // version déjà en attente
+      reg.addEventListener('updatefound', function(){
+        var nw = reg.installing; if(!nw) return;
+        nw.addEventListener('statechange', function(){ if(nw.state==='installed') activate(nw); });
+      });
+    }).catch(function(){});
+  });
+})();
+</script>
 <title>Jurisprudence & actualités RGPD & AI Act | Clarté — RTH NETGOCE</title>
 <meta name="description" content="Les décisions et sanctions récentes en matière de RGPD et d'AI Act (CNIL, CJUE, Garante, tribunaux français). Veille par Clarté / RTH NETGOCE.">
 <link rel="stylesheet" href="fonts/fonts.css">
@@ -177,7 +205,7 @@
   <b style="color:#fff">Clarté</b> · RTH NETGOCE — Conformité RGPD &amp; AI Act · <a href="index.html">Accueil</a> · <a href="le-controle.html">Le Contrôle</a> · <a href="documents.html">Espace client</a> · <a href="mentions.html">Mentions légales</a>
 </div></footer>
 
-<div class="badge">Clarté · MàJ 04/07 · b20</div>
+<div class="badge">Clarté · MàJ 04/07 · b21</div>
 
 <script>
 var TICKER=[

@@ -14,7 +14,35 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Clarté">
-<script>if('serviceWorker' in navigator){addEventListener('load',function(){var had=!!navigator.serviceWorker.controller;navigator.serviceWorker.register('sw.js',{updateViaCache:'none'}).then(function(reg){reg.update();setInterval(function(){reg.update();},60000);}).catch(function(){});var r=false;navigator.serviceWorker.addEventListener('controllerchange',function(){if(r||!had)return;r=true;location.reload();});});}</script>
+<script>
+/* Moteur de mise à jour automatique de l'appli.
+   Vérifie une nouvelle version : à l'ouverture, au retour sur la page,
+   et toutes les 60 s. Recharge la page automatiquement quand la nouvelle
+   version est prête. Plus aucune manipulation manuelle nécessaire. */
+(function(){
+  if(!('serviceWorker' in navigator)) return;
+  var had = !!navigator.serviceWorker.controller, reloaded = false;
+  navigator.serviceWorker.addEventListener('controllerchange', function(){
+    if(reloaded || !had) return; reloaded = true; location.reload();
+  });
+  addEventListener('load', function(){
+    navigator.serviceWorker.register('sw.js', {updateViaCache:'none'}).then(function(reg){
+      function check(){ try{ reg.update(); }catch(e){} }
+      function activate(w){ if(w && navigator.serviceWorker.controller){ try{ w.postMessage({type:'SKIP_WAITING'}); }catch(e){} } }
+      check();                                   // à l'ouverture
+      setInterval(check, 60000);                 // toutes les 60 s
+      document.addEventListener('visibilitychange', function(){ if(document.visibilityState==='visible') check(); });
+      addEventListener('focus', check);          // retour sur l'onglet/l'appli
+      addEventListener('pageshow', function(e){ if(e.persisted) check(); }); // retour arrière (bfcache)
+      activate(reg.waiting);                      // version déjà en attente
+      reg.addEventListener('updatefound', function(){
+        var nw = reg.installing; if(!nw) return;
+        nw.addEventListener('statechange', function(){ if(nw.state==='installed') activate(nw); });
+      });
+    }).catch(function(){});
+  });
+})();
+</script>
 <title>Clarté — Mise en conformité RGPD & AI Act pour les entreprises | RTH NETGOCE</title>
 <meta name="description" content="Clarté, par RTH NETGOCE : la mise en conformité RGPD ET AI Act (Règlement UE 2024/1689) pensée pour les TPE/PME. Audit, registre, documentation, plan d'action, formation et suivi. Testez votre conformité en 3 minutes.">
 <link rel="stylesheet" href="fonts/fonts.css">
@@ -540,7 +568,7 @@
   </div>
 </section>
 
-<div style="position:fixed;bottom:8px;right:10px;z-index:9999;font:700 10px/1 system-ui,sans-serif;color:#7a7f95;background:rgba(255,255,255,.82);border:1px solid #e7e9f3;padding:4px 8px;border-radius:8px;pointer-events:none">Clarté · MàJ 04/07 · b20</div>
+<div style="position:fixed;bottom:8px;right:10px;z-index:9999;font:700 10px/1 system-ui,sans-serif;color:#7a7f95;background:rgba(255,255,255,.82);border:1px solid #e7e9f3;padding:4px 8px;border-radius:8px;pointer-events:none">Clarté · MàJ 04/07 · b21</div>
 
 <!-- FOOTER -->
 <footer>
