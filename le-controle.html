@@ -428,7 +428,7 @@
   </div>
 </section>
 
-<div style="position:fixed;bottom:8px;right:10px;z-index:9999;font:700 10px/1 system-ui,sans-serif;color:#7a7f95;background:rgba(255,255,255,.82);border:1px solid #d8d1bf;padding:4px 8px;border-radius:8px;pointer-events:none">Clarté · MàJ 06/07 · b29</div>
+<div style="position:fixed;bottom:8px;right:10px;z-index:9999;font:700 10px/1 system-ui,sans-serif;color:#7a7f95;background:rgba(255,255,255,.82);border:1px solid #d8d1bf;padding:4px 8px;border-radius:8px;pointer-events:none">Clarté · MàJ 06/07 · b30</div>
 
 <footer>
   <div class="wrap">
@@ -972,8 +972,12 @@ var DOCS=[
  file:'Registre_traitements_{soc}',
  body:function(X,f){
    var out=[]; var ref=(f.dpoDesigne||has(f.dpoNom))?(V(f.dpoNom)+(f.dpoEmail?' — '+f.dpoEmail:'')):('Non désigné (facultatif pour cette structure) — référent interne : '+V(f.emailRgpd));
+   var procs=sectorProc(f).slice();
+   lines(f.traitementsSupp).forEach(function(l){ procs.push({f:l,per:'⟨ à préciser ⟩',don:'⟨ à préciser ⟩',b:'⟨ à préciser ⟩',c:'⟨ à préciser ⟩'}); });
+   function TID(i){ return 'T'+(i+1<10?'0':'')+(i+1); }
+   var hasVideo=procs.some(function(p){ return /vid[ée]o|surveillance/i.test(p.f+' '+p.per); });
    out.push(X.h1('Registre des activités de traitement (RGPD)'));
-   out.push(X.p('Établi en application de l\'article 30, paragraphe 1, du Règlement (UE) 2016/679 (RGPD). Ce registre recense de manière exhaustive les traitements de données à caractère personnel mis en œuvre par '+V(f.raisonSociale)+'.',{i:true,c:X.C.dim,size:19}));
+   out.push(X.p('Établi en application de l\'article 30, paragraphe 1, du Règlement (UE) 2016/679 (RGPD). Ce registre recense de manière exhaustive, robuste et auditable les traitements de données à caractère personnel mis en œuvre par '+V(f.raisonSociale)+'.',{i:true,c:X.C.dim,size:19}));
    out.push(X.h2('1. Identité et coordonnées du responsable de traitement'));
    out.push(X.kv([
      ['Responsable de traitement',V(f.raisonSociale)+(f.formeJuridique?' ('+f.formeJuridique+')':'')],
@@ -984,66 +988,73 @@ var DOCS=[
      ['Délégué à la protection des données (DPO) / Référent',ref]
    ]));
    out.push(X.spacer(40));
-   out.push(X.h2('2. Registre détaillé des activités de traitement'));
-   out.push(X.p('Chaque traitement précise sa finalité (art. 30.1.b), les catégories de personnes concernées (art. 30.1.c), les catégories de données, la base légale (art. 6) et la durée de conservation (art. 30.1.f).',{}));
-   var rows=[X.headRow(['Nom / finalité du traitement','Personnes concernées','Catégories de données','Base légale (art. 6)','Durée de conservation'],[2500,1600,2200,1800,1540])];
-   sectorProc(f).forEach(function(pr){ rows.push(X.row([X.cell(pr.f,{b:1}),X.cell(pr.per),X.cell(pr.don),X.cell(pr.b),X.cell(pr.c)])); });
-   lines(f.traitementsSupp).forEach(function(l){ rows.push(X.row([X.cell(l,{b:1}),X.cell('⟨ … ⟩'),X.cell('⟨ … ⟩'),X.cell('⟨ … ⟩'),X.cell('⟨ … ⟩')])); });
-   out.push(X.table(rows,[2500,1600,2200,1800,1540]));
-   out.push(X.note('Registre pré-rempli à partir du secteur « '+SECTORS[sectorKey(f)].label+' ». Complétez ou retirez les lignes qui ne correspondent pas à votre activité réelle.'));
+   out.push(X.h2('2. Cartographie et finalités des traitements'));
+   out.push(X.p('Chaque traitement est identifié (T01, T02…), avec sa finalité (art. 30.1.b), sa base légale (art. 6) et sa durée de conservation stricte (art. 30.1.f).',{}));
+   var r2=[X.headRow(['ID','Nom du traitement & finalité','Base légale (art. 6)','Durée de conservation'],[850,4190,2200,2400])];
+   procs.forEach(function(pr,i){ r2.push(X.row([X.cell(TID(i),{b:1,shade:X.C.soft2}),X.cell(pr.f,{b:1}),X.cell(pr.b),X.cell(pr.c)])); });
+   out.push(X.table(r2,[850,4190,2200,2400]));
+   out.push(X.note('Registre pré-rempli à partir du secteur « '+SECTORS[sectorKey(f)].label+' ». Complétez ou retirez les lignes selon votre activité réelle.'));
    out.push(X.spacer(40));
-   out.push(X.h2('3. Catégories particulières de données (données sensibles — art. 9)'));
+   out.push(X.h2('3. Catégories de personnes et de données traitées'));
+   var r3=[X.headRow(['ID','Personnes concernées','Catégories de données à caractère personnel'],[850,2900,5890])];
+   procs.forEach(function(pr,i){ r3.push(X.row([X.cell(TID(i),{b:1,shade:X.C.soft2}),X.cell(pr.per),X.cell(pr.don)])); });
+   out.push(X.table(r3,[850,2900,5890]));
+   out.push(X.h3('Catégories particulières (données sensibles — art. 9)'));
    out.push(X.p(SECTORS[sectorKey(f)].sensibles,{}));
-   out.push(X.p('Le cas échéant, dans le cadre de la gestion des ressources humaines, certaines données de santé (arrêts maladie, accidents du travail, visites médicales) peuvent être traitées pour répondre aux obligations légales en matière de droit du travail et de sécurité sociale (art. 9.2.b du RGPD).',{}));
-   out.push(X.h2('4. Catégories de destinataires et sous-traitants (art. 30.1.d)'));
-   out.push(X.p('Les données ne sont accessibles qu\'aux personnes habilitées, en fonction de leurs missions (principe du « besoin d\'en connaître »).',{}));
-   out.push(X.h3('Destinataires internes'));
-   out.push(X.li('Direction — '+V(f.representant)+' ;'));
-   out.push(X.li('Service comptabilité / facturation / paie ;'));
-   out.push(X.li('Personnel habilité (accès limité aux données nécessaires à ses fonctions).'));
-   out.push(X.h3('Sous-traitants et destinataires externes'));
-   out.push(X.p('Tous les sous-traitants sont liés par un contrat conforme à l\'article 28 du RGPD, garantissant la sécurité et la confidentialité des données.',{}));
+   out.push(X.p('Le cas échéant, dans le cadre de la gestion des ressources humaines, certaines données de santé (arrêts maladie, accidents du travail) et le NIR peuvent être traités pour répondre aux obligations légales (art. 9.2.b du RGPD) ; ils font l\'objet d\'un encadrement et d\'un accès restreint.',{}));
+   out.push(X.h2('4. Destinataires et sous-traitants (art. 28)'));
+   out.push(X.p('Conformément à l\'article 28 du RGPD, tous les sous-traitants sont liés par des clauses contractuelles strictes de confidentialité et de sécurité. Aucun transfert de données hors de l\'Union européenne n\'est opéré sans encadrement juridique.',{}));
    var st=subList(f);
-   var rr=[X.headRow(['Sous-traitant / destinataire','Prestation / finalité','Données confiées','Localisation'],[2650,2450,2350,2190])];
-   if(st.length){ st.forEach(function(s){ rr.push(X.row([X.cell(s.nom,{b:1}),X.cell(s.role||'⟨ … ⟩'),X.cell('⟨ à préciser ⟩'),X.cell(s.pays||'France / UE')])); }); }
+   var rr=[X.headRow(['Destinataire / sous-traitant','Rôle & service fourni','Localisation','Garanties juridiques & sécurité'],[2500,2450,1950,2740])];
+   rr.push(X.row([X.cell('Personnel habilité interne',{b:1}),X.cell('Gestion courante, vente, management'),X.cell('France (local)'),X.cell('Accès restreint par habilitation de poste ; clause de confidentialité')]));
+   if(st.length){ st.forEach(function(s){ rr.push(X.row([X.cell(s.nom,{b:1}),X.cell(s.role||'⟨ … ⟩'),X.cell(s.pays||'France / UE'),X.cell(s.gar||'Contrat art. 28 ; accès sécurisé')])); }); }
    else {
-     [['⟨ Cabinet comptable ⟩','Expertise comptable et gestion de la paie','Données RH, facturation','France / UE'],
-      ['⟨ Hébergeur du site ⟩','Hébergement du site internet','Données de navigation, formulaires','France / UE'],
-      ['⟨ Logiciel métier / de caisse ⟩','Gestion de l\'activité et de la fidélité','Données clients, historique d\'achats','France / UE'],
-      ['⟨ Outil d\'emailing ⟩','Envoi de newsletters et prospection','E-mails, identité','France / UE'],
-      ['Organismes sociaux (URSSAF, CPAM, mutuelle)','Déclarations sociales obligatoires','Données RH, NIR','France']
+     [['⟨ Cabinet comptable ⟩','Gestion de la paie et comptabilité','France','Contrat d\'externalisation conforme art. 28 ; accès via portail sécurisé'],
+      ['⟨ Hébergeur du site (ex. OVH) ⟩','Hébergement du site et des bases de données','France / UE','Garanties ISO 27001 ; chiffrement au repos ; aucune sortie de l\'UE'],
+      ['⟨ Outil d\'emailing (ex. Brevo) ⟩','Routage des newsletters et emails de fidélité','Union européenne','Contrat art. 28 ; serveurs au sein de l\'UE ; conformité CNIL'],
+      ['⟨ Logiciel métier / de caisse ⟩','Gestion de l\'activité et de la fidélité','France / UE','Contrat art. 28 ; hébergement UE'],
+      ['Organismes sociaux (URSSAF, CPAM, mutuelle)','Déclarations sociales obligatoires','France','Cadre légal ; transmission sécurisée']
      ].forEach(function(r){ rr.push(X.row([X.cell(r[0],{b:1}),X.cell(r[1]),X.cell(r[2]),X.cell(r[3])])); });
    }
-   out.push(X.table(rr,[2650,2450,2350,2190]));
-   out.push(X.note('Remplacez les mentions entre crochets « ⟨ … ⟩ » par les noms réels de vos prestataires pour que le registre soit incontestable lors d\'un audit.',{warn:true,label:'À compléter'}));
+   out.push(X.table(rr,[2500,2450,1950,2740]));
+   out.push(X.note('Remplacez les mentions entre crochets « ⟨ … ⟩ » par les noms réels de vos prestataires pour un registre incontestable lors d\'un audit.',{warn:true,label:'À compléter'}));
    out.push(X.h2('5. Transferts de données hors Union européenne (art. 30.1.e)'));
    out.push(X.p(transfertPhrase(f),{}));
    out.push(X.p('En cas de recours à un prestataire hébergeant des données hors UE (ex. outil d\'emailing ou d\'analyse web aux États-Unis), le transfert est encadré par : une décision d\'adéquation de la Commission européenne (ex. Data Privacy Framework pour les États-Unis) ou, à défaut, la signature de clauses contractuelles types (CCT), assorties de mesures de sécurité supplémentaires si nécessaire.',{}));
-   out.push(X.h2('6. Mesures de sécurité techniques et organisationnelles (art. 30.1.g & art. 32)'));
-   out.push(X.h3('Mesures organisationnelles'));
-   out.push(X.li('Sensibilisation et formation du personnel aux bonnes pratiques de sécurité et à la confidentialité ;'));
-   out.push(X.li('Gestion stricte des habilitations : accès limité au personnel ayant besoin d\'en connaître ;'));
-   out.push(X.li('Charte informatique signée et procédure de gestion des violations (notification CNIL sous 72 h en cas de risque).'));
-   out.push(X.h3('Mesures techniques'));
-   out.push(X.li('Contrôle d\'accès : identifiants individuels et mots de passe robustes (recommandations CNIL) ;'));
-   out.push(X.li('Sauvegardes régulières des données critiques, stockées de façon sécurisée (support externe ou cloud chiffré) ;'));
-   out.push(X.li('Sécurité des postes : mises à jour régulières, antivirus et pare-feu à jour ;'));
-   out.push(X.li('Sécurité physique : locaux sécurisés, accès restreint aux documents papier confidentiels (RH, comptabilité) ;'));
-   out.push(X.li('Chiffrement des données sensibles et des échanges.'));
+   out.push(X.h2('6. Mesures de sécurité techniques et organisationnelles (art. 32)'));
+   out.push(X.p('Pour garantir un niveau de résilience élevé et parer aux failles de sécurité, les mesures de l\'état de l\'art suivantes sont déployées :',{}));
+   out.push(X.h3('Sécurité logique & technique'));
+   out.push(X.li('Politique de mots de passe durcie : au moins 12 caractères (majuscules, minuscules, chiffres, caractères spéciaux) ou phrase de passe de 4 mots, conforme aux recommandations de la CNIL ;'));
+   out.push(X.li('Authentification multifacteur (MFA) activée pour les accès distants et les back-offices critiques (messagerie, outils métier et comptables) ;'));
+   out.push(X.li('Chiffrement : HTTPS/TLS sur le site internet ; chiffrement des postes de travail et supports amovibles (AES-256) contenant des données sensibles ;'));
+   out.push(X.li('Sauvegardes automatisées quotidiennes, externalisées et chiffrées, avec tests de restauration réguliers ;'));
+   out.push(X.li('Mises à jour de sécurité, antivirus et pare-feu maintenus à jour.'));
+   out.push(X.h3('Sécurité physique & organisationnelle'));
+   out.push(X.li('Contrôle des accès physiques : locaux verrouillés ; documents papier confidentiels (contrats de travail, fiches de paie) conservés sous clé ;'));
+   out.push(X.li('Gestion stricte des habilitations selon le besoin d\'en connaître ;'));
+   out.push(X.li('Charte informatique signée et annexée au règlement intérieur ;'));
+   out.push(X.li('Sensibilisation régulière du personnel (hameçonnage, hygiène informatique).'));
    var decl=(f.securite||[]); if(decl.length){ out.push(X.p('Mesures spécifiquement confirmées par l\'entreprise : '+secMeasures(f).join(' ; ')+'.',{i:true,c:X.C.dim,size:18})); }
-   out.push(X.h2('7. Droits des personnes concernées'));
-   out.push(X.p('Les personnes disposent des droits d\'accès, de rectification, d\'effacement, de limitation, de portabilité et d\'opposition. Ces droits s\'exercent auprès de '+V(f.emailRgpd)+'. Une réponse est apportée dans un délai maximum d\'un mois à compter de la réception de la demande.',{}));
-   out.push(X.h2('8. Suivi et mise à jour du registre'));
+   out.push(X.h2('7. Procédure de gestion des incidents et violations (art. 33 & 34)'));
+   out.push(X.p('En cas d\'incident de sécurité (perte d\'accès, vol de matériel, piratage), le protocole d\'urgence suivant est immédiatement déclenché :',{}));
+   out.push(X.li('Qualification & confinement : identifier la faille et isoler immédiatement les systèmes touchés pour stopper la fuite ;'));
+   out.push(X.li('Documentation interne : inscription systématique de l\'incident au registre interne des violations (nature, impact, mesures correctives) ;'));
+   out.push(X.li('Notification à la CNIL sous 72 heures si l\'incident présente un risque pour les droits et libertés des personnes ;'));
+   out.push(X.li('Notification des personnes concernées en cas de risque élevé, avec recommandations (ex. changement de mot de passe).'));
+   out.push(X.h2('8. Exercice des droits des personnes concernées'));
+   out.push(X.p('Chaque personne (client, salarié, abonné) dispose de l\'intégralité des droits d\'accès, de rectification, d\'effacement, de limitation, de portabilité et d\'opposition. Point de contact unique : '+V(f.emailRgpd)+'. Une réponse claire et motivée est apportée sous un délai maximum d\'un mois à compter de la réception de la demande.',{}));
+   if(hasVideo) out.push(X.p('Information terrain (vidéosurveillance) : un panneau d\'information visible est implanté en permanence à l\'entrée de l\'établissement, indiquant la finalité du traitement, la durée de conservation (30 jours), le contact d\'exercice des droits et la possibilité d\'adresser une réclamation à la CNIL.',{}));
+   out.push(X.h2('9. Suivi, révision et historique des versions'));
    out.push(X.p('Ce registre est un document vivant. Il doit être mis à jour à chaque modification substantielle d\'un traitement existant ou lors de la création d\'un nouveau traitement.',{}));
-   out.push(X.p('Document validé par la Direction le '+today()+'.',{b:true}));
+   out.push(X.p('Document officiel de conformité arrêté et validé par la Direction le '+today()+'.',{b:true}));
    out=out.concat(X.versionTable(f));
    out=out.concat(X.coverage('Couverture de l\'article 30 — point par point',[
      ['Art. 30.1.a — Identité et coordonnées du responsable','Section 1'],
-     ['Art. 30.1.b — Finalités du traitement','Section 2, colonne « Finalité »'],
-     ['Art. 30.1.c — Catégories de personnes et de données','Section 2 + section 3'],
+     ['Art. 30.1.b — Finalités du traitement','Section 2'],
+     ['Art. 30.1.c — Catégories de personnes et de données','Section 3'],
      ['Art. 30.1.d — Catégories de destinataires','Section 4'],
      ['Art. 30.1.e — Transferts hors UE','Section 5'],
-     ['Art. 30.1.f — Délais d\'effacement (conservation)','Section 2, colonne « Durée »'],
+     ['Art. 30.1.f — Délais de conservation','Section 2'],
      ['Art. 30.1.g — Mesures de sécurité','Section 6']
    ]));
    return out;
