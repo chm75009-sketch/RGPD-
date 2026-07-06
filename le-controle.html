@@ -46,6 +46,10 @@
 <title>Le Contrôle — Auto-diagnostic RGPD & AI Act | RTH NETGOCE</title>
 <meta name="description" content="Auto-évaluez la conformité RGPD & AI Act de votre entreprise en 15 points (données, IA, gouvernance). Score, niveau de risque et pré-diagnostic par email. Par RTH NETGOCE.">
 <link rel="stylesheet" href="fonts/fonts.css">
+<!-- Librairie docx (génération du registre offert, côté navigateur) -->
+<script>
+(function(){var cdns=['https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.min.js','https://cdnjs.cloudflare.com/ajax/libs/docx/8.5.0/docx.umd.min.js','https://unpkg.com/docx@8.5.0/build/index.umd.js'];var i=0;function load(){if(i>=cdns.length){window._docxFailed=true;return;}var s=document.createElement('script');s.src=cdns[i++];s.onload=function(){if(!(window.docx&&window.docx.Document))load();};s.onerror=load;document.head.appendChild(s);}load();})();
+</script>
 <!-- EmailJS désactivé pour l'instant. Pour l'activer : décommenter les 2 lignes
      ci-dessous, renseigner le publicKey du compte EmailJS Clarté, et passer
      EMAILJS_READY à true dans le script en bas de page.
@@ -323,6 +327,13 @@
         <h3>Vos points sensibles</h3>
         <div id="holes"></div>
       </div>
+      <div class="giftbox" style="margin:18px 0 6px;padding:18px 18px 20px;border:1.6px dashed var(--gold);border-radius:12px;background:#fffdf3;text-align:center">
+        <div style="font-size:30px;line-height:1">🎁</div>
+        <div style="font-weight:800;font-size:16px;margin:6px 0 2px">Votre registre des traitements — offert</div>
+        <div style="font-size:13.5px;color:var(--faint);margin-bottom:14px">Pré-rempli pour votre secteur, prêt à compléter. Format Word (.docx), à l'en-tête de votre entreprise.</div>
+        <button class="cta" onclick="downloadRegistre()" style="width:100%;justify-content:center">⬇ Télécharger mon registre offert</button>
+        <div id="giftMsg" style="font-size:13px;font-weight:700;margin-top:10px;min-height:16px"></div>
+      </div>
       <div class="vcta">
         <button class="cta" onclick="goDevis()">Être recontacté(e) →</button>
         <button class="again" onclick="restart()">↺ Repasser le contrôle</button>
@@ -417,7 +428,7 @@
   </div>
 </section>
 
-<div style="position:fixed;bottom:8px;right:10px;z-index:9999;font:700 10px/1 system-ui,sans-serif;color:#7a7f95;background:rgba(255,255,255,.82);border:1px solid #d8d1bf;padding:4px 8px;border-radius:8px;pointer-events:none">Clarté · MàJ 04/07 · b26</div>
+<div style="position:fixed;bottom:8px;right:10px;z-index:9999;font:700 10px/1 system-ui,sans-serif;color:#7a7f95;background:rgba(255,255,255,.82);border:1px solid #d8d1bf;padding:4px 8px;border-radius:8px;pointer-events:none">Clarté · MàJ 04/07 · b27</div>
 
 <footer>
   <div class="wrap">
@@ -709,5 +720,879 @@ document.addEventListener('DOMContentLoaded',function(){
   var b=$('show-score-btn'); if(b) b.addEventListener('click',submitSignup);
 });
 </script>
+<script>
+/* ===== Registre des traitements OFFERT — moteur identique au générateur payant ===== */
+/* ============================================================
+   CLARTÉ — Cœur de génération documentaire (niveau cabinet)
+   Testable sous Node (global.window.docx) et réutilisé dans documents.html
+   ============================================================ */
+
+function today(){ var d=new Date(); return String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear(); }
+function V(x){ return (x&&String(x).trim())? String(x).trim() : '⟨ à compléter ⟩'; }
+function lines(t){ return (t||'').split('\n').map(function(l){return l.trim();}).filter(Boolean); }
+function has(x){ return !!(x&&String(x).trim()); }
+
+/* ---------- Helpers docx enrichis ---------- */
+function DX(){
+  var d=window.docx;
+  var FONT='Calibri';
+  var C={ink:'11162E',indigo:'4F46E5',indigo2:'3730A3',gold:'B8860B',dim:'6B7280',red:'B8322B',green:'1E7A46',line:'D8D8E0',soft:'EEF0FF',soft2:'F4F6FF',warn:'FFF6E0'};
+  var TXT='222735';
+  function t(text,o){o=o||{};return new d.TextRun({text:text==null?'':String(text),size:o.size||21,font:FONT,bold:!!o.b,italics:!!o.i,color:o.c||TXT});}
+  function p(text,o){o=o||{};if(o.color&&!o.c)o.c=o.color;return new d.Paragraph({spacing:{before:o.before==null?40:o.before,after:o.after==null?70:o.after,line:264},alignment:o.center?d.AlignmentType.CENTER:(o.right?d.AlignmentType.RIGHT:(o.justify===false?d.AlignmentType.LEFT:d.AlignmentType.JUSTIFIED)),children:[t(text,o)]});}
+  function runs(arr,o){o=o||{};return new d.Paragraph({spacing:{before:o.before==null?40:o.before,after:o.after==null?70:o.after,line:264},alignment:o.justify===false?d.AlignmentType.LEFT:d.AlignmentType.JUSTIFIED,children:arr.map(function(r){return t(r.t,{size:r.size,b:r.b,i:r.i,c:r.c});})});}
+  function h1(text){return new d.Paragraph({spacing:{before:40,after:150},children:[new d.TextRun({text:text,bold:true,size:32,font:FONT,color:C.indigo})]});}
+  function h2(text){return new d.Paragraph({spacing:{before:280,after:120},keepNext:true,border:{bottom:{style:d.BorderStyle.SINGLE,size:6,color:C.indigo}},children:[new d.TextRun({text:text,bold:true,size:23,font:FONT,color:C.ink})]});}
+  function h3(text){return new d.Paragraph({spacing:{before:170,after:70},keepNext:true,children:[new d.TextRun({text:text,bold:true,size:21,font:FONT,color:C.indigo2})]});}
+  function li(text,o){o=o||{};return new d.Paragraph({bullet:{level:o.level||0},spacing:{before:20,after:40,line:262},children:Array.isArray(text)?text.map(function(r){return t(r.t,r);}):[t(text,{})]});}
+  function spacer(h){return new d.Paragraph({spacing:{before:h||50,after:h||50},children:[t('',{})]});}
+  function pageBreak(){return new d.Paragraph({children:[new d.PageBreak()]});}
+  function cell(text,o){o=o||{};
+    var fill=o.head?C.indigo:(o.shade||null);
+    var kids=Array.isArray(text)?text:[text];
+    return new d.TableCell({
+      width:o.w?{size:o.w,type:d.WidthType.DXA}:undefined,
+      columnSpan:o.span||undefined,
+      shading:fill?{fill:fill,type:d.ShadingType.CLEAR,color:'auto'}:undefined,
+      margins:{top:55,bottom:55,left:110,right:110},
+      verticalAlign:d.VerticalAlign.CENTER,
+      children:kids.map(function(x){
+        if(typeof x==='string'||typeof x==='number'||x==null) return new d.Paragraph({spacing:{before:10,after:10,line:250},children:[new d.TextRun({text:x==null?'':String(x),bold:!!o.head||!!o.b,size:o.head?18:19,font:FONT,color:o.head?'FFFFFF':(o.c||TXT)})]});
+        return x; /* déjà un élément docx (Paragraph/Table) */
+      })
+    });
+  }
+  function table(rows,spec){
+    var cw=[],i;
+    if(Object.prototype.toString.call(spec)==='[object Array]'){ cw=spec; }
+    else { var n=spec||2, each=Math.floor(9640/n); for(i=0;i<n;i++) cw.push(each); }
+    var tot=0; for(i=0;i<cw.length;i++) tot+=cw[i];
+    return new d.Table({width:{size:tot,type:d.WidthType.DXA},columnWidths:cw,layout:d.TableLayoutType.FIXED,
+      borders:{top:bd(),bottom:bd(),left:bd(),right:bd(),insideHorizontal:bd(),insideVertical:bd()},rows:rows});
+  }
+  function bd(){return {style:d.BorderStyle.SINGLE,size:3,color:C.line};}
+  function row(cells){return new d.TableRow({children:cells,cantSplit:true});}
+  function headRow(labels,widths){return row(labels.map(function(l,i){return cell(l,{head:1,w:widths?widths[i]:undefined});}));}
+  // Tableau de conformité « Exigence -> Couverture »
+  function coverage(title,pairs){
+    var rows=[headRow(['Exigence réglementaire','Traitement dans le présent document'],[3400,6240])];
+    pairs.forEach(function(pr){ rows.push(row([cell(pr[0],{b:1,shade:C.soft2,w:3400}),cell(pr[1],{w:6240})])); });
+    return [h2(title||'Couverture réglementaire — article par article'),table(rows,[3400,6240]),spacer(40)];
+  }
+  // Tableau clé/valeur (fiche d'identité)
+  function kv(pairs){
+    var rows=pairs.map(function(pr){return row([cell(pr[0],{b:1,shade:C.soft2,w:3200}),cell(pr[1],{w:6440})]);});
+    return table(rows,[3200,6440]);
+  }
+  function note(text,o){o=o||{};
+    return new d.Table({width:{size:9640,type:d.WidthType.DXA},columnWidths:[9640],layout:d.TableLayoutType.FIXED,borders:noBorders(),rows:[new d.TableRow({children:[new d.TableCell({width:{size:9640,type:d.WidthType.DXA},shading:{fill:o.warn?C.warn:C.soft2,type:d.ShadingType.CLEAR,color:'auto'},margins:{top:100,bottom:100,left:150,right:150},children:[
+      new d.Paragraph({spacing:{after:0,line:258},children:[new d.TextRun({text:(o.label||'Note')+' — ',bold:true,size:18,font:FONT,color:o.warn?C.red:C.indigo2}),new d.TextRun({text:text,size:18,font:FONT,color:o.warn?'5D4037':'333A52'})]})
+    ]})]})]});
+  }
+  function noBorders(){var n={style:d.BorderStyle.NONE,size:0,color:'FFFFFF'};return {top:n,bottom:n,left:n,right:n,insideHorizontal:n,insideVertical:n};}
+  function warnBox(){
+    return new d.Table({width:{size:9640,type:d.WidthType.DXA},columnWidths:[9640],layout:d.TableLayoutType.FIXED,borders:noBorders(),rows:[new d.TableRow({children:[new d.TableCell({width:{size:9640,type:d.WidthType.DXA},shading:{fill:C.warn,type:d.ShadingType.CLEAR,color:'auto'},margins:{top:130,bottom:130,left:170,right:170},children:[
+      new d.Paragraph({children:[new d.TextRun({text:'⚠  MODÈLE PROFESSIONNEL À PERSONNALISER',bold:true,size:19,font:FONT,color:C.red})]}),
+      new d.Paragraph({spacing:{before:60,line:258},children:[new d.TextRun({text:'Ce document est établi à partir de vos informations et de la réglementation en vigueur (RGPD — Règlement (UE) 2016/679 ; AI Act — Règlement (UE) 2024/1689 ; LCEN ; loi Informatique et Libertés). Il doit être relu, complété aux endroits signalés « ⟨ à compléter ⟩ » et adapté à votre situation réelle. Il ne constitue pas un conseil juridique individualisé et n\'engage pas la responsabilité de RTH NETGOCE.',size:18,font:FONT,color:'5D4037'})]})
+    ]})]})]});
+  }
+  // Bloc validation / version
+  function versionTable(f){
+    var rows=[headRow(['Version','Date','Rédigé / validé par','Objet'],[1300,1800,3400,3140])];
+    rows.push(row([cell('1.0'),cell(today()),cell(V(f.representant||f.dpoNom)),cell('Version initiale')]));
+    rows.push(row([cell(''),cell(''),cell(''),cell('')]));
+    return [h2('Gestion des versions'),table(rows,[1300,1800,3400,3140]),
+      p('Le présent document doit être revu au minimum une fois par an et à chaque évolution significative des traitements, des outils ou de la réglementation.',{i:true,c:C.dim,size:18})];
+  }
+  function signature(f,who){
+    var rows=[row([
+      cell([new d.Paragraph({children:[new d.TextRun({text:'Pour '+V(f.raisonSociale),bold:true,size:19,font:FONT,color:TXT})]}),
+            new d.Paragraph({spacing:{before:40},children:[new d.TextRun({text:V(f.representant)+(f.qualite?', '+f.qualite:''),size:18,font:FONT,color:TXT})]}),
+            new d.Paragraph({spacing:{before:220},children:[new d.TextRun({text:'Date et signature :',size:18,font:FONT,color:C.dim})]})],{w:4820}),
+      cell([new d.Paragraph({children:[new d.TextRun({text:who||'Le responsable de la conformité',bold:true,size:19,font:FONT,color:TXT})]}),
+            new d.Paragraph({spacing:{before:40},children:[new d.TextRun({text:' ',size:18,font:FONT})]}),
+            new d.Paragraph({spacing:{before:220},children:[new d.TextRun({text:'Date et signature :',size:18,font:FONT,color:C.dim})]})],{w:4820})
+    ])];
+    return [spacer(60),table(rows,[4820,4820])];
+  }
+  return {d:d,C:C,FONT:FONT,t:t,p:p,runs:runs,h1:h1,h2:h2,h3:h3,li:li,spacer:spacer,pageBreak:pageBreak,
+    cell:cell,table:table,row:row,headRow:headRow,coverage:coverage,kv:kv,note:note,warnBox:warnBox,
+    versionTable:versionTable,signature:signature};
+}
+
+/* ---------- Packs sectoriels ----------
+   Chaque secteur pré-remplit un registre-type : {f:finalité, per:personnes, don:données, b:base légale, c:conservation} */
+var SECTORS={
+  commerce:{label:'Commerce / vente au détail',
+    proc:[
+      {f:'Gestion de la clientèle et des ventes',per:'Clients',don:'Identité, coordonnées, historique d\'achats',b:'Exécution du contrat (art. 6.1.b)',c:'Durée de la relation + 3 ans à des fins de prospection'},
+      {f:'Facturation et comptabilité',per:'Clients',don:'Identité, coordonnées, données de facturation',b:'Obligation légale (art. 6.1.c)',c:'10 ans (obligations comptables)'},
+      {f:'Prospection commerciale',per:'Prospects, clients',don:'Identité, e-mail, téléphone',b:'Consentement / intérêt légitime (art. 6.1.a/f)',c:'3 ans à compter du dernier contact'},
+      {f:'Cartes de fidélité',per:'Clients',don:'Identité, historique, préférences',b:'Consentement (art. 6.1.a)',c:'Durée d\'adhésion + 3 ans'},
+      {f:'Vidéosurveillance des locaux',per:'Clients, salariés, visiteurs',don:'Images',b:'Intérêt légitime — sécurité (art. 6.1.f)',c:'30 jours maximum'}
+    ],sensibles:'Aucune donnée sensible en principe.'},
+  ecommerce:{label:'E-commerce / vente en ligne',
+    proc:[
+      {f:'Gestion des commandes en ligne',per:'Clients',don:'Identité, coordonnées, adresse de livraison, historique',b:'Exécution du contrat (art. 6.1.b)',c:'Durée de la relation + 3 ans'},
+      {f:'Paiement en ligne',per:'Clients',don:'Données de transaction (via prestataire de paiement)',b:'Exécution du contrat (art. 6.1.b)',c:'Le temps de la transaction ; preuve 13 mois (traçabilité)'},
+      {f:'Facturation et comptabilité',per:'Clients',don:'Identité, facturation',b:'Obligation légale (art. 6.1.c)',c:'10 ans'},
+      {f:'Compte client et espace personnel',per:'Clients',don:'Identifiants, historique, préférences',b:'Exécution du contrat (art. 6.1.b)',c:'Durée du compte ; suppression après 3 ans d\'inactivité'},
+      {f:'Prospection / newsletter',per:'Prospects, clients',don:'E-mail, préférences',b:'Consentement (art. 6.1.a)',c:'3 ans après le dernier contact'},
+      {f:'Mesure d\'audience et cookies',per:'Visiteurs',don:'Données de navigation, identifiants',b:'Consentement (art. 6.1.a)',c:'13 mois maximum (traceurs)'},
+      {f:'Lutte contre la fraude',per:'Clients',don:'Données de commande et de paiement',b:'Intérêt légitime (art. 6.1.f)',c:'Le temps nécessaire, puis archivage'}
+    ],sensibles:'Aucune donnée sensible en principe. Les données bancaires transitent par un prestataire certifié PCI-DSS.'},
+  chr:{label:'Restauration / hôtellerie / CHR',
+    proc:[
+      {f:'Réservations',per:'Clients',don:'Identité, coordonnées, date, préférences',b:'Exécution du contrat / mesures précontractuelles (art. 6.1.b)',c:'Durée de la relation + 3 ans'},
+      {f:'Facturation et comptabilité',per:'Clients',don:'Identité, facturation',b:'Obligation légale (art. 6.1.c)',c:'10 ans'},
+      {f:'Fidélisation et avis clients',per:'Clients',don:'Identité, e-mail, préférences',b:'Consentement (art. 6.1.a)',c:'3 ans après le dernier contact'},
+      {f:'Vidéosurveillance',per:'Clients, salariés',don:'Images',b:'Intérêt légitime — sécurité (art. 6.1.f)',c:'30 jours maximum'},
+      {f:'Gestion du personnel et de la paie',per:'Salariés',don:'Identité, RIB, contrat, temps de travail',b:'Obligation légale / contrat (art. 6.1.c/b)',c:'Durée du contrat + délais légaux (jusqu\'à 5 ans)'}
+    ],sensibles:'Allergies / régimes alimentaires signalés par le client : à traiter avec minimisation, sur la seule base du service demandé.'},
+  sante:{label:'Santé / professions de santé',
+    proc:[
+      {f:'Dossier patient / suivi de soins',per:'Patients',don:'Identité, données de santé',b:'Mission de soins — art. 9.2.h RGPD',c:'20 ans (dossier médical) selon la réglementation applicable'},
+      {f:'Prise de rendez-vous',per:'Patients',don:'Identité, coordonnées, motif',b:'Exécution du contrat / soins (art. 6.1.b, 9.2.h)',c:'Durée du suivi'},
+      {f:'Facturation et télétransmission',per:'Patients',don:'Identité, NIR, données de facturation',b:'Obligation légale (art. 6.1.c)',c:'Selon obligations (comptables et assurance maladie)'},
+      {f:'Gestion du personnel',per:'Salariés',don:'Identité, RIB, contrat',b:'Obligation légale / contrat (art. 6.1.c/b)',c:'Durée du contrat + délais légaux'}
+    ],sensibles:'Données de santé (art. 9 RGPD) : hébergement chez un Hébergeur de Données de Santé (HDS) certifié requis ; secret médical ; AIPD généralement obligatoire.'},
+  association:{label:'Association',
+    proc:[
+      {f:'Gestion des membres et adhésions',per:'Adhérents',don:'Identité, coordonnées, cotisations',b:'Exécution du contrat d\'adhésion (art. 6.1.b)',c:'Durée d\'adhésion + 3 ans'},
+      {f:'Gestion des dons',per:'Donateurs',don:'Identité, coordonnées, montants',b:'Obligation légale (reçus fiscaux) (art. 6.1.c)',c:'Selon obligations comptables et fiscales'},
+      {f:'Communication et newsletter',per:'Membres, contacts',don:'E-mail, coordonnées',b:'Consentement / intérêt légitime (art. 6.1.a/f)',c:'3 ans après le dernier contact'},
+      {f:'Gestion des bénévoles',per:'Bénévoles',don:'Identité, coordonnées, disponibilités',b:'Intérêt légitime (art. 6.1.f)',c:'Durée de l\'engagement + 1 an'}
+    ],sensibles:'Selon l\'objet associatif, des données sensibles (opinions, santé, appartenance) peuvent être traitées sur la base de l\'art. 9.2.d (fondation, association à but non lucratif).'},
+  batiment:{label:'Artisanat / BTP',
+    proc:[
+      {f:'Gestion des chantiers et devis',per:'Clients particuliers et professionnels',don:'Identité, coordonnées, adresse du chantier',b:'Exécution du contrat / mesures précontractuelles (art. 6.1.b)',c:'Durée de la relation + prescriptions (jusqu\'à 10 ans — garantie décennale)'},
+      {f:'Facturation et comptabilité',per:'Clients',don:'Identité, facturation',b:'Obligation légale (art. 6.1.c)',c:'10 ans'},
+      {f:'Gestion du personnel',per:'Salariés',don:'Identité, RIB, contrat, habilitations',b:'Obligation légale / contrat (art. 6.1.c/b)',c:'Durée du contrat + délais légaux'},
+      {f:'Sous-traitance et fournisseurs',per:'Contacts fournisseurs',don:'Identité, coordonnées professionnelles',b:'Exécution du contrat (art. 6.1.b)',c:'Durée de la relation + obligations comptables'}
+    ],sensibles:'Aucune donnée sensible en principe.'},
+  services:{label:'Services / conseil / professions libérales',
+    proc:[
+      {f:'Gestion de la clientèle et des missions',per:'Clients',don:'Identité, coordonnées, dossiers',b:'Exécution du contrat (art. 6.1.b)',c:'Durée de la relation + prescriptions applicables'},
+      {f:'Facturation et comptabilité',per:'Clients',don:'Identité, facturation',b:'Obligation légale (art. 6.1.c)',c:'10 ans'},
+      {f:'Prospection commerciale',per:'Prospects',don:'Identité professionnelle, e-mail',b:'Intérêt légitime (art. 6.1.f)',c:'3 ans après le dernier contact'},
+      {f:'Gestion du personnel',per:'Salariés',don:'Identité, RIB, contrat',b:'Obligation légale / contrat (art. 6.1.c/b)',c:'Durée du contrat + délais légaux'}
+    ],sensibles:'Selon le domaine (juridique, social…), des données sensibles peuvent être traitées : appliquer une minimisation stricte.'},
+  immobilier:{label:'Immobilier',
+    proc:[
+      {f:'Gestion des mandats et transactions',per:'Vendeurs, acquéreurs, locataires',don:'Identité, coordonnées, situation, pièces justificatives',b:'Exécution du contrat / mesures précontractuelles (art. 6.1.b)',c:'Durée de la relation + prescriptions'},
+      {f:'Constitution des dossiers locataires',per:'Candidats locataires',don:'Identité, revenus, garanties',b:'Mesures précontractuelles (art. 6.1.b)',c:'Suppression des dossiers non retenus sous 3 à 6 mois'},
+      {f:'Lutte anti-blanchiment (LCB-FT)',per:'Clients',don:'Identité, pièces justificatives',b:'Obligation légale (art. 6.1.c)',c:'5 ans après la fin de la relation d\'affaires'},
+      {f:'Facturation et comptabilité',per:'Clients',don:'Identité, facturation',b:'Obligation légale (art. 6.1.c)',c:'10 ans'}
+    ],sensibles:'Aucune donnée sensible en principe ; vigilance sur les justificatifs (RIB, avis d\'imposition) — minimisation.'},
+  beaute:{label:'Beauté / bien-être / coiffure',
+    proc:[
+      {f:'Prise de rendez-vous et suivi client',per:'Clients',don:'Identité, coordonnées, prestations',b:'Exécution du contrat (art. 6.1.b)',c:'Durée de la relation + 3 ans'},
+      {f:'Facturation et comptabilité',per:'Clients',don:'Identité, facturation',b:'Obligation légale (art. 6.1.c)',c:'10 ans'},
+      {f:'Fidélisation et rappels',per:'Clients',don:'Identité, e-mail, téléphone',b:'Consentement (art. 6.1.a)',c:'3 ans après le dernier contact'},
+      {f:'Fiches techniques (soins)',per:'Clients',don:'Sensibilités, allergies signalées',b:'Consentement explicite (art. 9.2.a)',c:'Durée de la relation'}
+    ],sensibles:'Données de santé légères (allergies, sensibilités cutanées) : consentement explicite et minimisation.'},
+  formation:{label:'Éducation / formation',
+    proc:[
+      {f:'Gestion des inscriptions et formations',per:'Apprenants, stagiaires',don:'Identité, coordonnées, parcours',b:'Exécution du contrat (art. 6.1.b)',c:'Durée de la formation + obligations (financeurs)'},
+      {f:'Suivi pédagogique et évaluations',per:'Apprenants',don:'Résultats, présence',b:'Exécution du contrat / obligation légale (art. 6.1.b/c)',c:'Selon obligations (Qualiopi, financeurs)'},
+      {f:'Facturation et financement',per:'Apprenants, financeurs',don:'Identité, facturation',b:'Obligation légale (art. 6.1.c)',c:'10 ans'},
+      {f:'Communication et prospection',per:'Prospects',don:'E-mail, coordonnées',b:'Consentement / intérêt légitime (art. 6.1.a/f)',c:'3 ans après le dernier contact'}
+    ],sensibles:'Mineurs possibles : recueil du consentement du titulaire de l\'autorité parentale (art. 8 RGPD).'},
+  autre:{label:'Autre / activité générale',
+    proc:[
+      {f:'Gestion de la clientèle',per:'Clients',don:'Identité, coordonnées, historique',b:'Exécution du contrat (art. 6.1.b)',c:'Durée de la relation + 3 ans'},
+      {f:'Facturation et comptabilité',per:'Clients',don:'Identité, facturation',b:'Obligation légale (art. 6.1.c)',c:'10 ans'},
+      {f:'Prospection commerciale',per:'Prospects',don:'Identité, e-mail',b:'Consentement / intérêt légitime (art. 6.1.a/f)',c:'3 ans après le dernier contact'},
+      {f:'Gestion du personnel',per:'Salariés',don:'Identité, RIB, contrat',b:'Obligation légale / contrat (art. 6.1.c/b)',c:'Durée du contrat + délais légaux'}
+    ],sensibles:'Aucune donnée sensible en principe.'}
+};
+function sectorKey(f){
+  var s=(f.secteurKey||'').trim();
+  if(s&&SECTORS[s]) return s;
+  var lab=(f.secteur||'').toLowerCase();
+  for(var k in SECTORS){ if(SECTORS[k].label.toLowerCase().indexOf(lab)>=0 && lab.length>3) return k; }
+  if(/e-?commerce|en ligne|boutique en ligne/.test(lab)) return 'ecommerce';
+  if(/resto|restaur|hotel|hôtel|bar|caf/.test(lab)) return 'chr';
+  if(/sant|médic|medic|infirm|kiné|dentiste|pharma/.test(lab)) return 'sante';
+  if(/associat/.test(lab)) return 'association';
+  if(/bâtiment|batiment|btp|artisan|maçon|plomb|électric/.test(lab)) return 'batiment';
+  if(/immobili|agence/.test(lab)) return 'immobilier';
+  if(/beaut|coiff|esthét|esthet|spa|bien-être/.test(lab)) return 'beaute';
+  if(/format|école|ecole|enseign|cfa|éduc/.test(lab)) return 'formation';
+  if(/conseil|consult|avocat|expert|libéral|service/.test(lab)) return 'services';
+  if(/commerc|magasin|boutique|vente/.test(lab)) return 'commerce';
+  return 'autre';
+}
+function sectorProc(f){ return SECTORS[sectorKey(f)].proc; }
+
+/* ---------- Fragments réutilisables ---------- */
+function respLine(f){ return V(f.raisonSociale)+(f.formeJuridique?', '+f.formeJuridique:'')+(f.capital?' au capital de '+f.capital+' €':'')+', dont le siège social est situé '+V(f.adresse)+(f.siret?', immatriculée sous le numéro SIRET '+f.siret:'')+(f.rcsVille?' (RCS '+f.rcsVille+')':'')+'.'; }
+function dpoLine(f){
+  if(f.dpoDesigne||has(f.dpoNom)) return 'Un délégué à la protection des données (DPO) / référent est désigné : '+V(f.dpoNom)+(f.dpoEmail?' — '+f.dpoEmail:'')+(f.dpoTel?' — '+f.dpoTel:'')+'.';
+  return 'Aucun DPO n\'est désigné à ce jour ; le référent en charge des questions relatives aux données à caractère personnel est joignable à l\'adresse '+V(f.emailRgpd)+'.';
+}
+function subList(f){ return lines(f.sousTraitants).map(function(l){ var pt=l.split(/—|–|-/).map(function(x){return x.trim();}); return {nom:pt[0]||l,role:pt[1]||'',pays:pt[2]||'',gar:pt[3]||''}; }); }
+function iaList(f){ return lines(f.iaOutils).map(function(l){ var pt=l.split(/—|–|-/).map(function(x){return x.trim();}); return {outil:pt[0]||l,usage:pt[1]||'',risque:pt[2]||''}; }); }
+function secMeasures(f){
+  var m=f.securite||[];
+  var out=[];
+  var map={chiffrement:'Chiffrement des données sensibles et des supports (postes, sauvegardes)',mfa:'Authentification forte (mots de passe robustes, double authentification)',sauvegardes:'Sauvegardes régulières et testées, conservées de façon sécurisée',acces:'Gestion des habilitations : accès limité aux personnes autorisées, selon le besoin d\'en connaître',antivirus:'Protection des postes (antivirus, pare-feu) et mises à jour de sécurité',maj:'Application régulière des mises à jour et correctifs de sécurité',charte:'Charte informatique signée par le personnel',sensibilisation:'Sensibilisation régulière du personnel à la protection des données',cloisonnement:'Cloisonnement et journalisation des accès aux données'};
+  (m||[]).forEach(function(k){ if(map[k]) out.push(map[k]); });
+  if(!out.length) out=['Contrôle des accès (identifiants individuels, mots de passe robustes)','Sauvegardes régulières','Mises à jour de sécurité','Sensibilisation du personnel'];
+  return out;
+}
+function transfertPhrase(f){
+  if(f.transfertHorsUE) return 'Certaines données peuvent faire l\'objet d\'un transfert hors de l\'Union européenne ('+V(f.transfertPays)+'). Ce transfert est encadré par des garanties appropriées : '+(has(f.transfertGarantie)?f.transfertGarantie:'clauses contractuelles types de la Commission européenne (CCT) ou décision d\'adéquation')+'.';
+  var pays=f.hebergeurPays||'';
+  if(/UE|France|Europe|union/i.test(pays)) return 'Aucun transfert de données hors de l\'Union européenne n\'est réalisé ('+(f.hebergeur?'hébergement '+f.hebergeur+' — ':'')+pays+').';
+  return 'Aucun transfert hors de l\'Union européenne n\'est réalisé. En cas de recours à un prestataire hors UE, un encadrement par garanties appropriées (clauses contractuelles types) serait mis en place.';
+}
+
+/* ============================================================
+   CATALOGUE DES DOCUMENTS (niveau cabinet)
+   ============================================================ */
+function buildDOCS(){
+var DOCS=[
+
+/* 1. REGISTRE DES TRAITEMENTS (art. 30.1) */
+{id:'registre',cat:'rg',icon:'📗',title:'Registre des activités de traitement',
+ desc:'Le document obligatoire (art. 30 RGPD) recensant l\'ensemble de vos traitements, pré-rempli selon votre secteur.',
+ need:'ⓘ Vérifiez et ajustez chaque ligne (finalités, durées) à vos traitements réels.',
+ file:'Registre_traitements_{soc}',
+ body:function(X,f){
+   var out=[];
+   out.push(X.h1('Registre des activités de traitement'));
+   out.push(X.p('Établi en application de l\'article 30, paragraphe 1, du Règlement (UE) 2016/679 (RGPD).',{i:true,c:X.C.dim,size:19}));
+   out.push(X.h2('1. Identité et coordonnées du responsable de traitement'));
+   out.push(X.kv([
+     ['Responsable de traitement',V(f.raisonSociale)+(f.formeJuridique?' ('+f.formeJuridique+')':'')],
+     ['Siège social',V(f.adresse)],
+     ['SIRET / RCS',(f.siret?f.siret:'⟨ à compléter ⟩')+(f.rcsVille?' — RCS '+f.rcsVille:'')],
+     ['Représentant légal',V(f.representant)+(f.qualite?' ('+f.qualite+')':'')],
+     ['Contact « données personnelles »',V(f.emailRgpd)],
+     ['DPO / référent',(f.dpoDesigne||has(f.dpoNom))?(V(f.dpoNom)+(f.dpoEmail?' — '+f.dpoEmail:'')):'Non désigné — référent : '+V(f.emailRgpd)]
+   ]));
+   out.push(X.spacer(40));
+   out.push(X.h2('2. Activités de traitement'));
+   out.push(X.p('Le tableau ci-dessous recense les traitements mis en œuvre. Chaque traitement précise sa finalité, les catégories de personnes et de données concernées, la base légale (art. 6 RGPD) et la durée de conservation.',{}));
+   var rows=[X.headRow(['Finalité du traitement','Personnes concernées','Catégories de données','Base légale (art. 6)','Durée de conservation'],[2400,1650,2250,1800,1540])];
+   sectorProc(f).forEach(function(pr){ rows.push(X.row([X.cell(pr.f,{b:1}),X.cell(pr.per),X.cell(pr.don),X.cell(pr.b),X.cell(pr.c)])); });
+   lines(f.traitementsSupp).forEach(function(l){ rows.push(X.row([X.cell(l),X.cell('⟨ … ⟩'),X.cell('⟨ … ⟩'),X.cell('⟨ … ⟩'),X.cell('⟨ … ⟩')])); });
+   out.push(X.table(rows,[2400,1650,2250,1800,1540]));
+   out.push(X.note('Ce registre est pré-rempli à partir du secteur « '+SECTORS[sectorKey(f)].label+' ». Complétez ou retirez les lignes qui ne correspondent pas à votre activité réelle.'));
+   out.push(X.spacer(40));
+   out.push(X.h2('3. Catégories particulières de données (art. 9)'));
+   out.push(X.p(SECTORS[sectorKey(f)].sensibles,{}));
+   out.push(X.h2('4. Destinataires et sous-traitants'));
+   var st=subList(f);
+   if(st.length){
+     var rr=[X.headRow(['Sous-traitant / destinataire','Rôle / prestation','Localisation','Garanties'],[2800,2600,1900,2340])];
+     st.forEach(function(s){ rr.push(X.row([X.cell(s.nom,{b:1}),X.cell(s.role),X.cell(s.pays||'⟨ … ⟩'),X.cell(s.gar||'Contrat art. 28')])); });
+     out.push(X.table(rr,[2800,2600,1900,2340]));
+   } else {
+     out.push(X.p('Les données sont destinées aux services internes habilités. Les sous-traitants (hébergeur, prestataires informatiques, comptable…) sont encadrés par un contrat conforme à l\'article 28 du RGPD. ⟨ Listez vos sous-traitants dans la fiche société pour les faire apparaître ici. ⟩',{}));
+   }
+   out.push(X.h2('5. Transferts hors Union européenne'));
+   out.push(X.p(transfertPhrase(f),{}));
+   out.push(X.h2('6. Mesures de sécurité (description générale — art. 32)'));
+   secMeasures(f).forEach(function(m){ out.push(X.li(m)); });
+   out=out.concat(X.coverage('Couverture de l\'article 30 — point par point',[
+     ['Art. 30.1.a — Identité et coordonnées du responsable','Section 1 (fiche d\'identité)'],
+     ['Art. 30.1.b — Finalités du traitement','Section 2, colonne « Finalité »'],
+     ['Art. 30.1.c — Catégories de personnes et de données','Section 2, colonnes dédiées + section 3'],
+     ['Art. 30.1.d — Catégories de destinataires','Section 4'],
+     ['Art. 30.1.e — Transferts hors UE','Section 5'],
+     ['Art. 30.1.f — Délais d\'effacement (conservation)','Section 2, colonne « Durée »'],
+     ['Art. 30.1.g — Description générale des mesures de sécurité','Section 6']
+   ]));
+   out=out.concat(X.versionTable(f));
+   return out;
+ }},
+
+/* 2. POLITIQUE DE CONFIDENTIALITÉ (art. 13-14) */
+{id:'confidentialite',cat:'rg',icon:'🔒',title:'Politique de confidentialité',
+ desc:'L\'information complète des personnes (art. 13 et 14 RGPD), avec tableau des traitements et droits détaillés.',
+ need:'ⓘ Vérifiez les finalités, durées et destinataires propres à votre activité.',
+ file:'Politique_confidentialite_{soc}',
+ body:function(X,f){
+   var out=[];
+   out.push(X.h1('Politique de confidentialité et de protection des données'));
+   out.push(X.p('La présente politique décrit la manière dont '+V(f.raisonSociale)+' collecte, utilise et protège les données à caractère personnel, en application du Règlement (UE) 2016/679 (RGPD) et de la loi n° 78-17 du 6 janvier 1978 modifiée. Elle vise à assurer une information transparente des personnes concernées, conformément aux articles 13 et 14 du RGPD.',{}));
+   out.push(X.h2('Article 1 — Responsable du traitement'));
+   out.push(X.p(respLine(f)));
+   out.push(X.p(dpoLine(f)));
+   out.push(X.h2('Article 2 — Données collectées, finalités et bases légales'));
+   out.push(X.p('Nous ne traitons que les données strictement nécessaires aux finalités poursuivies (principe de minimisation, art. 5.1.c). Le tableau ci-dessous détaille nos traitements :',{}));
+   var rows=[X.headRow(['Finalité','Données concernées','Base légale (art. 6)','Conservation'],[2650,2650,2350,1990])];
+   sectorProc(f).forEach(function(pr){ rows.push(X.row([X.cell(pr.f,{b:1}),X.cell(pr.don),X.cell(pr.b),X.cell(pr.c)])); });
+   out.push(X.table(rows,[2650,2650,2350,1990]));
+   out.push(X.h2('Article 3 — Destinataires des données'));
+   out.push(X.p('Vos données sont destinées aux seuls services internes habilités de '+V(f.raisonSociale)+'. Elles peuvent être communiquées à nos sous-traitants (hébergeur'+(f.hebergeur?' — '+f.hebergeur:'')+', prestataires informatiques, expert-comptable, prestataires de paiement), agissant sur instruction et encadrés par un contrat conforme à l\'article 28 du RGPD, ainsi qu\'aux organismes auxquels la loi nous oblige à les transmettre (administrations, organismes sociaux).',{}));
+   out.push(X.h2('Article 4 — Transferts hors Union européenne'));
+   out.push(X.p(transfertPhrase(f)));
+   out.push(X.h2('Article 5 — Durées de conservation'));
+   out.push(X.p('Les données sont conservées pour la durée strictement nécessaire aux finalités (voir tableau de l\'article 2), puis archivées lorsque la loi l\'impose, ou supprimées. Les données de prospection sont conservées 3 ans à compter du dernier contact ; les pièces comptables 10 ans ; les cookies 13 mois maximum.',{}));
+   out.push(X.h2('Article 6 — Sécurité des données'));
+   out.push(X.p('Nous mettons en œuvre des mesures techniques et organisationnelles appropriées pour préserver la sécurité et la confidentialité de vos données (art. 32 RGPD), notamment :',{}));
+   secMeasures(f).forEach(function(m){ out.push(X.li(m)); });
+   out.push(X.h2('Article 7 — Vos droits'));
+   out.push(X.p('Conformément aux articles 15 à 22 du RGPD, vous disposez des droits suivants sur vos données :',{}));
+   out.push(X.li('Droit d\'accès (art. 15) : obtenir la confirmation que vos données sont traitées et en recevoir copie ;'));
+   out.push(X.li('Droit de rectification (art. 16) : faire corriger des données inexactes ou incomplètes ;'));
+   out.push(X.li('Droit à l\'effacement (art. 17) : faire supprimer vos données dans les cas prévus ;'));
+   out.push(X.li('Droit à la limitation du traitement (art. 18) ;'));
+   out.push(X.li('Droit à la portabilité (art. 20) : récupérer vos données dans un format structuré ;'));
+   out.push(X.li('Droit d\'opposition (art. 21), notamment à la prospection commerciale, à tout moment ;'));
+   out.push(X.li('Droit de retirer votre consentement à tout moment, lorsque le traitement est fondé sur celui-ci ;'));
+   out.push(X.li('Droit de définir des directives relatives au sort de vos données après votre décès.'));
+   out.push(X.p('Pour exercer ces droits, contactez-nous à l\'adresse '+V(f.emailRgpd)+(f.adresse?', ou par courrier à '+f.adresse:'')+'. Nous répondons dans un délai d\'un mois. Une preuve d\'identité peut être demandée en cas de doute raisonnable.',{}));
+   out.push(X.h2('Article 8 — Réclamation'));
+   out.push(X.p('Vous pouvez introduire une réclamation auprès de la Commission Nationale de l\'Informatique et des Libertés (CNIL), 3 place de Fontenoy — TSA 80715 — 75334 Paris Cedex 07, ou sur www.cnil.fr.',{}));
+   out.push(X.h2('Article 9 — Cookies'));
+   out.push(X.p('Le site '+V(f.siteWeb)+' peut déposer des cookies. Les cookies non essentiels sont soumis à votre consentement préalable, que vous pouvez retirer à tout moment. Voir notre politique cookies dédiée.',{}));
+   out.push(X.h2('Article 10 — Modification'));
+   out.push(X.p('La présente politique peut être mise à jour. La version en vigueur est celle publiée à la date de sa consultation. Dernière mise à jour : '+today()+'.',{}));
+   out=out.concat(X.coverage('Couverture des articles 13 et 14 — point par point',[
+     ['Identité et coordonnées du responsable / DPO','Article 1'],
+     ['Finalités et bases légales du traitement','Article 2'],
+     ['Intérêts légitimes poursuivis, le cas échéant','Article 2 (base légale)'],
+     ['Destinataires des données','Article 3'],
+     ['Transferts hors UE et garanties','Article 4'],
+     ['Durées de conservation','Articles 2 et 5'],
+     ['Droits des personnes (accès, rectification, effacement…)','Article 7'],
+     ['Droit de retrait du consentement','Article 7'],
+     ['Droit de réclamation auprès de la CNIL','Article 8']
+   ]));
+   return out;
+ }},
+
+/* 3. MENTIONS LÉGALES */
+{id:'mentions',cat:'rg',icon:'📄',title:'Mentions légales',
+ desc:'Mentions obligatoires pour tout site professionnel (LCEN) + volet données personnelles.',
+ need:'ⓘ Complétez l\'hébergeur et le directeur de la publication si besoin.',
+ file:'Mentions_legales_{soc}',
+ body:function(X,f){
+   var out=[];
+   out.push(X.h1('Mentions légales'));
+   out.push(X.p('En application de l\'article 6-III de la loi n° 2004-575 du 21 juin 2004 pour la confiance dans l\'économie numérique (LCEN).',{i:true,c:X.C.dim,size:19}));
+   out.push(X.h2('1. Éditeur du site'));
+   out.push(X.kv([
+     ['Dénomination',V(f.raisonSociale)+(f.formeJuridique?' — '+f.formeJuridique:'')],
+     ['Capital social',f.capital?f.capital+' €':'⟨ à compléter ⟩'],
+     ['Siège social',V(f.adresse)],
+     ['SIRET',V(f.siret)],
+     ['RCS',f.rcsVille?f.rcsVille:'⟨ à compléter ⟩'],
+     ['TVA intracommunautaire',f.tva?f.tva:'⟨ à compléter ⟩'],
+     ['Directeur de la publication',V(f.representant)+(f.qualite?' ('+f.qualite+')':'')],
+     ['Contact',V(f.emailRgpd)]
+   ]));
+   out.push(X.h2('2. Hébergement'));
+   out.push(X.p('Le site est hébergé par '+V(f.hebergeur)+(f.hebergeurPays?', '+f.hebergeurPays:'')+'. ⟨ Complétez la raison sociale, l\'adresse et le téléphone de l\'hébergeur. ⟩',{}));
+   out.push(X.h2('3. Propriété intellectuelle'));
+   out.push(X.p('L\'ensemble des contenus du site (textes, images, logos, marques, structure) est protégé par le droit de la propriété intellectuelle et demeure la propriété exclusive de '+V(f.raisonSociale)+' ou de ses partenaires. Toute reproduction, représentation ou diffusion, totale ou partielle, sans autorisation écrite préalable, est interdite et constituerait une contrefaçon.',{}));
+   out.push(X.h2('4. Données personnelles'));
+   out.push(X.p('Les traitements de données réalisés via le site sont décrits dans la politique de confidentialité. Conformément au RGPD et à la loi Informatique et Libertés, vous disposez de droits d\'accès, de rectification, d\'effacement, d\'opposition, de limitation et de portabilité, exerçables à l\'adresse '+V(f.emailRgpd)+'. Vous pouvez introduire une réclamation auprès de la CNIL (www.cnil.fr).',{}));
+   out.push(X.h2('5. Cookies'));
+   out.push(X.p('Le site peut utiliser des cookies soumis à votre consentement pour les traceurs non essentiels. Voir la politique cookies.',{}));
+   out.push(X.h2('6. Responsabilité'));
+   out.push(X.p('L\'éditeur s\'efforce d\'assurer l\'exactitude des informations diffusées mais ne saurait être tenu responsable des omissions, inexactitudes ou carences de mise à jour, qu\'elles soient de son fait ou du fait de tiers partenaires.',{}));
+   out.push(X.h2('7. Droit applicable'));
+   out.push(X.p('Les présentes mentions sont régies par le droit français. Tout litige relève de la compétence des tribunaux du ressort de '+V(f.ville||f.rcsVille)+'.',{}));
+   return out;
+ }},
+
+/* 4. PROCÉDURE DROITS + REGISTRE DES DEMANDES */
+{id:'droits',cat:'rg',icon:'⚖️',title:'Procédure d\'exercice des droits + registre',
+ desc:'Comment recevoir, qualifier et traiter une demande de droits dans le délai légal (art. 12 à 22), avec registre de suivi.',
+ need:'ⓘ Désignez le responsable interne du suivi des demandes.',
+ file:'Procedure_droits_{soc}',
+ body:function(X,f){
+   var out=[];
+   out.push(X.h1('Procédure de gestion des demandes d\'exercice des droits'));
+   out.push(X.p('Objet : garantir le traitement des demandes d\'exercice des droits des personnes (accès, rectification, effacement, limitation, opposition, portabilité) dans le respect des articles 12 à 22 du RGPD, et dans le délai légal d\'un mois.',{}));
+   out.push(X.h2('1. Point de contact et réception'));
+   out.push(X.p('Toute demande est reçue au point de contact unique : '+V(f.emailRgpd)+'. Le responsable du suivi est '+((f.dpoDesigne||has(f.dpoNom))?V(f.dpoNom):'⟨ nom du référent ⟩')+'. Chaque demande est enregistrée dès sa réception (date, canal, demandeur) : cette date fait courir le délai d\'un mois.',{}));
+   out.push(X.h2('2. Vérification de l\'identité'));
+   out.push(X.p('L\'identité du demandeur est vérifiée sans excès : une pièce d\'identité n\'est demandée qu\'en cas de doute raisonnable sur l\'identité (art. 12.6). Aucune donnée superflue ne doit être exigée.',{}));
+   out.push(X.h2('3. Qualification de la demande'));
+   out.push(X.li('Identifier le ou les droits exercés et les traitements concernés ;'));
+   out.push(X.li('Vérifier l\'existence d\'une éventuelle obligation légale de conservation faisant obstacle à l\'effacement ;'));
+   out.push(X.li('Évaluer si la demande est manifestement infondée ou excessive (auquel cas un refus motivé ou des frais raisonnables sont possibles, art. 12.5).'));
+   out.push(X.h2('4. Délais de réponse'));
+   out.push(X.p('La réponse est apportée dans un délai d\'un mois à compter de la réception. Ce délai peut être prolongé de deux mois pour les demandes complexes ou nombreuses, à condition d\'en informer la personne dans le mois initial en précisant les motifs (art. 12.3).',{}));
+   out.push(X.h2('5. Contenu de la réponse'));
+   out.push(X.li('Répondre par un moyen sécurisé et adapté ;'));
+   out.push(X.li('En cas de refus, motiver la décision et rappeler la possibilité de saisir la CNIL et le juge (art. 12.4) ;'));
+   out.push(X.li('Répercuter la rectification ou l\'effacement auprès des destinataires et sous-traitants concernés (art. 19).'));
+   out.push(X.h2('6. Traçabilité — registre des demandes'));
+   out.push(X.p('Chaque demande et la réponse apportée sont consignées dans le registre ci-dessous (preuve de conformité au titre de l\'accountability, art. 5.2) :',{}));
+   var rows=[X.headRow(['Date reçue','Demandeur','Droit exercé','Traitement concerné','Suite donnée','Date réponse'],[1450,1900,1700,1900,1650,1040])];
+   rows.push(X.row([X.cell('⟨ … ⟩'),X.cell('⟨ … ⟩'),X.cell('⟨ … ⟩'),X.cell('⟨ … ⟩'),X.cell('⟨ … ⟩'),X.cell('⟨ … ⟩')]));
+   rows.push(X.row([X.cell(''),X.cell(''),X.cell(''),X.cell(''),X.cell(''),X.cell('')]));
+   rows.push(X.row([X.cell(''),X.cell(''),X.cell(''),X.cell(''),X.cell(''),X.cell('')]));
+   out.push(X.table(rows,[1450,1900,1700,1900,1650,1040]));
+   out=out.concat(X.versionTable(f));
+   return out;
+ }},
+
+/* 5. PROCÉDURE VIOLATIONS + REGISTRE + NOTIFICATION */
+{id:'violation',cat:'rg',icon:'🚨',title:'Procédure de violation de données + registre',
+ desc:'Détecter, qualifier et notifier une violation à la CNIL sous 72 h (art. 33-34), avec registre et modèle de notification.',
+ need:'ⓘ Adaptez la chaîne d\'alerte interne à votre organisation.',
+ file:'Procedure_violation_{soc}',
+ body:function(X,f){
+   var out=[];
+   out.push(X.h1('Procédure de gestion des violations de données'));
+   out.push(X.p('Objet : organiser la détection, la qualification, le traitement et, le cas échéant, la notification des violations de données à caractère personnel, conformément aux articles 33 et 34 du RGPD.',{}));
+   out.push(X.h2('1. Définition'));
+   out.push(X.p('Constitue une violation toute atteinte à la sécurité entraînant, de manière accidentelle ou illicite, la destruction, la perte, l\'altération, la divulgation ou l\'accès non autorisé à des données personnelles (art. 4.12) — par exemple : vol ou perte d\'un ordinateur, rançongiciel, envoi de données au mauvais destinataire, piratage d\'un compte.',{}));
+   out.push(X.h2('2. Détection et alerte interne'));
+   out.push(X.p('Toute personne (salarié, prestataire) constatant un incident alerte immédiatement '+((f.dpoDesigne||has(f.dpoNom))?V(f.dpoNom):'le référent')+' à l\'adresse '+V(f.emailRgpd)+'. Sont consignés sans délai : date et heure de découverte, nature de l\'incident, données et personnes potentiellement concernées, cause présumée.',{}));
+   out.push(X.h2('3. Qualification et mesures immédiates (sous 24 h)'));
+   out.push(X.li('Contenir l\'incident : couper l\'accès compromis, isoler les systèmes, changer les mots de passe ;'));
+   out.push(X.li('Évaluer le risque pour les droits et libertés des personnes (nature des données, volume, gravité, réversibilité) ;'));
+   out.push(X.li('Déterminer si la violation doit être notifiée à la CNIL et/ou aux personnes concernées.'));
+   out.push(X.h2('4. Notification à la CNIL (art. 33)'));
+   out.push(X.p('Si la violation est susceptible d\'engendrer un risque pour les droits et libertés des personnes, elle est notifiée à la CNIL dans les 72 heures suivant sa découverte, via le téléservice sur www.cnil.fr. Si ce délai ne peut être tenu, la notification est accompagnée des motifs du retard. Si le risque est peu probable, l\'absence de notification est justifiée et consignée.',{}));
+   out.push(X.h2('5. Information des personnes concernées (art. 34)'));
+   out.push(X.p('Lorsque la violation est susceptible d\'engendrer un risque élevé, les personnes concernées en sont informées dans les meilleurs délais, en termes clairs, avec la nature de la violation, les conséquences probables, les mesures prises et les recommandations (ex. changer ses mots de passe).',{}));
+   out.push(X.h2('6. Registre des violations (art. 33.5)'));
+   out.push(X.p('Toute violation, qu\'elle soit notifiée ou non, est consignée dans le registre ci-dessous :',{}));
+   var rows=[X.headRow(['Date','Nature / cause','Données & personnes concernées','Risque évalué','CNIL notifiée ?','Mesures'],[1250,1900,2100,1350,1200,1840])];
+   rows.push(X.row([X.cell('⟨ … ⟩'),X.cell('⟨ … ⟩'),X.cell('⟨ … ⟩'),X.cell('faible / élevé'),X.cell('oui / non'),X.cell('⟨ … ⟩')]));
+   rows.push(X.row([X.cell(''),X.cell(''),X.cell(''),X.cell(''),X.cell(''),X.cell('')]));
+   out.push(X.table(rows,[1250,1900,2100,1350,1200,1840]));
+   out.push(X.note('En cas de doute sur la qualification ou la notification, faites-vous accompagner sans attendre — le délai de 72 h est court.',{warn:true,label:'Important'}));
+   out=out.concat(X.versionTable(f));
+   return out;
+ }},
+
+/* 6. DURÉES DE CONSERVATION */
+{id:'conservation',cat:'rg',icon:'⏳',title:'Politique de durées de conservation',
+ desc:'Le tableau de référence des durées par catégorie de données, avec archivage et purge.',
+ need:'ⓘ Ajustez les durées à vos obligations sectorielles.',
+ file:'Durees_conservation_{soc}',
+ body:function(X,f){
+   var out=[];
+   out.push(X.h1('Politique de durées de conservation'));
+   out.push(X.p('En application du principe de limitation de la conservation (art. 5.1.e RGPD), les données ne sont conservées que le temps nécessaire aux finalités poursuivies. Trois phases sont distinguées : base active (usage courant), archivage intermédiaire (obligation ou intérêt légitime, accès restreint), puis suppression ou anonymisation.',{}));
+   out.push(X.h2('Tableau des durées de conservation'));
+   var rows=[X.headRow(['Catégorie de données','Base active','Archivage / suppression'],[3200,3200,3240])];
+   [['Données clients / prospects actifs','Durée de la relation contractuelle','+ 3 ans à des fins de prospection, puis suppression'],
+    ['Prospects sans achat','—','3 ans à compter du dernier contact'],
+    ['Pièces comptables et factures','Exercice en cours','10 ans (art. L123-22 code de commerce)'],
+    ['Données de salariés (paie, contrat)','Durée du contrat','Jusqu\'à 5 ans et + selon la nature (bulletins 5 ans)'],
+    ['Candidatures non retenues','—','2 ans après le dernier contact (sauf opposition)'],
+    ['Données de connexion / logs','—','6 à 12 mois'],
+    ['Cookies et traceurs','13 mois maximum','Expiration automatique ; consentement re-demandé'],
+    ['Vidéosurveillance','—','1 mois (30 jours) maximum'],
+    ['Données de contrats / litiges','Durée du contrat','Jusqu\'à la prescription applicable (souvent 5 ans)']
+   ].forEach(function(r){ rows.push(X.row(r.map(function(c){return X.cell(c);}))); });
+   out.push(X.table(rows,[3200,3200,3240]));
+   out.push(X.h2('Mise en œuvre'));
+   out.push(X.li('Une purge périodique (au moins annuelle) supprime ou anonymise les données au-delà des durées ci-dessus ;'));
+   out.push(X.li('Les données archivées sont conservées avec un accès restreint et journalisé ;'));
+   out.push(X.li('Le responsable de la purge est '+((f.dpoDesigne||has(f.dpoNom))?V(f.dpoNom):V(f.representant))+'.'));
+   out.push(X.note('Ces durées sont des références courantes ; certaines activités réglementées (santé, immobilier/LCB-FT, formation) imposent des durées spécifiques — ajustez en conséquence.'));
+   out=out.concat(X.versionTable(f));
+   return out;
+ }},
+
+/* 7. POLITIQUE COOKIES */
+{id:'cookies',cat:'rg',icon:'🍪',title:'Politique cookies & traceurs',
+ desc:'Information et recueil du consentement aux cookies, conforme aux lignes directrices CNIL.',
+ need:'ⓘ Listez vos cookies réels (mesure d\'audience, réseaux sociaux…).',
+ file:'Politique_cookies_{soc}',
+ body:function(X,f){
+   var out=[];
+   out.push(X.h1('Politique de gestion des cookies et traceurs'));
+   out.push(X.p('La présente politique explique l\'usage des cookies et traceurs sur le site '+V(f.siteWeb)+', conformément à l\'article 82 de la loi Informatique et Libertés et aux lignes directrices de la CNIL.',{}));
+   out.push(X.h2('1. Qu\'est-ce qu\'un cookie ?'));
+   out.push(X.p('Un cookie est un petit fichier déposé sur votre terminal (ordinateur, mobile) lors de la visite d\'un site. Il permet, selon sa finalité, d\'assurer le fonctionnement du site, de mesurer l\'audience ou de proposer des contenus personnalisés.',{}));
+   out.push(X.h2('2. Cookies utilisés'));
+   var rows=[X.headRow(['Cookie / catégorie','Finalité','Consentement','Durée'],[2600,3000,1600,2440])];
+   rows.push(X.row([X.cell('Cookies strictement nécessaires',{b:1}),X.cell('Fonctionnement et sécurité du site'),X.cell('Non requis'),X.cell('Session')]));
+   var declared=lines(f.cookiesList);
+   if(declared.length){ declared.forEach(function(l){ var pt=l.split(/—|–|-/).map(function(x){return x.trim();}); rows.push(X.row([X.cell(pt[0]||l,{b:1}),X.cell(pt[1]||'⟨ finalité ⟩'),X.cell('Requis'),X.cell(pt[2]||'≤ 13 mois')])); }); }
+   else {
+     rows.push(X.row([X.cell('Mesure d\'audience',{b:1}),X.cell('Statistiques de fréquentation ⟨ préciser l\'outil, ex. Matomo ⟩'),X.cell('Requis*'),X.cell('13 mois max')]));
+     rows.push(X.row([X.cell('Réseaux sociaux / contenus tiers',{b:1}),X.cell('Partage, vidéos embarquées ⟨ le cas échéant ⟩'),X.cell('Requis'),X.cell('13 mois max')]));
+   }
+   out.push(X.table(rows,[2600,3000,1600,2440]));
+   out.push(X.p('* Certaines solutions de mesure d\'audience peuvent être exemptées de consentement si elles sont configurées conformément aux recommandations de la CNIL (finalité limitée, pas de recoupement, données anonymisées).',{i:true,c:X.C.dim,size:18}));
+   out.push(X.h2('3. Votre consentement'));
+   out.push(X.p('Lors de votre première visite, un bandeau vous permet d\'accepter, de refuser ou de personnaliser les cookies non essentiels. Refuser doit être aussi simple qu\'accepter. Aucun traceur non essentiel n\'est déposé avant votre consentement. Vous pouvez modifier votre choix à tout moment via le lien « Gérer les cookies ».',{}));
+   out.push(X.h2('4. Durée du consentement'));
+   out.push(X.p('Votre choix est conservé au maximum 6 mois ; au-delà, votre consentement vous est de nouveau demandé.',{}));
+   out.push(X.h2('5. Contact'));
+   out.push(X.p('Pour toute question : '+V(f.emailRgpd)+'.',{}));
+   return out;
+ }},
+
+/* 8. CHARTE INFORMATIQUE */
+{id:'charte',cat:'gv',icon:'💻',title:'Charte informatique (usage des outils)',
+ desc:'Encadre l\'usage des équipements et outils numériques par le personnel — pièce clé de la sécurité (art. 32).',
+ need:'ⓘ À faire signer par chaque collaborateur et annexer au règlement intérieur.',
+ file:'Charte_informatique_{soc}',
+ body:function(X,f){
+   var out=[];
+   out.push(X.h1('Charte d\'utilisation des outils informatiques et numériques'));
+   out.push(X.p('La présente charte définit les règles d\'usage des ressources informatiques mises à disposition par '+V(f.raisonSociale)+', afin de garantir la sécurité des systèmes et la protection des données à caractère personnel (art. 32 RGPD). Elle a vocation à être annexée au règlement intérieur et signée par chaque utilisateur.',{}));
+   out.push(X.h2('Article 1 — Champ d\'application'));
+   out.push(X.p('Elle s\'applique à tout utilisateur (salarié, stagiaire, prestataire) accédant aux équipements, logiciels, messageries, accès Internet et données de l\'entreprise.',{}));
+   out.push(X.h2('Article 2 — Règles de sécurité'));
+   out.push(X.li('Utiliser des mots de passe robustes, personnels et confidentiels ; ne jamais les partager ;'));
+   out.push(X.li('Verrouiller sa session en cas d\'absence ; ne pas laisser de données accessibles ;'));
+   out.push(X.li('Ne pas installer de logiciel non autorisé ; signaler tout comportement anormal ;'));
+   out.push(X.li('Ne pas connecter de support externe non maîtrisé (clé USB inconnue) ;'));
+   out.push(X.li('Respecter les mises à jour et les outils de protection déployés.'));
+   out.push(X.h2('Article 3 — Usage de la messagerie et d\'Internet'));
+   out.push(X.li('La messagerie professionnelle est réservée à un usage professionnel ; un usage privé résiduel et raisonnable est toléré ;'));
+   out.push(X.li('Faire preuve de vigilance face aux courriels suspects (hameçonnage, pièces jointes) ;'));
+   out.push(X.li('Ne pas diffuser de données confidentielles ou personnelles sans autorisation ni moyen sécurisé.'));
+   out.push(X.h2('Article 4 — Protection des données personnelles'));
+   out.push(X.li('N\'accéder qu\'aux données nécessaires à ses missions (besoin d\'en connaître) ;'));
+   out.push(X.li('Ne pas copier ni extraire des données hors des outils autorisés ;'));
+   out.push(X.li('Signaler immédiatement toute violation de données présumée à '+V(f.emailRgpd)+'.'));
+   out.push(X.h2('Article 5 — Usage de l\'intelligence artificielle'));
+   out.push(X.li('Ne jamais saisir de données personnelles, confidentielles ou stratégiques dans un outil d\'IA grand public non maîtrisé ;'));
+   out.push(X.li('Vérifier et assumer la responsabilité des contenus produits par une IA ;'));
+   out.push(X.li('Signaler tout nouvel usage d\'IA au référent pour évaluation.'));
+   out.push(X.h2('Article 6 — Contrôles et sanctions'));
+   out.push(X.p('L\'entreprise peut mettre en œuvre des dispositifs de contrôle proportionnés (journalisation, filtrage) dans le respect de la vie privée et après information des salariés et, le cas échéant, consultation des représentants du personnel. Tout manquement peut donner lieu à des sanctions prévues par le règlement intérieur.',{}));
+   out=out.concat(X.signature(f,'L\'utilisateur (lu et approuvé)'));
+   return out;
+ }},
+
+/* 9. INFORMATION DES SALARIÉS */
+{id:'salaries',cat:'gv',icon:'👥',title:'Note d\'information des salariés + clause contrat',
+ desc:'Information des salariés sur le traitement de leurs données (art. 13) + clause RGPD à insérer au contrat de travail.',
+ need:'ⓘ À remettre à chaque salarié et à intégrer aux contrats.',
+ file:'Information_salaries_{soc}',
+ body:function(X,f){
+   var out=[];
+   out.push(X.h1('Note d\'information des salariés — protection des données'));
+   out.push(X.p(V(f.raisonSociale)+' traite des données à caractère personnel vous concernant dans le cadre de la relation de travail. La présente note vous informe de ces traitements, conformément à l\'article 13 du RGPD.',{}));
+   out.push(X.h2('1. Responsable et finalités'));
+   out.push(X.p('Responsable : '+V(f.raisonSociale)+'. Contact : '+V(f.emailRgpd)+'. '+dpoLine(f),{}));
+   var rows=[X.headRow(['Finalité','Base légale','Conservation'],[3600,3200,2840])];
+   [['Gestion administrative du personnel','Exécution du contrat de travail (art. 6.1.b)','Durée du contrat + 5 ans'],
+    ['Paie et déclarations sociales','Obligation légale (art. 6.1.c)','Bulletins 5 ans ; déclarations selon obligations'],
+    ['Gestion des accès et de la sécurité','Intérêt légitime (art. 6.1.f)','Durée du contrat'],
+    ['Suivi des formations et compétences','Exécution du contrat / obligation légale','Durée du contrat']
+   ].forEach(function(r){ rows.push(X.row(r.map(function(c){return X.cell(c);}))); });
+   out.push(X.table(rows,[3600,3200,2840]));
+   out.push(X.h2('2. Destinataires'));
+   out.push(X.p('Vos données sont destinées aux services RH et hiérarchiques habilités, à l\'expert-comptable / gestionnaire de paie, aux organismes sociaux (URSSAF, mutuelle, prévoyance, retraite) et aux administrations, dans la limite de leurs attributions.',{}));
+   out.push(X.h2('3. Vos droits'));
+   out.push(X.p('Vous disposez des droits d\'accès, de rectification, d\'effacement (dans les limites des obligations légales), de limitation et d\'opposition, exerçables à l\'adresse '+V(f.emailRgpd)+'. Vous pouvez saisir la CNIL (www.cnil.fr).',{}));
+   out.push(X.pageBreak());
+   out.push(X.h2('Annexe — Clause à insérer dans le contrat de travail'));
+   out.push(X.note('Clause type à recopier dans les contrats de travail et avenants.',{label:'Modèle de clause'}));
+   out.push(X.p('« Dans le cadre de la relation de travail, l\'employeur traite des données à caractère personnel du salarié aux fins de gestion administrative, de paie, de respect de ses obligations légales et de la sécurité des systèmes. Ces traitements reposent sur l\'exécution du contrat, le respect d\'obligations légales et l\'intérêt légitime de l\'employeur. Les données sont conservées pour les durées légales applicables. Le salarié dispose des droits prévus par le RGPD (accès, rectification, effacement, limitation, opposition), exerçables auprès de '+V(f.emailRgpd)+'. Une information détaillée figure dans la note d\'information du personnel, dont le salarié reconnaît avoir pris connaissance. »',{i:true}));
+   return out;
+ }},
+
+/* 10. CONTRAT DE SOUS-TRAITANCE (art. 28) */
+{id:'dpa',cat:'gv',icon:'🤝',title:'Clauses de sous-traitance (DPA — art. 28)',
+ desc:'Contrat / avenant encadrant un prestataire qui traite vos données pour votre compte (art. 28 RGPD).',
+ need:'ⓘ À annexer à chaque contrat de sous-traitant.',
+ file:'Clauses_sous_traitance_{soc}',
+ body:function(X,f){
+   var out=[];
+   out.push(X.h1('Accord de traitement des données (clauses art. 28 RGPD)'));
+   out.push(X.h2('Article 1 — Parties'));
+   out.push(X.p('Responsable de traitement : '+V(f.raisonSociale)+', '+V(f.adresse)+'.',{}));
+   out.push(X.p('Sous-traitant : ⟨ Raison sociale, forme, siège et représentant du prestataire ⟩.',{}));
+   out.push(X.h2('Article 2 — Objet et durée'));
+   out.push(X.p('Le sous-traitant traite des données à caractère personnel pour le compte du responsable, dans le cadre de la prestation : ⟨ décrire la prestation ⟩. Le présent accord s\'applique pendant toute la durée du contrat principal.',{}));
+   out.push(X.h2('Article 3 — Description du traitement'));
+   out.push(X.kv([
+     ['Nature et finalité','⟨ ex. hébergement, emailing, maintenance ⟩'],
+     ['Catégories de données','⟨ ex. identité, coordonnées ⟩'],
+     ['Catégories de personnes','⟨ ex. clients, salariés ⟩'],
+     ['Durée de conservation','Le temps de la prestation, puis restitution/suppression']
+   ]));
+   out.push(X.h2('Article 4 — Obligations du sous-traitant'));
+   out.push(X.li('Traiter les données uniquement sur instruction documentée du responsable ;'));
+   out.push(X.li('Garantir la confidentialité (personnel autorisé et soumis à une obligation de confidentialité) ;'));
+   out.push(X.li('Mettre en œuvre les mesures de sécurité appropriées (art. 32) ;'));
+   out.push(X.li('Ne recourir à un sous-traitant ultérieur qu\'avec l\'autorisation écrite préalable du responsable, en lui imposant les mêmes obligations ;'));
+   out.push(X.li('Aider le responsable à répondre aux demandes d\'exercice des droits ;'));
+   out.push(X.li('Aider le responsable à respecter ses obligations de sécurité, de notification de violation et d\'analyse d\'impact (art. 32 à 36) ;'));
+   out.push(X.li('Notifier au responsable toute violation de données dans les meilleurs délais après en avoir pris connaissance ;'));
+   out.push(X.li('Au choix du responsable, supprimer ou restituer les données au terme de la prestation et détruire les copies ;'));
+   out.push(X.li('Mettre à disposition du responsable la documentation nécessaire et permettre des audits.'));
+   out.push(X.h2('Article 5 — Localisation et transferts'));
+   out.push(X.p('Les données sont hébergées et traitées à ⟨ pays / localisation ⟩. Tout transfert hors de l\'Union européenne est encadré par des garanties appropriées (clauses contractuelles types de la Commission européenne, ou décision d\'adéquation).',{}));
+   out.push(X.h2('Article 6 — Responsabilité'));
+   out.push(X.p('Chaque partie répond des dommages causés par un traitement non conforme au RGPD dans les conditions de l\'article 82. Le sous-traitant répond notamment du non-respect des obligations qui lui incombent en propre.',{}));
+   out=out.concat(X.signature(f,'Le sous-traitant'));
+   return out;
+ }},
+
+/* 11. AIPD (art. 35) */
+{id:'aipd',cat:'gv',icon:'🧭',title:'Analyse d\'impact (AIPD — art. 35)',
+ desc:'Modèle méthodologique complet pour évaluer un traitement à risque élevé, avec grille de risques.',
+ need:'ⓘ À réaliser pour chaque traitement susceptible d\'engendrer un risque élevé.',
+ file:'AIPD_modele_{soc}',
+ body:function(X,f){
+   var out=[];
+   out.push(X.h1('Analyse d\'impact relative à la protection des données (AIPD)'));
+   out.push(X.p('Réalisée en application de l\'article 35 du RGPD, l\'AIPD est requise lorsqu\'un traitement est susceptible d\'engendrer un risque élevé pour les droits et libertés des personnes (ex. surveillance à grande échelle, données sensibles à grande échelle, décisions automatisées, profilage, croisement de données).',{}));
+   out.push(X.h2('1. Description systématique du traitement'));
+   out.push(X.kv([
+     ['Intitulé du traitement','⟨ … ⟩'],
+     ['Responsable',''+V(f.raisonSociale)],
+     ['Finalité(s)','⟨ … ⟩'],
+     ['Données et catégories de personnes','⟨ … ⟩'],
+     ['Destinataires et sous-traitants','⟨ … ⟩'],
+     ['Durée de conservation','⟨ … ⟩'],
+     ['Support / outils','⟨ … ⟩']
+   ]));
+   out.push(X.h2('2. Nécessité et proportionnalité'));
+   out.push(X.li('Base légale et finalité déterminée, explicite et légitime ;'));
+   out.push(X.li('Minimisation des données (seules les données nécessaires) ;'));
+   out.push(X.li('Exactitude et durées de conservation limitées ;'));
+   out.push(X.li('Information des personnes et modalités d\'exercice des droits ;'));
+   out.push(X.li('Encadrement des sous-traitants et des transferts.'));
+   out.push(X.h2('3. Appréciation des risques'));
+   out.push(X.p('Pour chacun des trois risques types, évaluer la gravité et la vraisemblance (faible / limitée / importante / maximale), les impacts potentiels et les mesures :',{}));
+   var rows=[X.headRow(['Risque','Impacts potentiels','Gravité','Vraisemblance','Mesures'],[1700,2600,1350,1450,2540])];
+   [['Accès illégitime aux données','Atteinte à la vie privée, usurpation','⟨ … ⟩','⟨ … ⟩','Chiffrement, habilitations, journalisation'],
+    ['Modification non désirée','Décisions erronées, préjudice','⟨ … ⟩','⟨ … ⟩','Contrôle d\'intégrité, sauvegardes'],
+    ['Disparition des données','Perte d\'information, indisponibilité','⟨ … ⟩','⟨ … ⟩','Sauvegardes testées, redondance']
+   ].forEach(function(r){ rows.push(X.row(r.map(function(c){return X.cell(c);}))); });
+   out.push(X.table(rows,[1700,2600,1350,1450,2540]));
+   out.push(X.h2('4. Mesures retenues'));
+   out.push(X.p('Mesures techniques et organisationnelles réduisant les risques à un niveau acceptable :',{}));
+   secMeasures(f).forEach(function(m){ out.push(X.li(m)); });
+   out.push(X.h2('5. Avis et validation'));
+   out.push(X.p('Avis du DPO / référent : '+((f.dpoDesigne||has(f.dpoNom))?V(f.dpoNom):'⟨ … ⟩')+'. Le cas échéant, avis des personnes concernées recueilli. Décision du responsable : '+V(f.representant)+'. Si un risque élevé résiduel subsiste malgré les mesures, la CNIL doit être consultée avant la mise en œuvre (art. 36).',{}));
+   out=out.concat(X.versionTable(f));
+   return out;
+ }},
+
+/* 12. DÉSIGNATION / LETTRE DE MISSION DPO */
+{id:'dpo',cat:'gv',icon:'📌',title:'Désignation du DPO / référent — lettre de mission',
+ desc:'Formalise la désignation et les missions du délégué à la protection des données ou du référent RGPD (art. 37-39).',
+ need:'ⓘ À dater et signer ; à communiquer en interne.',
+ file:'Designation_DPO_{soc}',
+ body:function(X,f){
+   var out=[];
+   var estDPO=(f.dpoDesigne||has(f.dpoNom));
+   out.push(X.h1(estDPO?'Désignation et lettre de mission du délégué à la protection des données':'Désignation et lettre de mission du référent « protection des données »'));
+   out.push(X.p(V(f.raisonSociale)+' désigne '+((estDPO)?V(f.dpoNom):'⟨ nom du référent ⟩')+' en qualité de '+(estDPO?'délégué à la protection des données (DPO)':'référent « protection des données »')+', à compter du '+today()+'.',{}));
+   out.push(X.h2('1. Coordonnées'));
+   out.push(X.kv([
+     ['Nom',estDPO?V(f.dpoNom):'⟨ … ⟩'],
+     ['Adresse e-mail',f.dpoEmail?f.dpoEmail:V(f.emailRgpd)],
+     ['Téléphone',f.dpoTel?f.dpoTel:'⟨ … ⟩'],
+     ['Rattachement','Direction de '+V(f.raisonSociale)]
+   ]));
+   out.push(X.h2('2. Missions (art. 39 RGPD)'));
+   out.push(X.li('Informer et conseiller le responsable de traitement et les salariés sur leurs obligations ;'));
+   out.push(X.li('Contrôler le respect du RGPD et de la politique interne de protection des données ;'));
+   out.push(X.li('Dispenser des conseils sur les analyses d\'impact (AIPD) et en vérifier l\'exécution ;'));
+   out.push(X.li('Coopérer avec la CNIL et faire office de point de contact ;'));
+   out.push(X.li('Tenir à jour le registre des traitements et piloter le plan d\'action de conformité.'));
+   out.push(X.h2('3. Moyens et indépendance'));
+   out.push(X.p('L\'intéressé exerce ses missions en toute indépendance, sans recevoir d\'instruction quant à leur exercice, et dispose des moyens et de l\'accès aux traitements nécessaires. Il est associé, en temps utile, à toutes les questions relatives à la protection des données.',{}));
+   if(estDPO) out.push(X.note('Si vous avez désigné un DPO au sens strict, pensez à le déclarer auprès de la CNIL (téléservice de désignation).',{label:'À faire'}));
+   out=out.concat(X.signature(f,estDPO?'Le délégué (DPO)':'Le référent'));
+   return out;
+ }},
+
+/* 13. POLITIQUE DE SÉCURITÉ */
+{id:'securite',cat:'gv',icon:'🛡️',title:'Politique de sécurité (PSSI TPE/PME)',
+ desc:'Les mesures techniques et organisationnelles de sécurité (art. 32), adaptées à une petite structure.',
+ need:'ⓘ Cochez vos mesures dans la fiche ; complétez les points spécifiques.',
+ file:'Politique_securite_{soc}',
+ body:function(X,f){
+   var out=[];
+   out.push(X.h1('Politique de sécurité des systèmes d\'information et des données'));
+   out.push(X.p('Cette politique décrit les mesures techniques et organisationnelles mises en œuvre par '+V(f.raisonSociale)+' pour assurer la sécurité, la confidentialité, l\'intégrité et la disponibilité des données à caractère personnel, conformément à l\'article 32 du RGPD.',{}));
+   out.push(X.h2('1. Contrôle des accès'));
+   out.push(X.li('Comptes individuels, mots de passe robustes et renouvelés ; pas de comptes partagés ;'));
+   out.push(X.li('Gestion des habilitations selon le besoin d\'en connaître ; revue périodique des accès ;'));
+   out.push(X.li('Retrait immédiat des accès au départ d\'un collaborateur.'));
+   out.push(X.h2('2. Sécurité des postes et des réseaux'));
+   out.push(X.li('Antivirus, pare-feu et mises à jour de sécurité à jour ;'));
+   out.push(X.li('Verrouillage automatique des sessions ; chiffrement des postes mobiles ;'));
+   out.push(X.li('Sécurisation du réseau et des accès distants.'));
+   out.push(X.h2('3. Sauvegardes et continuité'));
+   out.push(X.li('Sauvegardes régulières, externalisées et testées ;'));
+   out.push(X.li('Procédure de restauration documentée.'));
+   out.push(X.h2('4. Sécurité des données'));
+   out.push(X.li('Chiffrement des données sensibles et des échanges ;'));
+   out.push(X.li('Minimisation et cloisonnement des données ;'));
+   out.push(X.li('Journalisation des accès aux données sensibles.'));
+   out.push(X.h2('5. Volet organisationnel'));
+   out.push(X.li('Charte informatique signée par le personnel ;'));
+   out.push(X.li('Sensibilisation régulière (hameçonnage, mots de passe, violations) ;'));
+   out.push(X.li('Contrats de sous-traitance conformes à l\'article 28 ;'));
+   out.push(X.li('Procédure de gestion des violations de données.'));
+   out.push(X.h2('6. Mesures spécifiques déclarées'));
+   out.push(X.p('Mesures actuellement en place dans l\'entreprise :',{}));
+   secMeasures(f).forEach(function(m){ out.push(X.li(m)); });
+   out=out.concat(X.versionTable(f));
+   return out;
+ }},
+
+/* 14. PLAN D'ACTION / ACCOUNTABILITY */
+{id:'planaction',cat:'gv',icon:'✅',title:'Plan d\'action & registre de preuves',
+ desc:'Le pilotage de votre conformité : état des lieux, actions priorisées et registre de preuves (accountability, art. 5.2).',
+ need:'ⓘ À faire vivre : mettez à jour l\'avancement régulièrement.',
+ file:'Plan_action_conformite_{soc}',
+ body:function(X,f){
+   var out=[];
+   out.push(X.h1('Plan d\'action de conformité RGPD & AI Act'));
+   out.push(X.p('Ce document pilote la démarche de mise en conformité de '+V(f.raisonSociale)+' et matérialise le principe de responsabilité (accountability, art. 5.2 RGPD) : être en mesure de démontrer sa conformité.',{}));
+   out.push(X.h2('1. État des lieux documentaire'));
+   var rows=[X.headRow(['Document / mesure','En place','Responsable','Échéance'],[4200,1400,2400,1640])];
+   [['Registre des activités de traitement','⟨ oui/non ⟩','',''],
+    ['Politique de confidentialité + mentions légales','⟨ oui/non ⟩','',''],
+    ['Procédure droits des personnes + registre','⟨ oui/non ⟩','',''],
+    ['Procédure violations + registre','⟨ oui/non ⟩','',''],
+    ['Politique de conservation','⟨ oui/non ⟩','',''],
+    ['Charte informatique + sensibilisation','⟨ oui/non ⟩','',''],
+    ['Contrats de sous-traitance (art. 28)','⟨ oui/non ⟩','',''],
+    ['Politique & cartographie IA (AI Act)','⟨ oui/non ⟩','','']
+   ].forEach(function(r){ rows.push(X.row(r.map(function(c){return X.cell(c);}))); });
+   out.push(X.table(rows,[4200,1400,2400,1640]));
+   out.push(X.h2('2. Actions prioritaires'));
+   var r2=[X.headRow(['Action','Priorité','Responsable','Échéance','Statut'],[3200,1300,2200,1400,1540])];
+   r2.push(X.row([X.cell('⟨ ex. finaliser le registre ⟩'),X.cell('Haute'),X.cell(V(f.representant)),X.cell('⟨ … ⟩'),X.cell('À faire')]));
+   r2.push(X.row([X.cell(''),X.cell(''),X.cell(''),X.cell(''),X.cell('')]));
+   r2.push(X.row([X.cell(''),X.cell(''),X.cell(''),X.cell(''),X.cell('')]));
+   out.push(X.table(r2,[3200,1300,2200,1400,1540]));
+   out.push(X.h2('3. Registre de preuves'));
+   out.push(X.p('Conserver, pour chaque obligation, la preuve de sa mise en œuvre (documents datés, captures, contrats, attestations de formation, registres). Ces preuves sont opposables en cas de contrôle de la CNIL.',{}));
+   out=out.concat(X.versionTable(f));
+   return out;
+ }},
+
+/* 15. POLITIQUE IA (AI Act) */
+{id:'politiqueIA',cat:'ia',icon:'🤖',title:'Politique d\'usage de l\'intelligence artificielle',
+ desc:'Encadre l\'utilisation de l\'IA dans l\'entreprise (Règlement (UE) 2024/1689 — AI Act) et son articulation avec le RGPD.',
+ need:'ⓘ Adaptez aux outils réellement utilisés.',
+ file:'Politique_usage_IA_{soc}',
+ body:function(X,f){
+   var out=[];
+   out.push(X.h1('Politique d\'usage de l\'intelligence artificielle'));
+   out.push(X.p('La présente politique encadre l\'utilisation des systèmes d\'intelligence artificielle (IA) au sein de '+V(f.raisonSociale)+', dans le respect du Règlement (UE) 2024/1689 (« AI Act ») et du RGPD.',{}));
+   out.push(X.h2('1. Champ d\'application'));
+   out.push(X.p('Elle s\'applique à tout usage d\'un système d\'IA par l\'entreprise ou ses collaborateurs, qu\'il s\'agisse d\'outils intégrés ou d\'outils tiers (IA générative, chatbots, outils d\'aide à la décision).',{}));
+   out.push(X.h2('2. Principes directeurs'));
+   out.push(X.li('Transparence : informer les personnes lorsqu\'elles interagissent avec une IA ou reçoivent un contenu généré par IA ;'));
+   out.push(X.li('Supervision humaine : aucune décision produisant des effets juridiques ou significatifs n\'est prise sur le seul fondement d\'un traitement automatisé (art. 22 RGPD) ;'));
+   out.push(X.li('Protection des données : ne pas soumettre de données personnelles, confidentielles ou stratégiques à des outils d\'IA non maîtrisés ;'));
+   out.push(X.li('Exactitude et non-discrimination : vigilance sur les biais, en particulier pour le recrutement ou l\'évaluation ;'));
+   out.push(X.li('Littératie IA (art. 4 AI Act) : les utilisateurs sont sensibilisés à un usage éclairé de l\'IA.'));
+   out.push(X.h2('3. Classification des risques (AI Act)'));
+   out.push(X.li('Risque inacceptable — interdit : notation sociale, manipulation, catégorisation biométrique sensible, reconnaissance des émotions au travail ;'));
+   out.push(X.li('Risque élevé : IA de recrutement, d\'évaluation, d\'accès à des services essentiels — obligations renforcées ;'));
+   out.push(X.li('Risque limité : chatbots, IA générative — obligation de transparence ;'));
+   out.push(X.li('Risque minimal : usages courants — bonnes pratiques recommandées.'));
+   out.push(X.h2('4. Usages autorisés'));
+   var ia=iaList(f);
+   if(ia.length){ ia.forEach(function(o){ out.push(X.li(o.outil+(o.usage?' — '+o.usage:'')+(o.risque?' (risque '+o.risque+')':''))); }); }
+   else { out.push(X.p('⟨ Listez les outils d\'IA autorisés dans la fiche société pour les faire apparaître ici. ⟩',{i:true})); }
+   out.push(X.h2('5. Usages interdits'));
+   out.push(X.li('Toute pratique prohibée par l\'AI Act (voir catégorie « risque inacceptable ») ;'));
+   out.push(X.li('La saisie de données personnelles sensibles dans un outil d\'IA grand public ;'));
+   out.push(X.li('L\'usage d\'une IA pour une décision automatisée sans supervision humaine.'));
+   out.push(X.h2('6. Gouvernance'));
+   out.push(X.p('Référent IA / protection des données : '+((f.dpoDesigne||has(f.dpoNom))?V(f.dpoNom):V(f.emailRgpd))+'. Tout nouvel usage d\'IA doit lui être signalé pour évaluation préalable et, le cas échéant, inscription à la cartographie des systèmes d\'IA.',{}));
+   out=out.concat(X.versionTable(f));
+   return out;
+ }},
+
+/* 16. CARTOGRAPHIE IA */
+{id:'cartoIA',cat:'ia',icon:'🗺️',title:'Cartographie & classification des systèmes d\'IA',
+ desc:'Recense vos systèmes d\'IA et les classe par niveau de risque au sens de l\'AI Act.',
+ need:'ⓘ Classez chaque outil (minimal / limité / élevé / inacceptable).',
+ file:'Cartographie_IA_{soc}',
+ body:function(X,f){
+   var out=[];
+   out.push(X.h1('Cartographie et classification des systèmes d\'intelligence artificielle'));
+   out.push(X.p('Ce registre recense les systèmes d\'IA utilisés par '+V(f.raisonSociale)+' et évalue leur niveau de risque au sens du Règlement (UE) 2024/1689 (AI Act).',{}));
+   out.push(X.h2('Inventaire des systèmes d\'IA'));
+   var rows=[X.headRow(['Système / outil','Usage','Données utilisées','Niveau de risque','Mesures / transparence'],[1900,1950,1900,1550,2340])];
+   var ia=iaList(f);
+   if(ia.length){ ia.forEach(function(o){ rows.push(X.row([X.cell(o.outil,{b:1}),X.cell(o.usage||'⟨ … ⟩'),X.cell('⟨ à préciser ⟩'),X.cell(o.risque||'limité'),X.cell('Transparence, supervision humaine')])); }); }
+   else { rows.push(X.row([X.cell('⟨ Outil ⟩',{b:1}),X.cell('⟨ Usage ⟩'),X.cell('⟨ Données ⟩'),X.cell('⟨ Risque ⟩'),X.cell('⟨ Mesures ⟩')])); }
+   out.push(X.table(rows,[1900,1950,1900,1550,2340]));
+   out.push(X.h2('Rappels de conformité'));
+   out.push(X.li('IA à risque limité (chatbots, IA générative) : obligation de transparence envers les utilisateurs ;'));
+   out.push(X.li('IA à risque élevé : obligations renforcées (gestion des risques, documentation, supervision humaine, journalisation) ;'));
+   out.push(X.li('IA à risque inacceptable : interdites ;'));
+   out.push(X.li('Lorsqu\'un système d\'IA traite des données personnelles, le RGPD s\'applique cumulativement.'));
+   out.push(X.note('Calendrier AI Act : interdictions et littératie IA applicables depuis février 2025 ; obligations sur les IA à usage général depuis août 2025 ; systèmes à haut risque à compter du 2 août 2026.'));
+   out=out.concat(X.versionTable(f));
+   return out;
+ }},
+
+/* 17. SYNTHÈSE DE CONFORMITÉ */
+{id:'synthese',cat:'gv',icon:'📋',title:'Synthèse de conformité',
+ desc:'Récapitulatif de votre démarche RGPD & AI Act, à présenter en cas de contrôle ou à un partenaire.',
+ need:'ⓘ À dater et faire évoluer avec votre conformité.',
+ file:'Synthese_conformite_{soc}',
+ body:function(X,f){
+   var out=[];
+   out.push(X.h1('Synthèse de conformité RGPD & AI Act'));
+   out.push(X.h2('1. Entreprise'));
+   out.push(X.kv([
+     ['Entité',V(f.raisonSociale)],
+     ['Siège',V(f.adresse)],
+     ['SIRET',V(f.siret)],
+     ['Secteur',f.secteur?f.secteur:SECTORS[sectorKey(f)].label],
+     ['Référent conformité',(f.dpoDesigne||has(f.dpoNom))?V(f.dpoNom):V(f.emailRgpd)]
+   ]));
+   out.push(X.h2('2. Documentation en place'));
+   out.push(X.li('Registre des activités de traitement (art. 30) ;'));
+   out.push(X.li('Politique de confidentialité et mentions légales (art. 13-14) ;'));
+   out.push(X.li('Procédures : exercice des droits (art. 12-22), violations de données (art. 33-34) ;'));
+   out.push(X.li('Politique de durées de conservation et politique cookies ;'));
+   out.push(X.li('Charte informatique et politique de sécurité (art. 32) ;'));
+   out.push(X.li('Contrats de sous-traitance (art. 28) ;'));
+   out.push(X.li('Politique d\'usage de l\'IA et cartographie des systèmes d\'IA (AI Act) ;'));
+   out.push(X.li('Plan d\'action et registre de preuves (accountability).'));
+   out.push(X.h2('3. Engagement'));
+   out.push(X.p(V(f.raisonSociale)+' s\'engage dans une démarche de conformité continue au RGPD et à l\'AI Act, et met à jour sa documentation à chaque évolution significative de ses activités, de ses outils ou de la réglementation.',{}));
+   out.push(X.p('Établi le '+today()+' à '+V(f.ville||f.rcsVille)+'.',{i:true}));
+   out=out.concat(X.signature(f,'Le référent conformité'));
+   return out;
+ }}
+
+];
+return DOCS;
+}
+var DOCS=buildDOCS();
+function ensureDocx(cb){ if(window.docx&&window.docx.Document) return cb(); if(window._docxFailed){ alert('Génération indisponible : vérifiez votre connexion, puis réessayez.'); return; } var n=0,iv=setInterval(function(){ n++; if(window.docx&&window.docx.Document){ clearInterval(iv); cb(); } else if(n>50){ clearInterval(iv); alert('Génération indisponible pour le moment.'); } },150); }
+function downloadBlob(blob,name){ var u=URL.createObjectURL(blob); var a=document.createElement('a'); a.href=u; a.download=name; document.body.appendChild(a); a.click(); setTimeout(function(){URL.revokeObjectURL(u);a.remove();},1500); }
+function giftFiche(){ var q={}; try{ q=JSON.parse(localStorage.getItem('clarte_quiz_prefill')||'{}'); }catch(e){}
+  function g(id){ var el=document.getElementById(id); return el&&el.value?el.value.trim():''; }
+  return {raisonSociale:q.etab||g('business'),representant:q.resp||g('contact-name'),emailRgpd:q.email||g('email-signup'),ville:q.ville||g('city-signup'),secteur:q.secteur||g('activity'),telephone:q.tel||g('phone-signup'),adresse:'',siret:'',formeJuridique:'',rcsVille:'',tva:'',siteWeb:'',hebergeur:'',hebergeurPays:'',sousTraitants:'',iaOutils:'',securite:[],donnees:[],traitementsSupp:'',dpoNom:'',dpoEmail:'',dpoDesigne:false}; }
+function giftBuildDoc(title,bodyFn,f){ var X=DX(),dd=X.d;
+  var head=(f.raisonSociale||'Société')+(f.siret?' — SIRET '+f.siret:'');
+  var cover=[ new dd.Paragraph({spacing:{before:200,after:20},children:[new dd.TextRun({text:V(f.raisonSociale),bold:true,size:40,font:X.FONT,color:X.C.ink})]}),
+    X.p((f.formeJuridique?f.formeJuridique+' · ':'')+(f.adresse||''),{color:X.C.dim,size:19}),
+    new dd.Paragraph({spacing:{before:520,after:60},children:[new dd.TextRun({text:title,bold:true,size:36,font:X.FONT,color:X.C.indigo})]}),
+    X.p('Établi le '+today(),{color:X.C.dim,size:20}), X.spacer(120), X.warnBox(), new dd.Paragraph({children:[new dd.PageBreak()]}) ];
+  return new dd.Document({styles:{default:{document:{run:{font:X.FONT,size:21}}}},sections:[{properties:{page:{size:{width:11906,height:16838},margin:{top:1134,right:1134,bottom:1134,left:1134}}},
+    headers:{default:new dd.Header({children:[new dd.Paragraph({border:{bottom:{style:dd.BorderStyle.SINGLE,size:4,color:X.C.indigo}},spacing:{after:80},children:[new dd.TextRun({text:head,font:X.FONT,size:16,color:'888888'})]})]})},
+    footers:{default:new dd.Footer({children:[new dd.Paragraph({border:{top:{style:dd.BorderStyle.SINGLE,size:4,color:X.C.indigo}},spacing:{before:80},children:[new dd.TextRun({text:'Document offert par Clarté · RTH NETGOCE — Page ',font:X.FONT,size:15,color:'999999'}),new dd.TextRun({children:[dd.PageNumber.CURRENT],font:X.FONT,size:15,color:'999999'}),new dd.TextRun({text:'/',font:X.FONT,size:15,color:'999999'}),new dd.TextRun({children:[dd.PageNumber.TOTAL_PAGES],font:X.FONT,size:15,color:'999999'})]})]})},
+    children:cover.concat(bodyFn(X,f))}]});
+}
+function downloadRegistre(){ var msg=document.getElementById('giftMsg'); if(msg){ msg.textContent='Préparation de votre registre…'; msg.style.color='#6b6459'; }
+  ensureDocx(function(){ try{ var f=giftFiche(); if(!f.raisonSociale) f.raisonSociale='Mon entreprise'; var reg=null; for(var i=0;i<DOCS.length;i++){ if(DOCS[i].id==='registre'){ reg=DOCS[i]; break; } }
+    var doc=giftBuildDoc(reg.title,reg.body,f);
+    window.docx.Packer.toBlob(doc).then(function(blob){ downloadBlob(blob,'Registre_traitements_'+(f.raisonSociale||'entreprise').replace(/[^\w-]+/g,'_')+'.docx'); if(msg){ msg.textContent='✅ Registre téléchargé — ouvrez-le dans Word.'; msg.style.color='var(--green)'; } })
+      .catch(function(e){ if(msg){ msg.textContent='Erreur : '+e.message; msg.style.color='#c0392b'; } });
+  }catch(e){ if(msg){ msg.textContent='Erreur : '+e.message; msg.style.color='#c0392b'; } } });
+}
+</script>
+
 </body>
 </html>
