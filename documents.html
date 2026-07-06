@@ -302,7 +302,7 @@
 </div></footer>
 
 <div class="toast" id="toast"></div>
-<div style="position:fixed;bottom:8px;right:10px;z-index:9999;font:700 10px/1 system-ui,sans-serif;color:#7a7f95;background:rgba(255,255,255,.82);border:1px solid #e7e9f3;padding:4px 8px;border-radius:8px;pointer-events:none">Clarté · MàJ 04/07 · b28</div>
+<div style="position:fixed;bottom:8px;right:10px;z-index:9999;font:700 10px/1 system-ui,sans-serif;color:#7a7f95;background:rgba(255,255,255,.82);border:1px solid #e7e9f3;padding:4px 8px;border-radius:8px;pointer-events:none">Clarté · MàJ 06/07 · b29</div>
 
 <script>
 /* ================= FICHE SOCIÉTÉ (localStorage) ================= */
@@ -554,7 +554,18 @@ function sectorKey(f){
   if(/commerc|magasin|boutique|vente/.test(lab)) return 'commerce';
   return 'autre';
 }
-function sectorProc(f){ return SECTORS[sectorKey(f)].proc; }
+function sectorProc(f){
+  var base=SECTORS[sectorKey(f)].proc.slice();
+  function hasKw(){ var a=arguments; return base.some(function(b){ var s=(b.f+' '+b.per).toLowerCase(); for(var i=0;i<a.length;i++){ if(s.indexOf(a[i])>=0) return true; } return false; }); }
+  var salaries = f.hasSalaries || (f.donnees && f.donnees.indexOf('Salariés')>=0);
+  if(salaries && !hasKw('salari','personnel','ressources humaines'))
+    base.push({f:'Gestion des ressources humaines (paie et administration du personnel)',per:'Salariés, stagiaires',don:'Identité, RIB, contrat, temps de travail, données de paie',b:'Obligation légale / exécution du contrat (art. 6.1.c/b)',c:'Durée du contrat + délais légaux (bulletins de paie 5 ans)'});
+  if(salaries && !hasKw('recrut','candidat'))
+    base.push({f:'Recrutement (réception, tri et évaluation des candidatures)',per:'Candidats à l\'embauche',don:'CV, lettres de motivation, coordonnées',b:'Mesures précontractuelles / consentement (art. 6.1.b/a)',c:'2 ans après le dernier contact (sauf opposition)'});
+  if(has(f.siteWeb) && !hasKw('cookie','audience','site internet'))
+    base.push({f:'Gestion du site internet (cookies et traceurs)',per:'Visiteurs du site',don:'Données de navigation, préférences, identifiants',b:'Consentement (art. 6.1.a)',c:'13 mois maximum (traceurs)'});
+  return base;
+}
 
 /* ---------- Fragments réutilisables ---------- */
 function respLine(f){ return V(f.raisonSociale)+(f.formeJuridique?', '+f.formeJuridique:'')+(f.capital?' au capital de '+f.capital+' €':'')+', dont le siège social est situé '+V(f.adresse)+(f.siret?', immatriculée sous le numéro SIRET '+f.siret:'')+(f.rcsVille?' (RCS '+f.rcsVille+')':'')+'.'; }
@@ -635,52 +646,81 @@ var DOCS=[
  need:'ⓘ Vérifiez et ajustez chaque ligne (finalités, durées) à vos traitements réels.',
  file:'Registre_traitements_{soc}',
  body:function(X,f){
-   var out=[];
-   out.push(X.h1('Registre des activités de traitement'));
-   out.push(X.p('Établi en application de l\'article 30, paragraphe 1, du Règlement (UE) 2016/679 (RGPD).',{i:true,c:X.C.dim,size:19}));
+   var out=[]; var ref=(f.dpoDesigne||has(f.dpoNom))?(V(f.dpoNom)+(f.dpoEmail?' — '+f.dpoEmail:'')):('Non désigné (facultatif pour cette structure) — référent interne : '+V(f.emailRgpd));
+   out.push(X.h1('Registre des activités de traitement (RGPD)'));
+   out.push(X.p('Établi en application de l\'article 30, paragraphe 1, du Règlement (UE) 2016/679 (RGPD). Ce registre recense de manière exhaustive les traitements de données à caractère personnel mis en œuvre par '+V(f.raisonSociale)+'.',{i:true,c:X.C.dim,size:19}));
    out.push(X.h2('1. Identité et coordonnées du responsable de traitement'));
    out.push(X.kv([
      ['Responsable de traitement',V(f.raisonSociale)+(f.formeJuridique?' ('+f.formeJuridique+')':'')],
      ['Siège social',V(f.adresse)],
-     ['SIRET / RCS',(f.siret?f.siret:'⟨ à compléter ⟩')+(f.rcsVille?' — RCS '+f.rcsVille:'')],
+     ['SIRET / RCS',(f.siret?f.siret:'⟨ à compléter par le client ⟩')+(f.rcsVille?' — RCS '+f.rcsVille:'')],
      ['Représentant légal',V(f.representant)+(f.qualite?' ('+f.qualite+')':'')],
      ['Contact « données personnelles »',V(f.emailRgpd)],
-     ['DPO / référent',(f.dpoDesigne||has(f.dpoNom))?(V(f.dpoNom)+(f.dpoEmail?' — '+f.dpoEmail:'')):'Non désigné — référent : '+V(f.emailRgpd)]
+     ['Délégué à la protection des données (DPO) / Référent',ref]
    ]));
    out.push(X.spacer(40));
-   out.push(X.h2('2. Activités de traitement'));
-   out.push(X.p('Le tableau ci-dessous recense les traitements mis en œuvre. Chaque traitement précise sa finalité, les catégories de personnes et de données concernées, la base légale (art. 6 RGPD) et la durée de conservation.',{}));
-   var rows=[X.headRow(['Finalité du traitement','Personnes concernées','Catégories de données','Base légale (art. 6)','Durée de conservation'],[2400,1650,2250,1800,1540])];
+   out.push(X.h2('2. Registre détaillé des activités de traitement'));
+   out.push(X.p('Chaque traitement précise sa finalité (art. 30.1.b), les catégories de personnes concernées (art. 30.1.c), les catégories de données, la base légale (art. 6) et la durée de conservation (art. 30.1.f).',{}));
+   var rows=[X.headRow(['Nom / finalité du traitement','Personnes concernées','Catégories de données','Base légale (art. 6)','Durée de conservation'],[2500,1600,2200,1800,1540])];
    sectorProc(f).forEach(function(pr){ rows.push(X.row([X.cell(pr.f,{b:1}),X.cell(pr.per),X.cell(pr.don),X.cell(pr.b),X.cell(pr.c)])); });
-   lines(f.traitementsSupp).forEach(function(l){ rows.push(X.row([X.cell(l),X.cell('⟨ … ⟩'),X.cell('⟨ … ⟩'),X.cell('⟨ … ⟩'),X.cell('⟨ … ⟩')])); });
-   out.push(X.table(rows,[2400,1650,2250,1800,1540]));
-   out.push(X.note('Ce registre est pré-rempli à partir du secteur « '+SECTORS[sectorKey(f)].label+' ». Complétez ou retirez les lignes qui ne correspondent pas à votre activité réelle.'));
+   lines(f.traitementsSupp).forEach(function(l){ rows.push(X.row([X.cell(l,{b:1}),X.cell('⟨ … ⟩'),X.cell('⟨ … ⟩'),X.cell('⟨ … ⟩'),X.cell('⟨ … ⟩')])); });
+   out.push(X.table(rows,[2500,1600,2200,1800,1540]));
+   out.push(X.note('Registre pré-rempli à partir du secteur « '+SECTORS[sectorKey(f)].label+' ». Complétez ou retirez les lignes qui ne correspondent pas à votre activité réelle.'));
    out.push(X.spacer(40));
-   out.push(X.h2('3. Catégories particulières de données (art. 9)'));
+   out.push(X.h2('3. Catégories particulières de données (données sensibles — art. 9)'));
    out.push(X.p(SECTORS[sectorKey(f)].sensibles,{}));
-   out.push(X.h2('4. Destinataires et sous-traitants'));
+   out.push(X.p('Le cas échéant, dans le cadre de la gestion des ressources humaines, certaines données de santé (arrêts maladie, accidents du travail, visites médicales) peuvent être traitées pour répondre aux obligations légales en matière de droit du travail et de sécurité sociale (art. 9.2.b du RGPD).',{}));
+   out.push(X.h2('4. Catégories de destinataires et sous-traitants (art. 30.1.d)'));
+   out.push(X.p('Les données ne sont accessibles qu\'aux personnes habilitées, en fonction de leurs missions (principe du « besoin d\'en connaître »).',{}));
+   out.push(X.h3('Destinataires internes'));
+   out.push(X.li('Direction — '+V(f.representant)+' ;'));
+   out.push(X.li('Service comptabilité / facturation / paie ;'));
+   out.push(X.li('Personnel habilité (accès limité aux données nécessaires à ses fonctions).'));
+   out.push(X.h3('Sous-traitants et destinataires externes'));
+   out.push(X.p('Tous les sous-traitants sont liés par un contrat conforme à l\'article 28 du RGPD, garantissant la sécurité et la confidentialité des données.',{}));
    var st=subList(f);
-   if(st.length){
-     var rr=[X.headRow(['Sous-traitant / destinataire','Rôle / prestation','Localisation','Garanties'],[2800,2600,1900,2340])];
-     st.forEach(function(s){ rr.push(X.row([X.cell(s.nom,{b:1}),X.cell(s.role),X.cell(s.pays||'⟨ … ⟩'),X.cell(s.gar||'Contrat art. 28')])); });
-     out.push(X.table(rr,[2800,2600,1900,2340]));
-   } else {
-     out.push(X.p('Les données sont destinées aux services internes habilités. Les sous-traitants (hébergeur, prestataires informatiques, comptable…) sont encadrés par un contrat conforme à l\'article 28 du RGPD. ⟨ Listez vos sous-traitants dans la fiche société pour les faire apparaître ici. ⟩',{}));
+   var rr=[X.headRow(['Sous-traitant / destinataire','Prestation / finalité','Données confiées','Localisation'],[2650,2450,2350,2190])];
+   if(st.length){ st.forEach(function(s){ rr.push(X.row([X.cell(s.nom,{b:1}),X.cell(s.role||'⟨ … ⟩'),X.cell('⟨ à préciser ⟩'),X.cell(s.pays||'France / UE')])); }); }
+   else {
+     [['⟨ Cabinet comptable ⟩','Expertise comptable et gestion de la paie','Données RH, facturation','France / UE'],
+      ['⟨ Hébergeur du site ⟩','Hébergement du site internet','Données de navigation, formulaires','France / UE'],
+      ['⟨ Logiciel métier / de caisse ⟩','Gestion de l\'activité et de la fidélité','Données clients, historique d\'achats','France / UE'],
+      ['⟨ Outil d\'emailing ⟩','Envoi de newsletters et prospection','E-mails, identité','France / UE'],
+      ['Organismes sociaux (URSSAF, CPAM, mutuelle)','Déclarations sociales obligatoires','Données RH, NIR','France']
+     ].forEach(function(r){ rr.push(X.row([X.cell(r[0],{b:1}),X.cell(r[1]),X.cell(r[2]),X.cell(r[3])])); });
    }
-   out.push(X.h2('5. Transferts hors Union européenne'));
+   out.push(X.table(rr,[2650,2450,2350,2190]));
+   out.push(X.note('Remplacez les mentions entre crochets « ⟨ … ⟩ » par les noms réels de vos prestataires pour que le registre soit incontestable lors d\'un audit.',{warn:true,label:'À compléter'}));
+   out.push(X.h2('5. Transferts de données hors Union européenne (art. 30.1.e)'));
    out.push(X.p(transfertPhrase(f),{}));
-   out.push(X.h2('6. Mesures de sécurité (description générale — art. 32)'));
-   secMeasures(f).forEach(function(m){ out.push(X.li(m)); });
+   out.push(X.p('En cas de recours à un prestataire hébergeant des données hors UE (ex. outil d\'emailing ou d\'analyse web aux États-Unis), le transfert est encadré par : une décision d\'adéquation de la Commission européenne (ex. Data Privacy Framework pour les États-Unis) ou, à défaut, la signature de clauses contractuelles types (CCT), assorties de mesures de sécurité supplémentaires si nécessaire.',{}));
+   out.push(X.h2('6. Mesures de sécurité techniques et organisationnelles (art. 30.1.g & art. 32)'));
+   out.push(X.h3('Mesures organisationnelles'));
+   out.push(X.li('Sensibilisation et formation du personnel aux bonnes pratiques de sécurité et à la confidentialité ;'));
+   out.push(X.li('Gestion stricte des habilitations : accès limité au personnel ayant besoin d\'en connaître ;'));
+   out.push(X.li('Charte informatique signée et procédure de gestion des violations (notification CNIL sous 72 h en cas de risque).'));
+   out.push(X.h3('Mesures techniques'));
+   out.push(X.li('Contrôle d\'accès : identifiants individuels et mots de passe robustes (recommandations CNIL) ;'));
+   out.push(X.li('Sauvegardes régulières des données critiques, stockées de façon sécurisée (support externe ou cloud chiffré) ;'));
+   out.push(X.li('Sécurité des postes : mises à jour régulières, antivirus et pare-feu à jour ;'));
+   out.push(X.li('Sécurité physique : locaux sécurisés, accès restreint aux documents papier confidentiels (RH, comptabilité) ;'));
+   out.push(X.li('Chiffrement des données sensibles et des échanges.'));
+   var decl=(f.securite||[]); if(decl.length){ out.push(X.p('Mesures spécifiquement confirmées par l\'entreprise : '+secMeasures(f).join(' ; ')+'.',{i:true,c:X.C.dim,size:18})); }
+   out.push(X.h2('7. Droits des personnes concernées'));
+   out.push(X.p('Les personnes disposent des droits d\'accès, de rectification, d\'effacement, de limitation, de portabilité et d\'opposition. Ces droits s\'exercent auprès de '+V(f.emailRgpd)+'. Une réponse est apportée dans un délai maximum d\'un mois à compter de la réception de la demande.',{}));
+   out.push(X.h2('8. Suivi et mise à jour du registre'));
+   out.push(X.p('Ce registre est un document vivant. Il doit être mis à jour à chaque modification substantielle d\'un traitement existant ou lors de la création d\'un nouveau traitement.',{}));
+   out.push(X.p('Document validé par la Direction le '+today()+'.',{b:true}));
+   out=out.concat(X.versionTable(f));
    out=out.concat(X.coverage('Couverture de l\'article 30 — point par point',[
-     ['Art. 30.1.a — Identité et coordonnées du responsable','Section 1 (fiche d\'identité)'],
+     ['Art. 30.1.a — Identité et coordonnées du responsable','Section 1'],
      ['Art. 30.1.b — Finalités du traitement','Section 2, colonne « Finalité »'],
-     ['Art. 30.1.c — Catégories de personnes et de données','Section 2, colonnes dédiées + section 3'],
+     ['Art. 30.1.c — Catégories de personnes et de données','Section 2 + section 3'],
      ['Art. 30.1.d — Catégories de destinataires','Section 4'],
      ['Art. 30.1.e — Transferts hors UE','Section 5'],
      ['Art. 30.1.f — Délais d\'effacement (conservation)','Section 2, colonne « Durée »'],
-     ['Art. 30.1.g — Description générale des mesures de sécurité','Section 6']
+     ['Art. 30.1.g — Mesures de sécurité','Section 6']
    ]));
-   out=out.concat(X.versionTable(f));
    return out;
  }},
 
