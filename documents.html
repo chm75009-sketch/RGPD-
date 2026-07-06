@@ -293,7 +293,7 @@
       <span class="disc" style="margin:0">Un seul fichier réunissant tous les documents.</span>
     </div>
     <div class="docs" id="docsGrid"></div>
-    <p class="disc">⚠️ Les documents générés sont des <b>modèles</b> établis à partir de la réglementation en vigueur (RGPD — Règl. UE 2016/679 ; AI Act — Règl. UE 2024/1689). Ils doivent être relus, complétés et adaptés à votre situation. Ils ne constituent pas un conseil juridique et n'engagent pas la responsabilité de RTH NETGOCE. Pour une mise en conformité complète, contactez Clarté.</p>
+    <p class="disc">⚠️ Les documents générés sont des <b>modèles fournis à titre indicatif</b>, établis à partir des informations que vous renseignez et de la réglementation en vigueur (RGPD — Règl. UE 2016/679 ; AI Act — Règl. UE 2024/1689 ; LCEN ; loi n° 78-17 « Informatique et Libertés »). Ils doivent être <b>vérifiés, personnalisés et complétés</b>, puis validés et mis en œuvre <b>sous votre seule responsabilité</b> (celle du responsable de traitement). Ils ne constituent ni une consultation ni un conseil juridique individualisé et n'engagent pas la responsabilité de RTH NETGOCE (« Clarté »). Pour une mise en conformité accompagnée, contactez Clarté.</p>
   </div>
 </div></div>
 
@@ -302,7 +302,7 @@
 </div></footer>
 
 <div class="toast" id="toast"></div>
-<div style="position:fixed;bottom:8px;right:10px;z-index:9999;font:700 10px/1 system-ui,sans-serif;color:#7a7f95;background:rgba(255,255,255,.82);border:1px solid #e7e9f3;padding:4px 8px;border-radius:8px;pointer-events:none">Clarté · MàJ 04/07 · b27</div>
+<div style="position:fixed;bottom:8px;right:10px;z-index:9999;font:700 10px/1 system-ui,sans-serif;color:#7a7f95;background:rgba(255,255,255,.82);border:1px solid #e7e9f3;padding:4px 8px;border-radius:8px;pointer-events:none">Clarté · MàJ 04/07 · b28</div>
 
 <script>
 /* ================= FICHE SOCIÉTÉ (localStorage) ================= */
@@ -421,10 +421,10 @@ function DX(){
     ]})]})]});
   }
   function noBorders(){var n={style:d.BorderStyle.NONE,size:0,color:'FFFFFF'};return {top:n,bottom:n,left:n,right:n,insideHorizontal:n,insideVertical:n};}
-  function warnBox(){
+  function warnBox(f){ var who=(f&&f.raisonSociale&&String(f.raisonSociale).trim())?String(f.raisonSociale).trim():'le responsable de traitement (l\'utilisateur du document)';
     return new d.Table({width:{size:9640,type:d.WidthType.DXA},columnWidths:[9640],layout:d.TableLayoutType.FIXED,borders:noBorders(),rows:[new d.TableRow({children:[new d.TableCell({width:{size:9640,type:d.WidthType.DXA},shading:{fill:C.warn,type:d.ShadingType.CLEAR,color:'auto'},margins:{top:130,bottom:130,left:170,right:170},children:[
-      new d.Paragraph({children:[new d.TextRun({text:'⚠  MODÈLE PROFESSIONNEL À PERSONNALISER',bold:true,size:19,font:FONT,color:C.red})]}),
-      new d.Paragraph({spacing:{before:60,line:258},children:[new d.TextRun({text:'Ce document est établi à partir de vos informations et de la réglementation en vigueur (RGPD — Règlement (UE) 2016/679 ; AI Act — Règlement (UE) 2024/1689 ; LCEN ; loi Informatique et Libertés). Il doit être relu, complété aux endroits signalés « ⟨ à compléter ⟩ » et adapté à votre situation réelle. Il ne constitue pas un conseil juridique individualisé et n\'engage pas la responsabilité de RTH NETGOCE.',size:18,font:FONT,color:'5D4037'})]})
+      new d.Paragraph({children:[new d.TextRun({text:'⚠  DOCUMENT FOURNI À TITRE INDICATIF — MODÈLE À PERSONNALISER',bold:true,size:19,font:FONT,color:C.red})]}),
+      new d.Paragraph({spacing:{before:60,line:258},children:[new d.TextRun({text:'Ce document est un modèle généré automatiquement à partir des informations renseignées et de la réglementation en vigueur (RGPD — Règlement (UE) 2016/679 ; AI Act — Règlement (UE) 2024/1689 ; LCEN ; loi n° 78-17 « Informatique et Libertés »). Il est fourni à titre purement indicatif et doit être vérifié, personnalisé et complété — notamment aux endroits signalés « ⟨ à compléter ⟩ » —, puis validé et mis en œuvre sous la seule responsabilité de '+who+'. Il ne constitue ni une consultation ni un conseil juridique individualisé, et n\'engage pas la responsabilité de RTH NETGOCE (marque « Clarté »).',size:18,font:FONT,color:'5D4037'})]})
     ]})]})]});
   }
   // Bloc validation / version
@@ -591,7 +591,7 @@ function buildDoc(title, bodyFn){
     new d.Paragraph({spacing:{before:520,after:60},children:[new d.TextRun({text:title,bold:true,size:36,font:X.FONT,color:X.C.indigo})]}),
     X.p('Établi le '+today(),{color:X.C.dim,size:20}),
     new d.Paragraph({spacing:{before:40,after:200},children:[new d.TextRun({text:'',size:2})]}),
-    X.warnBox(),
+    X.warnBox(f),
     new d.Paragraph({children:[new d.PageBreak()]})
   ];
   var body=bodyFn(X,f);
@@ -1272,7 +1272,7 @@ function genPack(){
         new d.Paragraph({spacing:{before:400,after:80},children:[new d.TextRun({text:'PACK CONFORMITÉ RGPD & AI ACT',bold:true,size:40,font:X.FONT,color:X.C.indigo})]}),
         X.p('Établi le '+today(),{color:X.C.dim,size:20}),
         new d.Paragraph({spacing:{before:120,after:160},children:[new d.TextRun({text:''})]}),
-        X.warnBox(),
+        X.warnBox(f),
         new d.Paragraph({children:[new d.PageBreak()]})
       ];
       DOCS.forEach(function(doc,i){

@@ -428,7 +428,7 @@
   </div>
 </section>
 
-<div style="position:fixed;bottom:8px;right:10px;z-index:9999;font:700 10px/1 system-ui,sans-serif;color:#7a7f95;background:rgba(255,255,255,.82);border:1px solid #d8d1bf;padding:4px 8px;border-radius:8px;pointer-events:none">Clarté · MàJ 04/07 · b27</div>
+<div style="position:fixed;bottom:8px;right:10px;z-index:9999;font:700 10px/1 system-ui,sans-serif;color:#7a7f95;background:rgba(255,255,255,.82);border:1px solid #d8d1bf;padding:4px 8px;border-radius:8px;pointer-events:none">Clarté · MàJ 04/07 · b28</div>
 
 <footer>
   <div class="wrap">
@@ -790,10 +790,10 @@ function DX(){
     ]})]})]});
   }
   function noBorders(){var n={style:d.BorderStyle.NONE,size:0,color:'FFFFFF'};return {top:n,bottom:n,left:n,right:n,insideHorizontal:n,insideVertical:n};}
-  function warnBox(){
+  function warnBox(f){ var who=(f&&f.raisonSociale&&String(f.raisonSociale).trim())?String(f.raisonSociale).trim():'le responsable de traitement (l\'utilisateur du document)';
     return new d.Table({width:{size:9640,type:d.WidthType.DXA},columnWidths:[9640],layout:d.TableLayoutType.FIXED,borders:noBorders(),rows:[new d.TableRow({children:[new d.TableCell({width:{size:9640,type:d.WidthType.DXA},shading:{fill:C.warn,type:d.ShadingType.CLEAR,color:'auto'},margins:{top:130,bottom:130,left:170,right:170},children:[
-      new d.Paragraph({children:[new d.TextRun({text:'⚠  MODÈLE PROFESSIONNEL À PERSONNALISER',bold:true,size:19,font:FONT,color:C.red})]}),
-      new d.Paragraph({spacing:{before:60,line:258},children:[new d.TextRun({text:'Ce document est établi à partir de vos informations et de la réglementation en vigueur (RGPD — Règlement (UE) 2016/679 ; AI Act — Règlement (UE) 2024/1689 ; LCEN ; loi Informatique et Libertés). Il doit être relu, complété aux endroits signalés « ⟨ à compléter ⟩ » et adapté à votre situation réelle. Il ne constitue pas un conseil juridique individualisé et n\'engage pas la responsabilité de RTH NETGOCE.',size:18,font:FONT,color:'5D4037'})]})
+      new d.Paragraph({children:[new d.TextRun({text:'⚠  DOCUMENT FOURNI À TITRE INDICATIF — MODÈLE À PERSONNALISER',bold:true,size:19,font:FONT,color:C.red})]}),
+      new d.Paragraph({spacing:{before:60,line:258},children:[new d.TextRun({text:'Ce document est un modèle généré automatiquement à partir des informations renseignées et de la réglementation en vigueur (RGPD — Règlement (UE) 2016/679 ; AI Act — Règlement (UE) 2024/1689 ; LCEN ; loi n° 78-17 « Informatique et Libertés »). Il est fourni à titre purement indicatif et doit être vérifié, personnalisé et complété — notamment aux endroits signalés « ⟨ à compléter ⟩ » —, puis validé et mis en œuvre sous la seule responsabilité de '+who+'. Il ne constitue ni une consultation ni un conseil juridique individualisé, et n\'engage pas la responsabilité de RTH NETGOCE (marque « Clarté »).',size:18,font:FONT,color:'5D4037'})]})
     ]})]})]});
   }
   // Bloc validation / version
@@ -1579,7 +1579,7 @@ function giftBuildDoc(title,bodyFn,f){ var X=DX(),dd=X.d;
   var cover=[ new dd.Paragraph({spacing:{before:200,after:20},children:[new dd.TextRun({text:V(f.raisonSociale),bold:true,size:40,font:X.FONT,color:X.C.ink})]}),
     X.p((f.formeJuridique?f.formeJuridique+' · ':'')+(f.adresse||''),{color:X.C.dim,size:19}),
     new dd.Paragraph({spacing:{before:520,after:60},children:[new dd.TextRun({text:title,bold:true,size:36,font:X.FONT,color:X.C.indigo})]}),
-    X.p('Établi le '+today(),{color:X.C.dim,size:20}), X.spacer(120), X.warnBox(), new dd.Paragraph({children:[new dd.PageBreak()]}) ];
+    X.p('Établi le '+today(),{color:X.C.dim,size:20}), X.spacer(120), X.warnBox(f), new dd.Paragraph({children:[new dd.PageBreak()]}) ];
   return new dd.Document({styles:{default:{document:{run:{font:X.FONT,size:21}}}},sections:[{properties:{page:{size:{width:11906,height:16838},margin:{top:1134,right:1134,bottom:1134,left:1134}}},
     headers:{default:new dd.Header({children:[new dd.Paragraph({border:{bottom:{style:dd.BorderStyle.SINGLE,size:4,color:X.C.indigo}},spacing:{after:80},children:[new dd.TextRun({text:head,font:X.FONT,size:16,color:'888888'})]})]})},
     footers:{default:new dd.Footer({children:[new dd.Paragraph({border:{top:{style:dd.BorderStyle.SINGLE,size:4,color:X.C.indigo}},spacing:{before:80},children:[new dd.TextRun({text:'Document offert par Clarté · RTH NETGOCE — Page ',font:X.FONT,size:15,color:'999999'}),new dd.TextRun({children:[dd.PageNumber.CURRENT],font:X.FONT,size:15,color:'999999'}),new dd.TextRun({text:'/',font:X.FONT,size:15,color:'999999'}),new dd.TextRun({children:[dd.PageNumber.TOTAL_PAGES],font:X.FONT,size:15,color:'999999'})]})]})},
