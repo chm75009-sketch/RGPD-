@@ -428,7 +428,7 @@
   </div>
 </section>
 
-<div style="position:fixed;bottom:8px;right:10px;z-index:9999;font:700 10px/1 system-ui,sans-serif;color:#7a7f95;background:rgba(255,255,255,.82);border:1px solid #d8d1bf;padding:4px 8px;border-radius:8px;pointer-events:none">Clarté · MàJ 07/07 · b33</div>
+<div style="position:fixed;bottom:8px;right:10px;z-index:9999;font:700 10px/1 system-ui,sans-serif;color:#7a7f95;background:rgba(255,255,255,.82);border:1px solid #d8d1bf;padding:4px 8px;border-radius:8px;pointer-events:none">Clarté · MàJ 07/07 · b34</div>
 
 <footer>
   <div class="wrap">
@@ -1469,40 +1469,47 @@ var DOCS=[
  body:function(X,f){
    var out=[];
    out.push(X.h1('Accord de traitement des données (clauses art. 28 RGPD)'));
+   out.push(X.p('Le présent accord (Data Processing Agreement) encadre le traitement de données à caractère personnel confié par le responsable de traitement à son sous-traitant, conformément à l\'article 28 du RGPD. Il fixe des engagements fermes et auditables.',{}));
    out.push(X.h2('Article 1 — Parties'));
    out.push(X.p('Responsable de traitement : '+V(f.raisonSociale)+', '+V(f.adresse)+'.',{}));
    out.push(X.p('Sous-traitant : ⟨ Raison sociale, forme, siège et représentant du prestataire ⟩.',{}));
    out.push(X.h2('Article 2 — Objet et durée'));
-   out.push(X.p('Le sous-traitant traite des données à caractère personnel pour le compte du responsable dans le cadre de la prestation suivante : ⟨ décrire la prestation ⟩. Le présent accord s\'applique pendant toute la durée du contrat principal.',{}));
-   out.push(X.h2('Article 3 — Description du traitement'));
+   out.push(X.p('Le sous-traitant traite des données pour le compte du responsable dans le cadre de la prestation décrite en Annexe A. Le présent accord s\'applique pendant toute la durée du contrat principal.',{}));
+   out.push(X.h2('Article 3 — Obligations du sous-traitant'));
+   out.push(X.li('Traiter les données uniquement sur instruction documentée du responsable, y compris pour les transferts ;'));
+   out.push(X.li('Garantir la confidentialité (personnel autorisé, engagé et sensibilisé) ;'));
+   out.push(X.li('Mettre en œuvre les mesures de sécurité de l\'Annexe B (art. 32) ;'));
+   out.push(X.li('Aider le responsable à répondre aux demandes d\'exercice des droits ;'));
+   out.push(X.li('Aider le responsable pour la sécurité, les analyses d\'impact et les notifications (art. 32 à 36) ;'));
+   out.push(X.li('Supprimer ou restituer les données au terme de la prestation et détruire les copies (art. 8) ;'));
+   out.push(X.li('Tenir à disposition la documentation prouvant le respect de ses obligations.'));
+   out.push(X.h2('Article 4 — Notification des violations (délai ferme)'));
+   out.push(X.p('Le sous-traitant notifie au responsable toute violation de données constatée sur ses systèmes dans un délai maximum de 48 heures après en avoir pris connaissance, en fournissant tous les éléments utiles (nature, données et personnes concernées, mesures prises), afin de permettre au responsable de respecter son propre délai de 72 heures vis-à-vis de la CNIL.',{}));
+   out.push(X.h2('Article 5 — Sous-traitance ultérieure'));
+   out.push(X.p('Le sous-traitant ne peut recruter un sous-traitant ultérieur qu\'avec l\'autorisation écrite et préalable du responsable. Il lui impose par contrat les mêmes obligations de protection des données et demeure pleinement responsable de leur exécution. La liste des sous-traitants ultérieurs autorisés figure en Annexe C ; toute évolution est soumise à information préalable et droit d\'opposition du responsable.',{}));
+   out.push(X.h2('Article 6 — Droit d\'audit'));
+   out.push(X.p('Le responsable peut vérifier le respect du présent accord en réalisant, ou en faisant réaliser par un tiers indépendant qu\'il mandate, un audit (documentaire ou sur site) des locaux et systèmes du sous-traitant, au maximum une fois par an et à tout moment en cas de violation, moyennant un préavis raisonnable. Le sous-traitant met à disposition toutes les informations nécessaires et facilite les audits.',{}));
+   out.push(X.h2('Article 7 — Localisation et transferts hors UE'));
+   out.push(X.p('Les données sont hébergées et traitées à ⟨ pays / localisation ⟩. Tout transfert hors UE est encadré par des garanties appropriées (décision d\'adéquation ou clauses contractuelles types de la Commission européenne), assorties de mesures supplémentaires si nécessaire.',{}));
+   out.push(X.h2('Article 8 — Sort des données en fin de contrat'));
+   out.push(X.p('Au choix du responsable, le sous-traitant supprime ou restitue l\'ensemble des données au terme de la prestation, détruit les copies existantes et en atteste par écrit (certificat de destruction).',{}));
+   out.push(X.h2('Article 9 — Responsabilité'));
+   out.push(X.p('Chaque partie répond des dommages causés par un traitement non conforme au RGPD dans les conditions de l\'article 82. Le sous-traitant répond notamment du non-respect des obligations qui lui incombent en propre et de celles de ses sous-traitants ultérieurs.',{}));
+   out.push(X.h2('Annexe A — Description du traitement'));
    out.push(X.kv([
      ['Nature et finalité','⟨ ex. hébergement, emailing, maintenance, paie ⟩'],
      ['Catégories de données','⟨ ex. identité, coordonnées, données RH ⟩'],
      ['Catégories de personnes','⟨ ex. clients, salariés ⟩'],
-     ['Durée de conservation','Le temps de la prestation, puis restitution ou suppression']
+     ['Durée','Le temps de la prestation, puis restitution ou suppression']
    ]));
-   out.push(X.h2('Article 4 — Obligations du sous-traitant'));
-   out.push(X.li('Traiter les données uniquement sur instruction documentée du responsable, y compris pour les transferts ;'));
-   out.push(X.li('Garantir la confidentialité (personnel autorisé et soumis à une obligation de confidentialité) ;'));
-   out.push(X.li('Mettre en œuvre les mesures de sécurité appropriées (art. 32) — voir annexe ;'));
-   out.push(X.li('Ne recourir à un sous-traitant ultérieur qu\'avec l\'autorisation écrite préalable du responsable, en lui imposant les mêmes obligations ;'));
-   out.push(X.li('Aider le responsable à répondre aux demandes d\'exercice des droits ;'));
-   out.push(X.li('Aider le responsable à respecter ses obligations de sécurité, de notification de violation et d\'analyse d\'impact (art. 32 à 36) ;'));
-   out.push(X.li('Notifier toute violation de données au responsable dans les meilleurs délais après en avoir pris connaissance ;'));
-   out.push(X.li('Au choix du responsable, supprimer ou restituer les données au terme de la prestation et détruire les copies ;'));
-   out.push(X.li('Mettre à disposition la documentation nécessaire et permettre les audits.'));
-   out.push(X.h2('Article 5 — Localisation et transferts'));
-   out.push(X.p('Les données sont hébergées et traitées à ⟨ pays / localisation ⟩. Tout transfert hors UE est encadré par des garanties appropriées (clauses contractuelles types de la Commission européenne, ou décision d\'adéquation).',{}));
-   out.push(X.h2('Article 6 — Sous-traitants ultérieurs'));
-   out.push(X.p('Liste des sous-traitants ultérieurs autorisés à la date de signature : ⟨ … ⟩. Toute évolution est soumise à information préalable et droit d\'opposition du responsable.',{}));
-   out.push(X.h2('Article 7 — Responsabilité'));
-   out.push(X.p('Chaque partie répond des dommages causés par un traitement non conforme au RGPD dans les conditions de l\'article 82. Le sous-traitant répond notamment du non-respect des obligations qui lui incombent en propre.',{}));
-   out.push(X.h2('Annexe — Mesures de sécurité minimales'));
+   out.push(X.h2('Annexe B — Mesures de sécurité minimales'));
    out.push(X.li('Chiffrement des données en transit et au repos ;'));
-   out.push(X.li('Contrôle des accès et authentification renforcée ;'));
-   out.push(X.li('Sauvegardes et plan de continuité ;'));
-   out.push(X.li('Journalisation et traçabilité des accès ;'));
+   out.push(X.li('Contrôle des accès et authentification multifacteur ;'));
+   out.push(X.li('Sauvegardes, tests de restauration et plan de continuité ;'));
+   out.push(X.li('Journalisation et traçabilité des accès ; gestion des correctifs de sécurité ;'));
    out.push(X.li('Procédure de gestion des violations.'));
+   out.push(X.h2('Annexe C — Sous-traitants ultérieurs autorisés'));
+   out.push(X.p('⟨ Liste à la date de signature : nom, prestation, localisation, garanties. ⟩',{}));
    out=out.concat(X.signature(f,'Le sous-traitant'));
    return out;
  }},
@@ -1515,9 +1522,9 @@ var DOCS=[
  body:function(X,f){
    var out=[];
    out.push(X.h1('Analyse d\'impact relative à la protection des données (AIPD)'));
-   out.push(X.p('Réalisée en application de l\'article 35 du RGPD, l\'AIPD est requise lorsqu\'un traitement est susceptible d\'engendrer un risque élevé pour les droits et libertés des personnes.',{}));
-   out.push(X.h2('1. Faut-il réaliser une AIPD ?'));
-   out.push(X.p('Une AIPD est notamment obligatoire en cas d\'évaluation/notation, de décision automatisée à effet juridique, de surveillance systématique, de traitement de données sensibles à grande échelle, de croisement de données, de personnes vulnérables, ou d\'usage innovant. Se référer à la liste des types de traitements de la CNIL.',{}));
+   out.push(X.p('Réalisée en application de l\'article 35 du RGPD selon la méthode de la CNIL (référentiel PIA, inspiré d\'EBIOS Risk Manager / ISO 27005). L\'AIPD est une étude de risques juridiques, techniques et organisationnels, obligatoire pour tout traitement susceptible d\'engendrer un risque élevé pour les droits et libertés.',{}));
+   out.push(X.h2('1. Quand l\'AIPD est-elle obligatoire ?'));
+   out.push(X.p('Notamment : évaluation/notation ou profilage, décision automatisée à effet juridique, surveillance systématique à grande échelle, traitement de données sensibles ou d\'infractions à grande échelle, croisement de données, personnes vulnérables, usage innovant. Se référer à la liste des types de traitements de la CNIL.',{}));
    out.push(X.h2('2. Description systématique du traitement'));
    out.push(X.kv([
      ['Intitulé du traitement','⟨ … ⟩'],
@@ -1526,28 +1533,36 @@ var DOCS=[
      ['Données et catégories de personnes','⟨ … ⟩'],
      ['Destinataires et sous-traitants','⟨ … ⟩'],
      ['Durée de conservation','⟨ … ⟩'],
-     ['Support / outils','⟨ … ⟩']
+     ['Support et flux de données','⟨ logiciels, hébergement, échanges ⟩']
    ]));
    out.push(X.h2('3. Nécessité et proportionnalité'));
    out.push(X.li('Finalité déterminée, explicite et légitime ; base légale identifiée ;'));
    out.push(X.li('Minimisation : seules les données nécessaires sont traitées ;'));
    out.push(X.li('Exactitude et durées de conservation limitées ;'));
    out.push(X.li('Information des personnes et modalités d\'exercice des droits ;'));
-   out.push(X.li('Encadrement des sous-traitants et des transferts.'));
+   out.push(X.li('Encadrement des sous-traitants (art. 28) et des transferts.'));
    out.push(X.h2('4. Consultation'));
    out.push(X.p('Avis du DPO / référent recueilli ; le cas échéant, avis des personnes concernées ou de leurs représentants.',{}));
-   out.push(X.h2('5. Appréciation des risques'));
-   out.push(X.p('Pour chaque risque, évaluer la gravité et la vraisemblance (négligeable / limitée / importante / maximale) et définir les mesures :',{}));
-   var rows=[X.headRow(['Risque','Impacts potentiels','Gravité','Vraisemblance','Mesures'],[1700,2600,1350,1450,2540])];
-   [['Accès illégitime','Atteinte à la vie privée, usurpation, préjudice','⟨ … ⟩','⟨ … ⟩','Chiffrement, habilitations, journalisation'],
-    ['Modification non désirée','Décisions erronées, atteinte à l\'intégrité','⟨ … ⟩','⟨ … ⟩','Contrôle d\'intégrité, sauvegardes'],
-    ['Disparition des données','Indisponibilité, perte d\'information','⟨ … ⟩','⟨ … ⟩','Sauvegardes testées, redondance']
+   out.push(X.h2('5. Appréciation des risques (méthode CNIL / EBIOS)'));
+   out.push(X.p('Pour chacun des trois événements redoutés, évaluer la gravité et la vraisemblance (négligeable / limitée / importante / maximale), les sources de risque et les impacts potentiels sur les personnes :',{}));
+   var rows=[X.headRow(['Événement redouté','Sources de risque','Impacts potentiels','Gravité','Vraisemblance'],[2000,2100,2500,1500,1540])];
+   [['Accès illégitime aux données','Piratage, vol, erreur, sous-traitant','Atteinte à la vie privée, usurpation, préjudice','⟨ … ⟩','⟨ … ⟩'],
+    ['Modification non désirée','Malveillance, erreur, dysfonctionnement','Décisions erronées, atteinte à l\'intégrité','⟨ … ⟩','⟨ … ⟩'],
+    ['Disparition des données','Panne, sinistre, rançongiciel','Indisponibilité, perte d\'information, préjudice','⟨ … ⟩','⟨ … ⟩']
    ].forEach(function(r){ rows.push(X.row([X.cell(r[0],{b:1}),X.cell(r[1]),X.cell(r[2]),X.cell(r[3]),X.cell(r[4])])); });
-   out.push(X.table(rows,[1700,2600,1350,1450,2540]));
-   out.push(X.h2('6. Plan de mesures'));
-   secMeasures(f).forEach(function(m){ out.push(X.li(m)); });
-   out.push(X.h2('7. Validation et suivi'));
-   out.push(X.p('Avis du DPO / référent : '+((f.dpoDesigne||has(f.dpoNom))?V(f.dpoNom):'⟨ … ⟩')+'. Décision du responsable : '+V(f.representant)+'. Si un risque élevé résiduel subsiste malgré les mesures, la CNIL doit être consultée avant la mise en œuvre (art. 36). L\'AIPD est réévaluée en cas d\'évolution du traitement.',{}));
+   out.push(X.table(rows,[2000,2100,2500,1500,1540]));
+   out.push(X.h2('6. Mesures de réduction du risque'));
+   out.push(X.p('Pour chaque risque majeur, une mesure de sécurité concrète est associée :',{}));
+   var r2=[X.headRow(['Risque','Mesures concrètes'],[3000,6640])];
+   [['Accès illégitime','Chiffrement (AES-256), habilitations strictes + authentification multifacteur, cloisonnement réseau, journalisation des accès'],
+    ['Modification non désirée','Contrôle d\'intégrité, gestion des versions, sauvegardes, traçabilité des opérations'],
+    ['Disparition des données','Sauvegardes externalisées et chiffrées, tests de restauration réguliers, redondance / plan de reprise (PRA)']
+   ].forEach(function(r){ r2.push(X.row([X.cell(r[0],{b:1}),X.cell(r[1])])); });
+   out.push(X.table(r2,[3000,6640]));
+   out.push(X.h2('7. Plan d\'action des mesures complémentaires'));
+   out.push(X.p('⟨ Lister les mesures restant à mettre en œuvre, avec responsable et échéance, jusqu\'à ramener le risque résiduel à un niveau acceptable. ⟩',{}));
+   out.push(X.h2('8. Validation et suivi'));
+   out.push(X.p('Avis du DPO / référent : '+((f.dpoDesigne||has(f.dpoNom))?V(f.dpoNom):'⟨ … ⟩')+'. Décision du responsable : '+V(f.representant)+'. Si un risque élevé résiduel subsiste malgré les mesures, la CNIL est consultée avant la mise en œuvre (art. 36). L\'AIPD est réévaluée à chaque évolution du traitement.',{}));
    out=out.concat(X.versionTable(f));
    return out;
  }},
@@ -1560,25 +1575,29 @@ var DOCS=[
  body:function(X,f){
    var out=[]; var estDPO=(f.dpoDesigne||has(f.dpoNom));
    out.push(X.h1(estDPO?'Désignation et lettre de mission du délégué à la protection des données':'Désignation et lettre de mission du référent « protection des données »'));
-   out.push(X.p(V(f.raisonSociale)+' désigne '+(estDPO?V(f.dpoNom):'⟨ nom du référent ⟩')+' en qualité de '+(estDPO?'délégué à la protection des données (DPO)':'référent « protection des données »')+', à compter du '+today()+'.',{}));
+   out.push(X.p(V(f.raisonSociale)+' désigne '+(estDPO?V(f.dpoNom):'⟨ nom du référent ⟩')+' en qualité de '+(estDPO?'délégué à la protection des données (DPO)':'référent « protection des données »')+', rattaché(e) à la direction générale, à compter du '+today()+'.',{}));
    out.push(X.h2('1. Coordonnées'));
    out.push(X.kv([
      ['Nom',estDPO?V(f.dpoNom):'⟨ … ⟩'],
      ['Adresse e-mail',f.dpoEmail?f.dpoEmail:V(f.emailRgpd)],
      ['Téléphone',f.dpoTel?f.dpoTel:'⟨ … ⟩'],
-     ['Rattachement','Direction de '+V(f.raisonSociale)]
+     ['Rattachement hiérarchique','Direction générale de '+V(f.raisonSociale)]
    ]));
-   out.push(X.h2('2. Missions (art. 39 RGPD)'));
+   out.push(X.h2('2. Conditions de la désignation'));
+   out.push(X.p('L\'intéressé est désigné sur la base de ses qualités professionnelles et de ses connaissances spécialisées du droit et des pratiques de la protection des données (art. 37.5).',{}));
+   out.push(X.h2('3. Notification à la CNIL (art. 37.7)'));
+   out.push(X.p('Les coordonnées du '+(estDPO?'DPO':'référent')+' sont'+(estDPO?'':' , en cas de désignation d\'un DPO au sens strict,')+' communiquées à la CNIL via le téléservice de désignation, et publiées (page « données personnelles » du site). La désignation d\'un DPO n\'est pleinement opposable qu\'une fois cette notification effectuée.',{}));
+   out.push(X.h2('4. Missions (art. 39 RGPD)'));
    out.push(X.li('Informer et conseiller le responsable et les salariés sur leurs obligations ;'));
    out.push(X.li('Contrôler le respect du RGPD et de la politique interne de protection des données ;'));
    out.push(X.li('Conseiller sur les analyses d\'impact (AIPD) et en vérifier l\'exécution ;'));
    out.push(X.li('Coopérer avec la CNIL et faire office de point de contact ;'));
    out.push(X.li('Tenir à jour le registre des traitements et piloter le plan d\'action de conformité.'));
-   out.push(X.h2('3. Moyens et indépendance'));
-   out.push(X.p('L\'intéressé exerce ses missions en toute indépendance, sans recevoir d\'instruction quant à leur exercice, ne peut être sanctionné pour cet exercice, et dispose des moyens et de l\'accès aux traitements nécessaires. Il est associé, en temps utile, à toutes les questions relatives à la protection des données et rend compte au plus haut niveau de la direction.',{}));
-   out.push(X.h2('4. Absence de conflit d\'intérêts'));
-   out.push(X.p('Les autres missions éventuelles de l\'intéressé ne doivent pas entraîner de conflit d\'intérêts avec ses fonctions de '+(estDPO?'DPO':'référent')+'.',{}));
-   if(estDPO) out.push(X.note('Si vous désignez un DPO au sens strict, déclarez-le auprès de la CNIL via le téléservice de désignation.',{label:'À faire'}));
+   out.push(X.h2('5. Indépendance et moyens'));
+   out.push(X.p('L\'intéressé exerce ses missions en toute indépendance, sans recevoir d\'instruction quant à leur exercice, ne peut être relevé ni sanctionné pour cet exercice, rend compte directement au plus haut niveau de la direction, et dispose des moyens humains, techniques et budgétaires ainsi que de l\'accès aux traitements nécessaires.',{}));
+   out.push(X.h2('6. Absence de conflit d\'intérêts (art. 38.6)'));
+   out.push(X.p('Le '+(estDPO?'DPO':'référent')+' ne peut occuper, au sein de l\'organisme, une fonction le conduisant à déterminer les finalités et les moyens d\'un traitement — il ne peut donc être « juge et partie ». Sont notamment incompatibles les fonctions de directeur informatique (DSI), de directeur des ressources humaines (DRH), de directeur marketing ou de dirigeant.',{}));
+   if(estDPO) out.push(X.note('Étape indispensable : déclarer le DPO à la CNIL via le téléservice de désignation.',{warn:true,label:'À faire'}));
    out=out.concat(X.signature(f,estDPO?'Le délégué (DPO)':'Le référent'));
    return out;
  }},
@@ -1590,40 +1609,44 @@ var DOCS=[
  file:'Politique_securite_{soc}',
  body:function(X,f){
    var out=[];
-   out.push(X.h1('Politique de sécurité des systèmes d\'information et des données'));
-   out.push(X.p('Cette politique décrit les mesures techniques et organisationnelles mises en œuvre par '+V(f.raisonSociale)+' pour assurer la sécurité, la confidentialité, l\'intégrité et la disponibilité des données (art. 32 RGPD).',{}));
+   out.push(X.h1('Politique de sécurité des systèmes d\'information (PSSI)'));
+   out.push(X.p('Cette politique décrit les règles de l\'art techniques et organisationnelles mises en œuvre par '+V(f.raisonSociale)+' pour assurer la sécurité, la confidentialité, l\'intégrité et la disponibilité des données (art. 32 RGPD), en s\'alignant sur les recommandations de l\'ANSSI et les principes de la norme ISO/CEI 27001.',{}));
    out.push(X.h2('1. Gouvernance de la sécurité'));
-   out.push(X.p('Responsable de la sécurité : '+((f.dpoDesigne||has(f.dpoNom))?V(f.dpoNom):V(f.representant))+'. Revue de la présente politique au moins une fois par an.',{}));
-   out.push(X.h2('2. Contrôle des accès'));
-   out.push(X.li('Comptes individuels ; mots de passe robustes (min. 12 caractères) ; pas de comptes partagés ;'));
-   out.push(X.li('Authentification multifacteur pour les accès distants et outils critiques ;'));
-   out.push(X.li('Gestion des habilitations selon le besoin d\'en connaître ; revue périodique ;'));
+   out.push(X.p('Responsable de la sécurité : '+((f.dpoDesigne||has(f.dpoNom))?V(f.dpoNom):V(f.representant))+'. La présente politique est revue au moins une fois par an et après tout incident majeur.',{}));
+   out.push(X.h2('2. Politique de mots de passe (règles CNIL)'));
+   out.push(X.li('Longueur minimale de 12 caractères comprenant majuscules, minuscules, chiffres et caractères spéciaux — ou phrase de passe complexe d\'au moins 4 mots ;'));
+   out.push(X.li('Mots de passe personnels, confidentiels, non réutilisés ; stockage haché côté systèmes ;'));
+   out.push(X.li('Blocage du compte après plusieurs échecs ; renouvellement en cas de suspicion de compromission.'));
+   out.push(X.h2('3. Authentification multifacteur (MFA)'));
+   out.push(X.p('L\'authentification multifacteur est généralisée à tous les accès distants et aux services critiques : VPN, messagerie, outils cloud, back-offices et comptes à privilèges.',{}));
+   out.push(X.h2('4. Gestion des accès et des habilitations'));
+   out.push(X.li('Comptes individuels ; pas de comptes partagés ; comptes à privilèges limités et surveillés ;'));
+   out.push(X.li('Habilitations selon le besoin d\'en connaître ; revue périodique des droits ;'));
    out.push(X.li('Retrait immédiat des accès au départ d\'un collaborateur.'));
-   out.push(X.h2('3. Sécurité des postes et des réseaux'));
-   out.push(X.li('Antivirus, pare-feu et mises à jour de sécurité à jour ;'));
-   out.push(X.li('Verrouillage automatique des sessions ; chiffrement des postes mobiles (AES-256) ;'));
-   out.push(X.li('Sécurisation du réseau et des accès distants (VPN) ; cloisonnement.'));
-   out.push(X.h2('4. Sauvegardes et continuité'));
-   out.push(X.li('Sauvegardes régulières, externalisées et chiffrées ;'));
-   out.push(X.li('Tests de restauration réguliers ; procédure de reprise documentée (PRA/PCA).'));
-   out.push(X.h2('5. Sécurité des données'));
-   out.push(X.li('Chiffrement des données sensibles et des échanges (HTTPS/TLS) ;'));
-   out.push(X.li('Minimisation et cloisonnement ; journalisation des accès aux données sensibles.'));
-   out.push(X.h2('6. Sécurité physique'));
-   out.push(X.li('Locaux sécurisés (verrouillage, alarme) ; documents papier confidentiels sous clé.'));
-   out.push(X.h2('7. Volet organisationnel'));
-   out.push(X.li('Charte informatique signée par le personnel ;'));
-   out.push(X.li('Sensibilisation régulière (hameçonnage, mots de passe, violations) ;'));
-   out.push(X.li('Contrats de sous-traitance conformes à l\'article 28 ;'));
-   out.push(X.li('Procédure de gestion des violations de données.'));
-   out.push(X.h2('8. Mesures spécifiques déclarées'));
-   out.push(X.p('Mesures actuellement en place dans l\'entreprise :',{}));
+   out.push(X.h2('5. Gestion des correctifs (patch management)'));
+   out.push(X.p('Les systèmes, serveurs et logiciels sont maintenus à jour. Les correctifs de sécurité critiques sont appliqués dans un délai court après leur publication (idéalement sous 48 à 72 heures pour les vulnérabilités critiques), selon une procédure documentée et testée.',{}));
+   out.push(X.h2('6. Sécurité des postes et des réseaux'));
+   out.push(X.li('Antivirus / EDR et pare-feu à jour ; verrouillage automatique des sessions ;'));
+   out.push(X.li('Chiffrement des postes mobiles et supports amovibles (AES-256) ;'));
+   out.push(X.li('Cloisonnement du réseau ; sécurisation des accès distants ; filtrage.'));
+   out.push(X.h2('7. Sauvegardes et continuité'));
+   out.push(X.li('Sauvegardes régulières, externalisées et chiffrées (règle 3-2-1) ;'));
+   out.push(X.li('Tests de restauration réguliers ; plan de reprise et de continuité (PRA/PCA) documenté.'));
+   out.push(X.h2('8. Chiffrement et protection des données'));
+   out.push(X.li('Chiffrement des données sensibles au repos et en transit (HTTPS/TLS) ;'));
+   out.push(X.li('Minimisation, cloisonnement et journalisation des accès aux données sensibles.'));
+   out.push(X.h2('9. Sécurité physique'));
+   out.push(X.li('Locaux sécurisés (verrouillage, alarme, contrôle d\'accès) ; documents confidentiels sous clé.'));
+   out.push(X.h2('10. Volet organisationnel'));
+   out.push(X.li('Charte informatique signée ; sensibilisation régulière (hameçonnage, mots de passe) ;'));
+   out.push(X.li('Contrats de sous-traitance conformes à l\'article 28 ; procédure de gestion des violations.'));
+   out.push(X.h2('11. Mesures spécifiques déclarées'));
    secMeasures(f).forEach(function(m){ out.push(X.li(m)); });
    out=out.concat(X.coverage('Couverture de l\'article 32',[
-     ['Confidentialité','Sections 2, 5, 6'],
-     ['Intégrité','Sections 3, 5'],
-     ['Disponibilité et résilience','Section 4'],
-     ['Rétablissement après incident','Section 4 (PRA/PCA)'],
+     ['Confidentialité','Sections 2, 3, 4, 8'],
+     ['Intégrité','Sections 5, 6, 8'],
+     ['Disponibilité et résilience','Section 7'],
+     ['Rétablissement après incident','Section 7 (PRA/PCA)'],
      ['Évaluation régulière de l\'efficacité','Section 1 (revue annuelle)']
    ]));
    out=out.concat(X.versionTable(f));
@@ -1637,26 +1660,31 @@ var DOCS=[
  file:'Plan_action_conformite_{soc}',
  body:function(X,f){
    var out=[];
-   out.push(X.h1('Plan d\'action de conformité RGPD & AI Act'));
-   out.push(X.p('Ce document pilote la démarche de mise en conformité de '+V(f.raisonSociale)+' et matérialise le principe de responsabilité (accountability, art. 5.2 RGPD) : être en mesure de démontrer sa conformité à tout moment.',{}));
-   out.push(X.h2('1. État des lieux documentaire'));
+   out.push(X.h1('Plan d\'action de conformité RGPD & AI Act (feuille de route)'));
+   out.push(X.p('Ce plan, vivant, chiffré et assigné, pilote la mise en conformité de '+V(f.raisonSociale)+' et démontre la démarche d\'amélioration continue (accountability, art. 5.2). Les chantiers sont priorisés selon une approche par les risques.',{}));
+   out.push(X.h2('1. Méthode : approche par les risques'));
+   out.push(X.p('Les actions sont priorisées selon la criticité pour les droits des personnes : les traitements les plus sensibles (données bancaires, données de santé, surveillance) sont traités en priorité, avant les sujets à faible risque (ex. formulaires de contact).',{}));
+   out.push(X.h2('2. État des lieux documentaire'));
    var rows=[X.headRow(['Document / mesure','En place','Responsable','Échéance'],[4200,1400,2400,1640])];
    ['Registre des activités de traitement (art. 30)','Politique de confidentialité + mentions légales','Procédure droits des personnes + registre','Procédure violations + registre','Politique de conservation','Politique cookies','Charte informatique + sensibilisation','Politique de sécurité (art. 32)','Contrats de sous-traitance (art. 28)','Information des salariés','Politique & cartographie IA (AI Act)'].forEach(function(d){ rows.push(X.row([X.cell(d,{b:1}),X.cell('⟨ oui/non ⟩'),X.cell(''),X.cell('')])); });
    out.push(X.table(rows,[4200,1400,2400,1640]));
-   out.push(X.h2('2. Actions prioritaires'));
-   var r2=[X.headRow(['Action','Priorité','Responsable','Échéance','Statut'],[3200,1300,2200,1400,1540])];
-   r2.push(X.row([X.cell('⟨ ex. finaliser le registre ⟩'),X.cell('Haute'),X.cell(V(f.representant)),X.cell('⟨ … ⟩'),X.cell('À faire')]));
-   r2.push(X.row([X.cell(''),X.cell(''),X.cell(''),X.cell(''),X.cell('')]));
-   r2.push(X.row([X.cell(''),X.cell(''),X.cell(''),X.cell(''),X.cell('')]));
-   out.push(X.table(r2,[3200,1300,2200,1400,1540]));
-   out.push(X.h2('3. Indicateurs de suivi'));
-   out.push(X.li('Nombre de demandes de droits reçues / traitées dans le délai ;'));
-   out.push(X.li('Nombre de violations et délai de notification ;'));
-   out.push(X.li('Taux de sous-traitants sous contrat art. 28 ;'));
-   out.push(X.li('Sessions de sensibilisation réalisées.'));
-   out.push(X.h2('4. Registre de preuves'));
-   out.push(X.p('Pour chaque obligation, conserver la preuve de sa mise en œuvre (documents datés, captures, contrats, attestations de formation, registres). Ces preuves sont opposables en cas de contrôle de la CNIL.',{}));
-   out.push(X.h2('5. Gouvernance et revue'));
+   out.push(X.h2('3. Feuille de route — matrice RACI'));
+   out.push(X.p('Pour chaque action : R = Réalise (acteur), A = Approuve (responsable), C/I = Consulté / Informé, une échéance et un indicateur de réussite mesurable.',{c:X.C.dim,size:18,i:true}));
+   var r2=[X.headRow(['Action','Criticité','A (approuve)','R (réalise)','Échéance','Indicateur de réussite'],[2100,1150,1450,1450,1300,2090])];
+   [['Sécuriser les données bancaires / sensibles','Haute',V(f.representant),'⟨ IT ⟩','⟨ … ⟩','Chiffrement + MFA activés (oui/non)'],
+    ['Mettre en place le bandeau cookies conforme','Moyenne',V(f.representant),'⟨ Web ⟩','⟨ … ⟩','Taux de refus possible en 1 clic'],
+    ['Contractualiser les sous-traitants (art. 28)','Haute',V(f.representant),'⟨ Achats ⟩','⟨ … ⟩','% de sous-traitants sous DPA'],
+    ['Sensibiliser le personnel','Moyenne',V(f.representant),'⟨ RH ⟩','⟨ … ⟩','% de salariés formés']
+   ].forEach(function(r){ r2.push(X.row([X.cell(r[0],{b:1}),X.cell(r[1]),X.cell(r[2]),X.cell(r[3]),X.cell(r[4]),X.cell(r[5])])); });
+   out.push(X.table(r2,[2100,1150,1450,1450,1300,2090]));
+   out.push(X.h2('4. Indicateurs de suivi (KPI)'));
+   out.push(X.li('Demandes de droits traitées dans le délai d\'un mois (%) ;'));
+   out.push(X.li('Violations notifiées dans les 72 h (%) ;'));
+   out.push(X.li('Sous-traitants sous contrat art. 28 (%) ;'));
+   out.push(X.li('Collaborateurs sensibilisés (%).'));
+   out.push(X.h2('5. Registre de preuves'));
+   out.push(X.p('Pour chaque action réalisée, conserver la preuve datée (document, capture, contrat, attestation de formation). Ces preuves sont opposables lors d\'un contrôle de la CNIL.',{}));
+   out.push(X.h2('6. Gouvernance et revue'));
    out.push(X.p('Le plan est revu au moins une fois par an et à chaque évolution significative. Pilote : '+((f.dpoDesigne||has(f.dpoNom))?V(f.dpoNom):V(f.representant))+'.',{}));
    out=out.concat(X.versionTable(f));
    return out;
