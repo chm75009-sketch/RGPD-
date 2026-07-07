@@ -428,7 +428,7 @@
   </div>
 </section>
 
-<div style="position:fixed;bottom:8px;right:10px;z-index:9999;font:700 10px/1 system-ui,sans-serif;color:#7a7f95;background:rgba(255,255,255,.82);border:1px solid #d8d1bf;padding:4px 8px;border-radius:8px;pointer-events:none">Clarté · MàJ 07/07 · b32</div>
+<div style="position:fixed;bottom:8px;right:10px;z-index:9999;font:700 10px/1 system-ui,sans-serif;color:#7a7f95;background:rgba(255,255,255,.82);border:1px solid #d8d1bf;padding:4px 8px;border-radius:8px;pointer-events:none">Clarté · MàJ 07/07 · b33</div>
 
 <footer>
   <div class="wrap">
@@ -1296,32 +1296,36 @@ var DOCS=[
  file:'Durees_conservation_{soc}',
  body:function(X,f){
    var out=[];
-   out.push(X.h1('Politique de durées de conservation des données'));
-   out.push(X.p('En application du principe de limitation de la conservation (art. 5.1.e RGPD), les données ne sont conservées que le temps nécessaire aux finalités. Trois phases sont distinguées : base active (usage courant), archivage intermédiaire (obligation légale ou intérêt légitime, accès restreint), puis suppression ou anonymisation.',{}));
+   out.push(X.h1('Référentiel des durées de conservation des données'));
+   out.push(X.p('En application du principe de limitation de la conservation (art. 5.1.e RGPD), chaque donnée suit un cycle de vie en trois phases juridiques : la base active (usage courant), l\'archivage intermédiaire (accès restreint, pour une obligation légale ou un intérêt légitime — ex. contentieux), puis le sort final (destruction ou anonymisation). Aucune durée n\'est laissée « au temps nécessaire » : la CNIL sanctionne l\'absence de critères précis.',{}));
    out.push(X.h2('1. Tableau des durées de conservation'));
-   var rows=[X.headRow(['Catégorie de données','Base active','Archivage intermédiaire','Sort final / référence'],[2600,2200,2500,2340])];
-   [['Clients / prospects actifs','Durée de la relation','+ 3 ans (prospection)','Suppression'],
-    ['Prospects sans achat','—','3 ans dernier contact','Suppression'],
-    ['Factures / pièces comptables','Exercice','10 ans','Art. L123-22 c. commerce'],
-    ['Contrats','Durée du contrat','Jusqu\'à prescription (souvent 5 ans)','Suppression'],
-    ['Bulletins de paie','—','5 ans (voire 50 ans au format dématérialisé sécurisé)','Code du travail'],
-    ['Dossiers du personnel','Durée du contrat','Selon la nature (jusqu\'à 5 ans et +)','Suppression / archivage'],
-    ['Candidatures non retenues','—','2 ans après dernier contact','Suppression (sauf opposition)'],
+   var rows=[X.headRow(['Type de donnée','Base active','Archivage intermédiaire (accès restreint)','Sort final'],[2500,2100,3100,1940])];
+   [['Clients (relation en cours)','Durée de la relation contractuelle','3 ans après la fin de la relation (prospection)','Suppression / anonymisation'],
+    ['Prospects (sans achat)','—','3 ans à compter du dernier contact','Suppression'],
+    ['Factures / pièces comptables','Exercice en cours','10 ans (art. L123-22 C. commerce)','Suppression'],
+    ['Contrats (hors travail) / litiges','Durée du contrat','5 ans (prescription civile — art. 2224 C. civ.)','Suppression'],
+    ['Bulletins de paie','—','5 ans (art. L3243-4 C. travail) — voire jusqu\'à la liquidation de la retraite','Suppression / conservation retraite'],
+    ['Contrats de travail & dossier RH','Durée du contrat','5 ans après le départ du salarié','Suppression'],
+    ['Registre unique du personnel','Présence du salarié','5 ans après le départ','Suppression'],
+    ['Candidatures non retenues','—','2 ans après le dernier contact (sauf accord explicite du candidat)','Suppression'],
     ['Données de connexion / logs','—','6 à 12 mois','Suppression'],
-    ['Cookies et traceurs','13 mois max','—','Expiration automatique'],
-    ['Vidéosurveillance','30 jours max','—','Effacement automatique'],
-    ['Gestion des droits / réclamations','Traitement','Durée de prescription','Suppression']
+    ['Cookies et traceurs','13 mois maximum','—','Expiration automatique'],
+    ['Vidéosurveillance (locaux non ouverts au public)','1 mois maximum (recommandation CNIL)','Au-delà : uniquement si procédure judiciaire en cours','Effacement automatique'],
+    ['Preuve du consentement','Durée du traitement concerné','+ délai de prescription','Suppression']
    ].forEach(function(r){ rows.push(X.row([X.cell(r[0],{b:1}),X.cell(r[1]),X.cell(r[2]),X.cell(r[3])])); });
-   out.push(X.table(rows,[2600,2200,2500,2340]));
-   out.push(X.h2('2. Gestion des archives intermédiaires'));
-   out.push(X.p('Les données archivées sont conservées avec un accès restreint et journalisé, séparément de la base active, pour la seule durée de l\'obligation ou de l\'intérêt légitime (ex. contentieux).',{}));
-   out.push(X.h2('3. Purge et anonymisation'));
-   out.push(X.p('Une purge périodique (au moins annuelle) supprime ou anonymise les données au-delà des durées ci-dessus. Responsable de la purge : '+((f.dpoDesigne||has(f.dpoNom))?V(f.dpoNom):V(f.representant))+'.',{}));
-   out.push(X.note('Certaines activités réglementées (santé, immobilier/LCB-FT, formation, banque) imposent des durées spécifiques — ajustez en conséquence.'));
+   out.push(X.table(rows,[2500,2100,3100,1940]));
+   out.push(X.h2('2. Gestion de l\'archivage intermédiaire'));
+   out.push(X.p('Les données archivées sont conservées séparément de la base active, avec un accès restreint aux seules personnes habilitées et une journalisation des consultations, pour la seule durée de l\'obligation ou de l\'intérêt légitime.',{}));
+   out.push(X.h2('3. Purge et preuve'));
+   out.push(X.li('Une purge (suppression ou anonymisation) est déclenchée automatiquement à l\'échéance des durées ci-dessus ;'));
+   out.push(X.li('Un journal de purge est conservé comme preuve de conformité (accountability, art. 5.2) ;'));
+   out.push(X.li('Responsable : '+((f.dpoDesigne||has(f.dpoNom))?V(f.dpoNom):V(f.representant))+'.'));
+   out.push(X.note('Pour un dossier « grand compte », chaque durée doit correspondre à une purge ou un archivage AUTOMATIQUE paramétré dans vos logiciels (RH, CRM, ERP) — c\'est la différence entre une politique déclarative et une conformité réellement appliquée.',{label:'Automatisation'}));
+   out.push(X.note('Certaines activités réglementées (santé, immobilier/LCB-FT, banque, formation) imposent des durées spécifiques — ajustez en conséquence.'));
    out=out.concat(X.coverage('Couverture — limitation de la conservation',[
      ['Art. 5.1.e — Limitation de la conservation','Tableau section 1'],
-     ['Art. 5.2 — Accountability (preuve)','Sections 2 et 3'],
-     ['Obligations légales sectorielles','Colonne « Sort final / référence »']
+     ['Critères précis (pas de durée floue)','Colonnes chiffrées + références légales'],
+     ['Art. 5.2 — Accountability (preuve)','Section 3 (journal de purge)']
    ]));
    out=out.concat(X.versionTable(f));
    return out;
@@ -1335,30 +1339,35 @@ var DOCS=[
  body:function(X,f){
    var out=[];
    out.push(X.h1('Politique de gestion des cookies et traceurs'));
-   out.push(X.p('La présente politique explique l\'usage des cookies et traceurs sur le site '+V(f.siteWeb)+', conformément à l\'article 82 de la loi Informatique et Libertés et aux lignes directrices et recommandation de la CNIL.',{}));
+   out.push(X.p('La présente politique explique l\'usage des cookies sur le site '+V(f.siteWeb)+', conformément à l\'article 82 de la loi Informatique et Libertés et aux lignes directrices et à la recommandation « cookies » de la CNIL.',{}));
    out.push(X.h2('1. Qu\'est-ce qu\'un cookie ?'));
-   out.push(X.p('Un cookie est un fichier déposé sur votre terminal lors de la visite d\'un site. Selon sa finalité, il assure le fonctionnement du site, mesure l\'audience ou personnalise les contenus et la publicité.',{}));
-   out.push(X.h2('2. Typologie et cookies utilisés'));
-   var rows=[X.headRow(['Cookie / catégorie','Finalité','Consentement','Durée de vie'],[2600,3000,1600,2440])];
-   rows.push(X.row([X.cell('Strictement nécessaires',{b:1}),X.cell('Fonctionnement et sécurité du site'),X.cell('Non requis'),X.cell('Session')]));
+   out.push(X.p('Un cookie est un fichier déposé sur votre terminal lors de la visite d\'un site. Selon sa finalité, il assure le fonctionnement du site, mesure l\'audience, ou personnalise contenus et publicité.',{}));
+   out.push(X.h2('2. Nos règles d\'or (conformité CNIL)'));
+   out.push(X.li('Refuser est aussi simple qu\'accepter : le bouton « Tout refuser » est présenté au même niveau de visibilité et d\'accessibilité que « Tout accepter » ;'));
+   out.push(X.li('Aucun pré-cochage : les cookies non essentiels (statistiques, publicité, réseaux sociaux) sont désactivés par défaut ;'));
+   out.push(X.li('Aucun traceur non essentiel n\'est déposé avant votre consentement ; poursuivre la navigation ne vaut pas consentement ;'));
+   out.push(X.li('Votre choix (acceptation ou refus) est mémorisé 6 mois ; au-delà, il vous est de nouveau demandé ;'));
+   out.push(X.li('La durée de vie d\'un cookie de mesure d\'audience n\'excède pas 13 mois.'));
+   out.push(X.h2('3. Liste des cookies utilisés'));
+   var rows=[X.headRow(['Nom du cookie','Éditeur','Finalité','Consentement','Durée'],[1600,2000,2900,1400,1740])];
+   rows.push(X.row([X.cell('Cookies de session',{b:1}),X.cell('Site '+V(f.raisonSociale)),X.cell('Fonctionnement, panier, sécurité'),X.cell('Non requis'),X.cell('Session')]));
    var declared=lines(f.cookiesList);
-   if(declared.length){ declared.forEach(function(l){ var pt=l.split(/—|–|-/).map(function(x){return x.trim();}); rows.push(X.row([X.cell(pt[0]||l,{b:1}),X.cell(pt[1]||'⟨ finalité ⟩'),X.cell('Requis'),X.cell(pt[2]||'≤ 13 mois')])); }); }
+   if(declared.length){ declared.forEach(function(l){ var pt=l.split(/—|–|-/).map(function(x){return x.trim();}); rows.push(X.row([X.cell(pt[0]||l,{b:1}),X.cell(pt[3]||'⟨ éditeur ⟩'),X.cell(pt[1]||'⟨ finalité ⟩'),X.cell('Requis'),X.cell(pt[2]||'≤ 13 mois')])); }); }
    else {
-     rows.push(X.row([X.cell('Mesure d\'audience',{b:1}),X.cell('Statistiques de fréquentation ⟨ ex. Matomo ⟩'),X.cell('Requis*'),X.cell('13 mois max')]));
-     rows.push(X.row([X.cell('Réseaux sociaux / contenus tiers',{b:1}),X.cell('Partage, vidéos embarquées ⟨ le cas échéant ⟩'),X.cell('Requis'),X.cell('13 mois max')]));
-     rows.push(X.row([X.cell('Publicité / ciblage',{b:1}),X.cell('Personnalisation publicitaire ⟨ le cas échéant ⟩'),X.cell('Requis'),X.cell('13 mois max')]));
+     rows.push(X.row([X.cell('_ga',{b:1}),X.cell('Google (Analytics)'),X.cell('Mesure d\'audience — statistiques de visite'),X.cell('Requis'),X.cell('13 mois')]));
+     rows.push(X.row([X.cell('_gid',{b:1}),X.cell('Google (Analytics)'),X.cell('Mesure d\'audience'),X.cell('Requis'),X.cell('24 h')]));
+     rows.push(X.row([X.cell('_fbp',{b:1}),X.cell('Meta'),X.cell('Publicité / réseaux sociaux'),X.cell('Requis'),X.cell('3 mois')]));
    }
-   out.push(X.table(rows,[2600,3000,1600,2440]));
-   out.push(X.p('* La mesure d\'audience peut être exemptée de consentement si elle respecte les recommandations CNIL (finalité limitée, pas de recoupement, données anonymisées, pas de suivi inter-sites).',{i:true,c:X.C.dim,size:18}));
-   out.push(X.h2('3. Recueil du consentement'));
-   out.push(X.li('Aucun traceur non essentiel n\'est déposé avant votre consentement ;'));
-   out.push(X.li('Le bandeau permet d\'accepter, de refuser ou de personnaliser ; refuser est aussi simple qu\'accepter ;'));
-   out.push(X.li('Votre choix est modifiable à tout moment via le lien « Gérer les cookies ».'));
-   out.push(X.h2('4. Durée du consentement'));
-   out.push(X.p('Votre choix est conservé au maximum 6 mois ; au-delà, votre consentement vous est de nouveau demandé. La durée de vie des traceurs n\'excède pas 13 mois.',{}));
-   out.push(X.h2('5. Preuve du consentement'));
-   out.push(X.p('Les choix des visiteurs sont horodatés et conservés afin de pouvoir démontrer le recueil valable du consentement (accountability).',{}));
-   out.push(X.h2('6. Contact'));
+   out.push(X.table(rows,[1600,2000,2900,1400,1740]));
+   out.push(X.note('Remplacez ce tableau par la liste EXACTE de vos cookies réels (nom, éditeur, finalité, durée). C\'est le point le plus contrôlé par la CNIL en ligne.',{warn:true,label:'À personnaliser'}));
+   out.push(X.p('La mesure d\'audience peut être exemptée de consentement si elle respecte les conditions CNIL (finalité limitée, pas de recoupement ni de suivi inter-sites, données anonymisées).',{i:true,c:X.C.dim,size:18}));
+   out.push(X.h2('4. Gestion de votre consentement'));
+   out.push(X.p('Un gestionnaire de consentement (bandeau) vous permet d\'accepter, de refuser ou de personnaliser vos choix, et de les modifier à tout moment via le lien « Gérer les cookies ». Aucun « cookie wall » abusif n\'est imposé.',{}));
+   out.push(X.h2('5. Paramétrage de votre navigateur'));
+   out.push(X.p('Vous pouvez également configurer votre navigateur pour bloquer ou supprimer les cookies (menu « Options » / « Confidentialité »). Le blocage de certains cookies peut altérer le fonctionnement du site.',{}));
+   out.push(X.h2('6. Preuve du consentement'));
+   out.push(X.p('Les choix des visiteurs sont horodatés et conservés afin de démontrer le recueil valable du consentement (accountability).',{}));
+   out.push(X.h2('7. Contact'));
    out.push(X.p('Pour toute question : '+V(f.emailRgpd)+'.',{}));
    return out;
  }},
@@ -1371,36 +1380,39 @@ var DOCS=[
  body:function(X,f){
    var out=[];
    out.push(X.h1('Charte d\'utilisation des outils informatiques et numériques'));
-   out.push(X.p('La présente charte définit les règles d\'usage des ressources informatiques mises à disposition par '+V(f.raisonSociale)+', afin de garantir la sécurité des systèmes et la protection des données (art. 32 RGPD). Elle a vocation à être annexée au règlement intérieur et signée par chaque utilisateur.',{}));
+   out.push(X.p('La présente charte définit les règles d\'usage des ressources informatiques mises à disposition par '+V(f.raisonSociale)+'. Elle protège l\'entreprise en cas de faute et garantit la sécurité des données (art. 32 RGPD), tout en préservant la vie privée du salarié au travail.',{}));
    out.push(X.h2('Article 1 — Champ d\'application'));
    out.push(X.p('Elle s\'applique à tout utilisateur (salarié, stagiaire, prestataire, intérimaire) accédant aux équipements, logiciels, messageries, accès Internet et données de l\'entreprise, sur site comme en télétravail.',{}));
-   out.push(X.h2('Article 2 — Propriété et usage des outils'));
-   out.push(X.p('Les ressources sont mises à disposition à des fins professionnelles. Un usage privé résiduel et raisonnable est toléré, sans compromettre la sécurité ni la disponibilité des outils.',{}));
-   out.push(X.h2('Article 3 — Règles de sécurité'));
-   out.push(X.li('Mots de passe robustes, personnels et confidentiels (min. 12 caractères) ; ne jamais les partager ni les réutiliser ;'));
-   out.push(X.li('Activer l\'authentification multifacteur lorsqu\'elle est proposée ;'));
-   out.push(X.li('Verrouiller sa session en cas d\'absence ;'));
-   out.push(X.li('Ne pas installer de logiciel non autorisé ; ne pas connecter de support externe non maîtrisé ;'));
-   out.push(X.li('Signaler immédiatement tout comportement anormal ou incident.'));
+   out.push(X.h2('Article 2 — Propriété et usage du matériel'));
+   out.push(X.p('Les outils (ordinateurs, téléphones, logiciels, accès) sont la propriété de l\'entreprise et destinés à un usage professionnel. Un usage privé résiduel est toléré s\'il reste raisonnable et ne compromet ni la sécurité ni la disponibilité des outils.',{}));
+   out.push(X.h2('Article 3 — Sécurité des accès'));
+   out.push(X.li('Mots de passe robustes (min. 12 caractères), personnels et confidentiels ; ne jamais les partager ;'));
+   out.push(X.li('Verrouiller systématiquement sa session en cas d\'absence ;'));
+   out.push(X.li('Activer l\'authentification multifacteur lorsqu\'elle est proposée ; respecter la politique de sauvegarde ;'));
+   out.push(X.li('Ne pas installer de logiciel non autorisé ni connecter de support externe non maîtrisé.'));
    out.push(X.h2('Article 4 — Messagerie et Internet'));
-   out.push(X.li('Vigilance face aux courriels suspects (hameçonnage, pièces jointes, liens) ;'));
-   out.push(X.li('Ne pas diffuser de données confidentielles ou personnelles sans autorisation ni moyen sécurisé ;'));
-   out.push(X.li('Respecter le droit d\'auteur et l\'image des tiers.'));
-   out.push(X.h2('Article 5 — Protection des données personnelles'));
+   out.push(X.p('Vigilance face aux courriels suspects (hameçonnage). Ne pas diffuser de données confidentielles ou personnelles sans autorisation ni moyen sécurisé. Respecter le droit d\'auteur et l\'image des tiers.',{}));
+   out.push(X.h2('Article 5 — Fichiers personnels du salarié'));
+   out.push(X.p('Les fichiers et messages créés sur le poste professionnel sont présumés à caractère professionnel : l\'employeur peut y accéder, même en l\'absence du salarié. Pour protéger sa vie privée, le salarié doit identifier explicitement ses éléments privés en les nommant « Personnel » ou « Privé ». L\'employeur ne peut alors les ouvrir qu\'en présence du salarié (ou en cas de risque ou d\'événement particulier, sous contrôle du juge). L\'usage abusif de la mention « personnel » n\'est pas protégé.',{}));
+   out.push(X.h2('Article 6 — Réseaux sociaux et image de l\'entreprise'));
+   out.push(X.p('Le salarié est tenu à une obligation de confidentialité et de réserve : il ne publie aucune information confidentielle et ne tient aucun propos susceptible de nuire à l\'image ou aux intérêts de l\'entreprise. Toute communication au nom de l\'entreprise requiert une autorisation.',{}));
+   out.push(X.h2('Article 7 — Protection des données personnelles'));
    out.push(X.li('N\'accéder qu\'aux données nécessaires à ses missions (besoin d\'en connaître) ;'));
    out.push(X.li('Ne pas copier ni extraire des données hors des outils autorisés ;'));
    out.push(X.li('Signaler toute violation présumée à '+V(f.emailRgpd)+'.'));
-   out.push(X.h2('Article 6 — Usage de l\'intelligence artificielle'));
+   out.push(X.h2('Article 8 — Intelligence artificielle'));
    out.push(X.li('Ne jamais saisir de données personnelles, confidentielles ou stratégiques dans un outil d\'IA grand public non maîtrisé ;'));
-   out.push(X.li('Vérifier et assumer la responsabilité des contenus produits par une IA ;'));
-   out.push(X.li('Signaler tout nouvel usage d\'IA au référent pour évaluation préalable.'));
-   out.push(X.h2('Article 7 — Télétravail et mobilité'));
-   out.push(X.p('En mobilité, sécuriser les équipements (chiffrement, verrouillage), éviter les réseaux Wi-Fi publics non sûrs et protéger la confidentialité des écrans.',{}));
-   out.push(X.h2('Article 8 — Contrôles et sanctions'));
-   out.push(X.p('L\'entreprise peut mettre en œuvre des dispositifs de contrôle proportionnés (journalisation, filtrage), dans le respect de la vie privée et après information des salariés et, le cas échéant, consultation des représentants du personnel. Tout manquement peut donner lieu aux sanctions prévues par le règlement intérieur.',{}));
-   out.push(X.h2('Article 9 — Entrée en vigueur'));
-   out.push(X.p('La présente charte prend effet à sa date de signature et s\'impose à chaque utilisateur.',{}));
-   out=out.concat(X.signature(f,'L\'utilisateur (lu et approuvé)'));
+   out.push(X.li('Vérifier et assumer la responsabilité des contenus générés ; signaler tout nouvel usage d\'IA au référent.'));
+   out.push(X.h2('Article 9 — Mobilité, télétravail et équipements personnels (BYOD)'));
+   out.push(X.p('En mobilité et en télétravail : chiffrement et verrouillage des équipements, éviter les Wi-Fi publics non sûrs, protéger la confidentialité des écrans. L\'usage d\'un équipement personnel (BYOD) à des fins professionnelles doit être autorisé et sécurisé.',{}));
+   out.push(X.h2('Article 10 — Départ du collaborateur'));
+   out.push(X.p('Au départ : restitution de l\'ensemble du matériel, révocation immédiate des accès et comptes, suppression des données professionnelles éventuellement présentes sur des supports personnels autorisés.',{}));
+   out.push(X.h2('Article 11 — Contrôles et sanctions'));
+   out.push(X.p('L\'entreprise peut mettre en œuvre des dispositifs de contrôle proportionnés (journalisation, filtrage), dans le respect de la vie privée et après information des salariés et consultation du CSE. Tout manquement expose l\'utilisateur aux sanctions prévues par le règlement intérieur, graduées selon la gravité.',{}));
+   out.push(X.h2('Article 12 — Valeur juridique et opposabilité'));
+   out.push(X.p('Pour être opposable, la présente charte est soit annexée au règlement intérieur (procédure : consultation du CSE, transmission à l\'inspection du travail et dépôt au greffe du conseil de prud\'hommes), soit signée individuellement par chaque collaborateur lors de son embauche.',{}));
+   out.push(X.note('Interdit en un coup d\'œil : partage de mots de passe · installation de logiciels non autorisés · extraction de données hors outils validés · saisie de données confidentielles dans une IA grand public · propos nuisant à l\'image de l\'entreprise.',{warn:true,label:'Récapitulatif des interdits'}));
+   out=out.concat(X.signature(f,'L\'utilisateur (« Lu et approuvé »)'));
    return out;
  }},
 
@@ -1411,29 +1423,41 @@ var DOCS=[
  file:'Information_salaries_{soc}',
  body:function(X,f){
    var out=[];
-   out.push(X.h1('Note d\'information des salariés — protection des données'));
-   out.push(X.p(V(f.raisonSociale)+' traite des données à caractère personnel vous concernant dans le cadre de la relation de travail. La présente note vous informe de ces traitements, conformément à l\'article 13 du RGPD.',{}));
+   out.push(X.h1('Notice d\'information des salariés — protection des données'));
+   out.push(X.p(V(f.raisonSociale)+' traite des données à caractère personnel vous concernant dans le cadre de la relation de travail. La présente notice vous informe, en toute transparence, de ces traitements (art. 13 et 14 RGPD).',{}));
    out.push(X.h2('1. Responsable et contact'));
    out.push(X.p('Responsable : '+V(f.raisonSociale)+', '+V(f.adresse)+'. Contact : '+V(f.emailRgpd)+'. '+dpoLine(f),{}));
-   out.push(X.h2('2. Finalités, bases légales et durées'));
-   var rows=[X.headRow(['Finalité','Base légale','Conservation'],[3600,3200,2840])];
+   out.push(X.h2('2. Finalités RH, bases légales et durées'));
+   var rows=[X.headRow(['Finalité','Base légale','Conservation'],[3400,3200,3040])];
    [['Gestion administrative du personnel','Exécution du contrat (art. 6.1.b)','Durée du contrat + 5 ans'],
-    ['Paie et déclarations sociales','Obligation légale (art. 6.1.c)','Bulletins conservés selon les délais légaux'],
-    ['Gestion des accès et sécurité','Intérêt légitime (art. 6.1.f)','Durée du contrat'],
-    ['Suivi des formations et compétences','Exécution du contrat / obligation légale','Durée du contrat'],
-    ['Contrôle du temps de travail','Obligation légale / intérêt légitime','5 ans']
+    ['Paie et déclarations sociales (DSN)','Obligation légale (art. 6.1.c)','Bulletins 5 ans (art. L3243-4)'],
+    ['Gestion des plannings et du temps de travail','Obligation légale / intérêt légitime','5 ans'],
+    ['Mutuelle et prévoyance','Obligation légale / contrat','Durée du contrat + délais légaux'],
+    ['Médecine du travail / suivi de santé','Obligation légale (art. 9.2.b)','Selon la réglementation santé au travail'],
+    ['Formation et suivi des compétences','Exécution du contrat / obligation légale','Durée du contrat']
    ].forEach(function(r){ rows.push(X.row([X.cell(r[0],{b:1}),X.cell(r[1]),X.cell(r[2])])); });
-   out.push(X.table(rows,[3600,3200,2840]));
-   out.push(X.h2('3. Destinataires'));
-   out.push(X.p('Services RH et hiérarchiques habilités, expert-comptable / gestionnaire de paie, organismes sociaux (URSSAF, mutuelle, prévoyance, retraite), administrations, dans la limite de leurs attributions.',{}));
-   out.push(X.h2('4. Données issues de dispositifs particuliers'));
-   out.push(X.p('Le cas échéant, les dispositifs de vidéosurveillance, de contrôle d\'accès ou de géolocalisation font l\'objet d\'une information spécifique et, lorsque requis, d\'une consultation du CSE.',{}));
+   out.push(X.table(rows,[3400,3200,3040]));
+   out.push(X.h2('3. Dispositifs de contrôle éventuels'));
+   out.push(X.p('Le cas échéant, les dispositifs suivants vous concernent ; vous en êtes informé(e) et, lorsque requis, ils font l\'objet d\'une consultation du CSE :',{}));
+   var r2=[X.headRow(['Dispositif','Finalité','Base légale','Information / CSE'],[2200,2600,2500,2340])];
+   [['Badges / contrôle d\'accès','Sécurité des locaux, gestion des accès','Intérêt légitime (art. 6.1.f)','Information + CSE'],
+    ['Géolocalisation des véhicules','Sécurité, organisation des tournées','Intérêt légitime (encadré, subsidiaire)','Information + consultation CSE'],
+    ['Vidéosurveillance (lieux non ouverts au public)','Sécurité des biens et des personnes','Intérêt légitime (art. 6.1.f)','Panneau + CSE ; 1 mois max'],
+    ['Journalisation informatique (logs)','Sécurité des systèmes','Intérêt légitime','Information ; 6 à 12 mois']
+   ].forEach(function(r){ r2.push(X.row([X.cell(r[0],{b:1}),X.cell(r[1]),X.cell(r[2]),X.cell(r[3])])); });
+   out.push(X.table(r2,[2200,2600,2500,2340]));
+   out.push(X.note('Les dispositifs de surveillance doivent être proportionnés et ne peuvent placer les salariés sous une surveillance constante et permanente.',{label:'Proportionnalité'}));
+   out.push(X.h2('4. Destinataires'));
+   out.push(X.p('Services RH et hiérarchiques habilités, expert-comptable / gestionnaire de paie, organismes sociaux (URSSAF, mutuelle, prévoyance, retraite, médecine du travail) et administrations, dans la limite de leurs attributions. En cas d\'externalisation de la paie, le prestataire agit comme sous-traitant (art. 28) et le bulletin peut être déposé dans un coffre-fort numérique sécurisé.',{}));
    out.push(X.h2('5. Vos droits'));
-   out.push(X.p('Droits d\'accès, de rectification, d\'effacement (dans les limites des obligations légales), de limitation et d\'opposition, exerçables à l\'adresse '+V(f.emailRgpd)+'. Réclamation possible auprès de la CNIL (www.cnil.fr).',{}));
+   out.push(X.p('Vous disposez d\'un droit d\'accès à votre dossier RH, de rectification, d\'effacement (dans les limites des obligations légales), de limitation et d\'opposition. Ils s\'exercent auprès de '+V(f.emailRgpd)+'. En cas de difficulté, vous pouvez saisir le DPO puis la CNIL (www.cnil.fr).',{}));
    out.push(X.pageBreak());
-   out.push(X.h2('Annexe — Clause à insérer dans le contrat de travail'));
-   out.push(X.note('Clause type à recopier dans les contrats de travail et avenants.',{label:'Modèle de clause'}));
-   out.push(X.p('« Dans le cadre de la relation de travail, l\'employeur traite des données à caractère personnel du salarié aux fins de gestion administrative, de paie, de respect de ses obligations légales et de la sécurité des systèmes. Ces traitements reposent sur l\'exécution du contrat, le respect d\'obligations légales et l\'intérêt légitime de l\'employeur. Les données sont conservées pour les durées légales applicables. Le salarié dispose des droits prévus par le RGPD (accès, rectification, effacement, limitation, opposition), exerçables auprès de '+V(f.emailRgpd)+'. Une information détaillée figure dans la note d\'information du personnel, dont le salarié reconnaît avoir pris connaissance. »',{i:true}));
+   out.push(X.h2('Annexe — Clause à insérer au contrat de travail'));
+   out.push(X.note('Clause à recopier dans les contrats et avenants.',{label:'Modèle de clause'}));
+   out.push(X.p('« Dans le cadre de la relation de travail, l\'employeur traite des données à caractère personnel du salarié aux fins de gestion administrative, de paie, de respect de ses obligations légales et de la sécurité des systèmes. Ces traitements reposent sur l\'exécution du contrat, le respect d\'obligations légales et l\'intérêt légitime de l\'employeur — et non sur le consentement. Le salarié dispose des droits d\'accès, de rectification, d\'effacement, de limitation et d\'opposition, exerçables auprès de '+V(f.emailRgpd)+'. Une notice détaillée lui est remise, dont il reconnaît avoir pris connaissance. »',{i:true}));
+   out.push(X.h2('Reçu et accusé de prise de connaissance'));
+   out.push(X.p('À faire signer avec le contrat de travail — vaut preuve d\'information (et non consentement, les traitements RH ne reposant pas sur celui-ci) :',{c:X.C.dim,size:18,i:true}));
+   out.push(X.p('« Lu et approuvé — je reconnais avoir reçu la présente notice et avoir été informé(e) de mes droits Informatique et Libertés. »   Nom, date et signature du salarié : ⟨ … ⟩',{i:true}));
    return out;
  }},
 
