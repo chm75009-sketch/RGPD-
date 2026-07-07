@@ -302,7 +302,7 @@
 </div></footer>
 
 <div class="toast" id="toast"></div>
-<div style="position:fixed;bottom:8px;right:10px;z-index:9999;font:700 10px/1 system-ui,sans-serif;color:#7a7f95;background:rgba(255,255,255,.82);border:1px solid #e7e9f3;padding:4px 8px;border-radius:8px;pointer-events:none">Clarté · MàJ 07/07 · b34</div>
+<div style="position:fixed;bottom:8px;right:10px;z-index:9999;font:700 10px/1 system-ui,sans-serif;color:#7a7f95;background:rgba(255,255,255,.82);border:1px solid #e7e9f3;padding:4px 8px;border-radius:8px;pointer-events:none">Clarté · MàJ 07/07 · b35</div>
 
 <script>
 /* ================= FICHE SOCIÉTÉ (localStorage) ================= */
@@ -1373,35 +1373,36 @@ var DOCS=[
  body:function(X,f){
    var out=[];
    out.push(X.h1('Politique d\'usage de l\'intelligence artificielle'));
-   out.push(X.p('La présente politique encadre l\'utilisation des systèmes d\'intelligence artificielle (IA) au sein de '+V(f.raisonSociale)+', dans le respect du Règlement (UE) 2024/1689 (« AI Act ») et du RGPD.',{}));
+   out.push(X.p('La présente politique encadre l\'utilisation des systèmes d\'intelligence artificielle (IA) — y compris les IA génératives (ChatGPT, Claude, etc.) — au sein de '+V(f.raisonSociale)+', dans le respect du Règlement (UE) 2024/1689 (« AI Act ») et du RGPD.',{}));
    out.push(X.h2('1. Champ d\'application et définitions'));
-   out.push(X.p('Elle s\'applique à tout usage d\'un système d\'IA par l\'entreprise ou ses collaborateurs (outils intégrés ou tiers, IA générative, chatbots, aide à la décision). Un « système d\'IA » est un système automatisé qui, pour des objectifs donnés, génère des résultats tels que des prédictions, recommandations ou décisions.',{}));
-   out.push(X.h2('2. Principes directeurs'));
-   out.push(X.li('Transparence : informer les personnes lorsqu\'elles interagissent avec une IA ou reçoivent un contenu généré par IA ;'));
-   out.push(X.li('Supervision humaine : aucune décision produisant des effets significatifs n\'est prise sur le seul fondement d\'un traitement automatisé (art. 22 RGPD) ;'));
-   out.push(X.li('Protection des données : ne pas soumettre de données personnelles, confidentielles ou stratégiques à des outils non maîtrisés ;'));
-   out.push(X.li('Exactitude et non-discrimination : vigilance sur les biais (recrutement, évaluation, scoring) ;'));
-   out.push(X.li('Littératie IA (art. 4 AI Act) : les utilisateurs sont sensibilisés à un usage éclairé.'));
-   out.push(X.h2('3. Classification des risques (AI Act)'));
+   out.push(X.p('Elle s\'applique à tout usage d\'un système d\'IA par l\'entreprise ou ses collaborateurs (outils intégrés ou tiers). Un « système d\'IA » est un système automatisé qui génère des prédictions, recommandations, contenus ou décisions.',{}));
+   out.push(X.h2('2. Classification des usages selon le risque (AI Act)'));
    var rows=[X.headRow(['Niveau','Exemples','Régime'],[2100,4300,3240])];
    [['Inacceptable','Notation sociale, manipulation, catégorisation biométrique sensible, reconnaissance des émotions au travail','Interdit'],
-    ['Élevé','IA de recrutement, d\'évaluation, d\'accès à des services essentiels','Obligations renforcées (gestion des risques, documentation, supervision, journalisation)'],
-    ['Limité','Chatbots, IA générative','Obligation de transparence'],
-    ['Minimal','Usages courants','Bonnes pratiques recommandées']
+    ['Haut risque','IA de recrutement (tri de CV), d\'évaluation des salariés, d\'accès à des services essentiels','Obligations renforcées : gestion des risques, documentation, supervision humaine, journalisation'],
+    ['Risque limité','Chatbots, IA générative','Obligation de transparence'],
+    ['Risque minimal','Usages bureautiques courants','Bonnes pratiques recommandées']
    ].forEach(function(r){ rows.push(X.row([X.cell(r[0],{b:1}),X.cell(r[1]),X.cell(r[2])])); });
    out.push(X.table(rows,[2100,4300,3240]));
+   out.push(X.h2('3. Règles d\'or impératives'));
+   out.push(X.h3('a) Interdiction de fuite de données (data leakage)'));
+   out.push(X.p('Il est formellement interdit d\'injecter des données à caractère personnel (clients, salariés) ou des secrets commerciaux dans les invites (prompts) d\'IA publiques ou gratuites : ces données peuvent être réutilisées pour entraîner les modèles et échapper à tout contrôle. N\'utiliser que des outils maîtrisés et contractualisés pour toute donnée sensible.',{}));
+   out.push(X.h3('b) Transparence des contenus'));
+   out.push(X.p('Tout livrable, texte ou média destiné au public et généré (en tout ou partie) par une IA doit être clairement identifié comme tel (art. 50 AI Act).',{}));
+   out.push(X.h3('c) Supervision humaine (human-in-the-loop)'));
+   out.push(X.p('Aucune décision produisant des effets sur une personne (RH — recrutement, évaluation — ou commerciale) ne peut être prise sur le seul résultat d\'une IA : une révision humaine critique est obligatoire (art. 22 RGPD).',{}));
    out.push(X.h2('4. Usages autorisés'));
    var ia=iaList(f);
    if(ia.length){ ia.forEach(function(o){ out.push(X.li(o.outil+(o.usage?' — '+o.usage:'')+(o.risque?' (risque '+o.risque+')':''))); }); }
    else { out.push(X.p('⟨ Listez les outils d\'IA autorisés dans la fiche société pour les faire apparaître ici. ⟩',{i:true})); }
    out.push(X.h2('5. Usages interdits'));
    out.push(X.li('Toute pratique prohibée par l\'AI Act (catégorie « risque inacceptable ») ;'));
-   out.push(X.li('La saisie de données personnelles sensibles dans un outil d\'IA grand public ;'));
+   out.push(X.li('La saisie de données personnelles ou confidentielles dans un outil d\'IA grand public ;'));
    out.push(X.li('Toute décision automatisée à effet significatif sans supervision humaine.'));
    out.push(X.h2('6. Articulation avec le RGPD'));
-   out.push(X.p('Lorsqu\'un système d\'IA traite des données personnelles, le RGPD s\'applique cumulativement : base légale, information, minimisation, et AIPD lorsque le traitement présente un risque élevé.',{}));
+   out.push(X.p('Lorsqu\'un système d\'IA traite des données personnelles, le RGPD s\'applique cumulativement : base légale, information, minimisation, et AIPD si risque élevé. Les données traitées via l\'IA suivent la politique de durées de conservation de l\'entreprise.',{}));
    out.push(X.h2('7. Gouvernance et sanctions'));
-   out.push(X.p('Référent IA / protection des données : '+((f.dpoDesigne||has(f.dpoNom))?V(f.dpoNom):V(f.emailRgpd))+'. Tout nouvel usage d\'IA lui est signalé pour évaluation préalable et inscription à la cartographie. Les manquements à l\'AI Act sont passibles d\'amendes pouvant atteindre 35 M€ ou 7 % du chiffre d\'affaires mondial.',{}));
+   out.push(X.p('Référent IA / protection des données : '+((f.dpoDesigne||has(f.dpoNom))?V(f.dpoNom):V(f.emailRgpd))+'. Tout nouvel usage d\'IA lui est signalé pour évaluation préalable et inscription à la cartographie des systèmes d\'IA. Les manquements à l\'AI Act sont passibles d\'amendes pouvant atteindre 35 M€ ou 7 % du chiffre d\'affaires mondial.',{}));
    out=out.concat(X.versionTable(f));
    return out;
  }},
@@ -1414,21 +1415,25 @@ var DOCS=[
  body:function(X,f){
    var out=[];
    out.push(X.h1('Cartographie et classification des systèmes d\'intelligence artificielle'));
-   out.push(X.p('Ce registre recense les systèmes d\'IA utilisés par '+V(f.raisonSociale)+' et évalue leur niveau de risque au sens du Règlement (UE) 2024/1689 (AI Act).',{}));
+   out.push(X.p('Ce registre recense les systèmes d\'IA utilisés par '+V(f.raisonSociale)+', évalue leur niveau de risque au sens de l\'AI Act (Règl. UE 2024/1689) et croise ces éléments avec le registre des traitements (RGPD).',{}));
    out.push(X.h2('1. Inventaire des systèmes d\'IA'));
-   var rows=[X.headRow(['Système / outil','Usage','Données utilisées','Fournisseur','Niveau de risque','Mesures'],[1650,1650,1650,1550,1300,1840])];
+   var rows=[X.headRow(['Système / outil','Usage','Fournisseur / hébergement (UE ?)','Niveau de risque','Biais testé ?','Mesures'],[1700,1650,1900,1350,1140,1900])];
    var ia=iaList(f);
-   if(ia.length){ ia.forEach(function(o){ rows.push(X.row([X.cell(o.outil,{b:1}),X.cell(o.usage||'⟨ … ⟩'),X.cell('⟨ à préciser ⟩'),X.cell('⟨ … ⟩'),X.cell(o.risque||'limité'),X.cell('Transparence, supervision')])); }); }
-   else { rows.push(X.row([X.cell('⟨ Outil ⟩',{b:1}),X.cell('⟨ Usage ⟩'),X.cell('⟨ Données ⟩'),X.cell('⟨ Fournisseur ⟩'),X.cell('⟨ Risque ⟩'),X.cell('⟨ Mesures ⟩')])); }
-   out.push(X.table(rows,[1650,1650,1650,1550,1300,1840]));
-   out.push(X.h2('2. Méthode de classification'));
-   out.push(X.p('Pour chaque système, déterminer : la finalité, l\'existence de décisions à effet significatif, le traitement de données sensibles ou biométriques, et le public concerné — puis affecter un niveau (inacceptable / élevé / limité / minimal).',{}));
-   out.push(X.h2('3. Rappels de conformité'));
-   out.push(X.li('IA à risque limité (chatbots, IA générative) : obligation de transparence ;'));
-   out.push(X.li('IA à risque élevé : obligations renforcées (gestion des risques, documentation, supervision humaine, journalisation) ;'));
-   out.push(X.li('IA à risque inacceptable : interdites ;'));
-   out.push(X.li('Lorsqu\'un système traite des données personnelles, le RGPD s\'applique cumulativement.'));
-   out.push(X.note('Calendrier AI Act : interdictions et littératie IA depuis février 2025 ; obligations sur les IA à usage général depuis août 2025 ; systèmes à haut risque à compter du 2 août 2026.'));
+   if(ia.length){ ia.forEach(function(o){ rows.push(X.row([X.cell(o.outil,{b:1}),X.cell(o.usage||'⟨ … ⟩'),X.cell('⟨ fournisseur / UE ? ⟩'),X.cell(o.risque||'limité'),X.cell('⟨ oui/non ⟩'),X.cell('Transparence, supervision')])); }); }
+   else { rows.push(X.row([X.cell('⟨ Outil ⟩',{b:1}),X.cell('⟨ Usage ⟩'),X.cell('⟨ Fournisseur / UE ? ⟩'),X.cell('⟨ Risque ⟩'),X.cell('⟨ oui/non ⟩'),X.cell('⟨ Mesures ⟩')])); }
+   out.push(X.table(rows,[1700,1650,1900,1350,1140,1900]));
+   out.push(X.h2('2. Détection des « Shadow IA »'));
+   out.push(X.p('Une procédure de détection des usages d\'IA non autorisés (outils utilisés par les salariés sans accord de la direction) est mise en place : recensement déclaratif périodique, sensibilisation, revue des outils et, le cas échéant, contrôle proportionné des flux. Tout usage détecté est évalué puis autorisé et inscrit à la cartographie, ou interdit.',{}));
+   out.push(X.h2('3. Évaluation des biais et de la discrimination'));
+   out.push(X.p('Lorsqu\'une IA est utilisée pour trier des candidatures, évaluer des performances ou prendre une décision affectant des personnes (usage à haut risque), la cartographie documente les tests réalisés pour détecter et corriger les biais algorithmiques, garantir la non-discrimination et assurer une supervision humaine effective.',{}));
+   out.push(X.h2('4. Souveraineté et transferts hors UE'));
+   out.push(X.p('Pour chaque système, la localisation d\'hébergement des modèles et des données est précisée (UE / hors UE). Tout traitement ou transfert hors UE est encadré par des garanties appropriées (décision d\'adéquation ou clauses contractuelles types), conformément au RGPD.',{}));
+   out.push(X.h2('5. Rappels de conformité (AI Act)'));
+   out.push(X.li('Risque limité (chatbots, IA générative) : obligation de transparence ;'));
+   out.push(X.li('Haut risque : gestion des risques, documentation, supervision humaine, journalisation ;'));
+   out.push(X.li('Risque inacceptable : interdit ;'));
+   out.push(X.li('Traitement de données personnelles : application cumulative du RGPD.'));
+   out.push(X.note('Calendrier AI Act : interdictions et littératie IA depuis février 2025 ; IA à usage général depuis août 2025 ; systèmes à haut risque à compter du 2 août 2026.'));
    out=out.concat(X.versionTable(f));
    return out;
  }},
@@ -1440,7 +1445,8 @@ var DOCS=[
  file:'Synthese_conformite_{soc}',
  body:function(X,f){
    var out=[];
-   out.push(X.h1('Synthèse de conformité RGPD & AI Act'));
+   out.push(X.h1('Synthèse de conformité RGPD & AI Act — tableau de bord'));
+   out.push(X.p('Résumé exécutif destiné à la direction et à un auditeur externe. Il matérialise le principe de responsabilité (accountability, art. 5.2 RGPD) : la capacité de '+V(f.raisonSociale)+' à démontrer sa conformité à tout moment.',{}));
    out.push(X.h2('1. Entreprise'));
    out.push(X.kv([
      ['Entité',V(f.raisonSociale)],
@@ -1449,18 +1455,26 @@ var DOCS=[
      ['Secteur',f.secteur?f.secteur:SECTORS[sectorKey(f)].label],
      ['Référent conformité',(f.dpoDesigne||has(f.dpoNom))?V(f.dpoNom):V(f.emailRgpd)]
    ]));
-   out.push(X.h2('2. Documentation en place'));
+   out.push(X.h2('2. Indicateurs clés (KPI)'));
+   var kpi=[X.headRow(['Indicateur','Cible','Réel'],[5000,2320,2320])];
+   [['Documents obligatoires en place','100 %','⟨ … ⟩'],
+    ['Salariés sensibilisés à la protection des données','≥ 95 %','⟨ … ⟩'],
+    ['Sous-traitants sous contrat (art. 28)','100 %','⟨ … ⟩'],
+    ['Demandes de droits traitées dans le délai d\'un mois','100 %','⟨ … ⟩'],
+    ['Violations notifiées à la CNIL sous 72 h','100 %','⟨ … ⟩'],
+    ['Violations de données subies sur l\'année','0','⟨ … ⟩']
+   ].forEach(function(r){ kpi.push(X.row([X.cell(r[0],{b:1}),X.cell(r[1]),X.cell(r[2])])); });
+   out.push(X.table(kpi,[5000,2320,2320]));
+   out.push(X.h2('3. Documentation en place'));
    var rows=[X.headRow(['Document','Référence','Statut'],[5000,2600,2040])];
-   [['Registre des activités de traitement','Art. 30'],['Politique de confidentialité','Art. 13-14'],['Mentions légales','LCEN'],['Procédure droits + registre','Art. 12-22'],['Procédure violations + registre','Art. 33-34'],['Politique de conservation','Art. 5.1.e'],['Politique cookies','Art. 82 LIL'],['Charte informatique','Art. 32'],['Information des salariés','Art. 13'],['Contrats de sous-traitance','Art. 28'],['Politique de sécurité','Art. 32'],['Plan d\'action / accountability','Art. 5.2'],['Politique & cartographie IA','AI Act']].forEach(function(r){ rows.push(X.row([X.cell(r[0],{b:1}),X.cell(r[1]),X.cell('⟨ en place / à faire ⟩')])); });
+   [['Registre des activités de traitement','Art. 30'],['Politique de confidentialité','Art. 13-14'],['Mentions légales','LCEN'],['Procédure droits + registre','Art. 12-22'],['Procédure violations + registre','Art. 33-34'],['Politique de conservation','Art. 5.1.e'],['Politique cookies','Art. 82 LIL'],['Charte informatique','Art. 32'],['Information des salariés','Art. 13'],['Contrats de sous-traitance','Art. 28'],['Politique de sécurité (PSSI)','Art. 32'],['Plan d\'action / accountability','Art. 5.2'],['Politique & cartographie IA','AI Act']].forEach(function(r){ rows.push(X.row([X.cell(r[0],{b:1}),X.cell(r[1]),X.cell('⟨ en place / à faire ⟩')])); });
    out.push(X.table(rows,[5000,2600,2040]));
-   out.push(X.h2('3. Engagement'));
+   out.push(X.h2('4. Gouvernance de l\'IA (AI Act)'));
+   out.push(X.p('Les systèmes d\'IA sont recensés et classés par niveau de risque (voir cartographie IA). Une politique d\'usage encadre les collaborateurs. Cette synthèse reflète les risques réels de l\'entreprise et est mise à jour à mesure qu\'ils évoluent.',{}));
+   out.push(X.h2('5. Engagement'));
    out.push(X.p(V(f.raisonSociale)+' s\'engage dans une démarche de conformité continue au RGPD et à l\'AI Act, et met à jour sa documentation à chaque évolution significative de ses activités, de ses outils ou de la réglementation.',{}));
-   out.push(X.h2('4. Prochaines étapes'));
-   out.push(X.li('Compléter les mentions « ⟨ … ⟩ » avec vos informations réelles ;'));
-   out.push(X.li('Faire signer la charte informatique et sensibiliser le personnel ;'));
-   out.push(X.li('Contractualiser les sous-traitants (art. 28) ;'));
-   out.push(X.li('Planifier une revue annuelle.'));
-   out.push(X.p('Établi le '+today()+' à '+V(f.ville||f.rcsVille)+'.',{i:true}));
+   out.push(X.h2('6. Calendrier de réévaluation'));
+   out.push(X.p('La gouvernance dans son ensemble (registre, politiques, sécurité, cartographie IA) fait l\'objet d\'une révision obligatoire au minimum une fois par an. Dernière synthèse établie le '+today()+' — prochaine revue prévue : ⟨ date à + 12 mois ⟩.',{b:true}));
    out=out.concat(X.signature(f,'Le référent conformité'));
    return out;
  }}
