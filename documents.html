@@ -303,7 +303,7 @@
 </div></footer>
 
 <div class="toast" id="toast"></div>
-<div style="position:fixed;bottom:8px;right:10px;z-index:9999;font:700 10px/1 system-ui,sans-serif;color:#7a7f95;background:rgba(255,255,255,.82);border:1px solid #e7e9f3;padding:4px 8px;border-radius:8px;pointer-events:none">Clarté · MàJ 08/07 · b51</div>
+<div style="position:fixed;bottom:8px;right:10px;z-index:9999;font:700 10px/1 system-ui,sans-serif;color:#7a7f95;background:rgba(255,255,255,.82);border:1px solid #e7e9f3;padding:4px 8px;border-radius:8px;pointer-events:none">Clarté · MàJ 08/07 · b52</div>
 
 <script>
 /* ================= FICHE SOCIÉTÉ (localStorage) ================= */
@@ -814,6 +814,7 @@ var DOCS=[
    out.push(X.h2('5. Vos données quittent-elles l\'Union européenne ?'));
    out.push(X.p(transfertPhrase(f)));
    out.push(X.p('Si nous utilisons des outils susceptibles d\'héberger des données hors UE (ex. Google Analytics, Mailchimp, certains services cloud), le transfert est encadré par des garanties appropriées : décision d\'adéquation (ex. Data Privacy Framework pour les États-Unis) ou clauses contractuelles types (CCT) de la Commission européenne.',{}));
+   out.push(X.p('Une copie de ces garanties (clauses contractuelles types ou référence à la décision d\'adéquation) peut être obtenue sur demande à '+mailDroits+'.',{}));
    out.push(X.h2('6. Combien de temps conservons-nous vos données ?'));
    out.push(X.p('Chaque donnée est conservée pour la durée nécessaire à sa finalité (voir tableau de la section 2), puis archivée si la loi l\'impose, ou supprimée : prospection 3 ans après le dernier contact ; pièces comptables 10 ans ; données de paie selon les délais légaux ; cookies 13 mois maximum.',{}));
    out.push(X.h2('7. Comment protégeons-nous vos données ?'));
@@ -824,7 +825,7 @@ var DOCS=[
    out.push(X.li('Droit à l\'effacement (art. 17) — « droit à l\'oubli », dans les cas prévus ;'));
    out.push(X.li('Droit à la limitation (art. 18) et droit d\'opposition (art. 21), notamment à la prospection ;'));
    out.push(X.li('Droit à la portabilité (art. 20) ;'));
-   out.push(X.li('Droit de retirer votre consentement à tout moment ;'));
+   out.push(X.li('Droit de retirer votre consentement à tout moment, sans que cela ne remette en cause la licéité du traitement effectué avant ce retrait ;'));
    out.push(X.li('Droit de définir des directives sur le sort de vos données après votre décès.'));
    out.push(X.p('Pour exercer vos droits, écrivez à '+mailDroits+(f.adresse?' ou par courrier à '+f.adresse:'')+'. Nous répondons sous un mois (prorogeable de deux mois si la demande est complexe). Une preuve d\'identité peut être demandée en cas de doute raisonnable.',{b:true}));
    out.push(X.h2('9. Protection des mineurs'));
@@ -866,7 +867,7 @@ var DOCS=[
      ['Capital social',f.capital?f.capital+' €':'⟨ à compléter ⟩'],
      ['Siège social',V(f.adresse)],
      ['SIRET',V(f.siret)],
-     ['RCS',f.rcsVille?f.rcsVille:'⟨ à compléter ⟩'],
+     ['RCS',f.rcsVille?('RCS '+f.rcsVille+(f.siret?' '+String(f.siret).replace(/\s/g,'').slice(0,9):' ⟨ n° SIREN ⟩')):'⟨ RCS Ville + n° SIREN ⟩'],
      ['TVA intracommunautaire',f.tva?f.tva:'⟨ à compléter ⟩'],
      ['Téléphone / e-mail',(f.telephone?f.telephone+' — ':'')+V(f.emailRgpd)]
    ]));
@@ -926,12 +927,15 @@ var DOCS=[
     ['Rectification (art. 16)','Corriger / compléter','Répercuter aux destinataires (art. 19)'],
     ['Effacement (art. 17)','Supprimer','Sauf obligation légale de conservation'],
     ['Limitation (art. 18)','Geler le traitement','Marquer les données'],
-    ['Portabilité (art. 20)','Format structuré, lisible par machine','Données fournies + base contrat/consentement'],
-    ['Opposition (art. 21)','Cesser le traitement','Automatique pour la prospection']
+    ['Portabilité (art. 20)','Format structuré, lisible par machine','Données fournies par la personne + base consentement/contrat ET traitement automatisé'],
+    ['Opposition (art. 21)','Cesser le traitement','Automatique pour la prospection'],
+    ['Décision automatisée (art. 22)','Droit de ne pas faire l\'objet d\'une décision entièrement automatisée produisant des effets juridiques ; obtenir une intervention humaine, exprimer son point de vue, contester la décision','Sauf contrat, autorisation légale ou consentement explicite (art. 22.2)']
    ].forEach(function(r){ rows.push(X.row([X.cell(r[0],{b:1}),X.cell(r[1]),X.cell(r[2])])); });
    out.push(X.table(rows,[2600,3800,3240]));
    out.push(X.h2('6. Réponse et voies de recours'));
    out.push(X.p('La réponse est motivée. Tout refus rappelle la possibilité de saisir la CNIL (www.cnil.fr) et le juge. La rectification ou l\'effacement est répercuté aux destinataires (art. 19).',{}));
+   out.push(X.p('Gratuité : l\'exercice des droits est gratuit (art. 12.5) ; seule une demande manifestement infondée ou excessive, notamment répétitive, peut justifier des frais raisonnables ou un refus, la charge de la preuve du caractère abusif pesant sur le responsable de traitement.',{}));
+   out.push(X.p('Absence de suite : si aucune suite n\'est donnée, la personne en est informée au plus tard un mois après la demande, avec les motifs de l\'inaction et le rappel des voies de recours (art. 12.4).',{}));
    out.push(X.h2('7. Registre des demandes (preuve — art. 5.2)'));
    var rr=[X.headRow(['Date reçue','Demandeur','Droit exercé','Traitement concerné','Suite donnée','Date réponse'],[1450,1900,1700,1900,1650,1040])];
    rr.push(X.row([X.cell('⟨ … ⟩'),X.cell('⟨ … ⟩'),X.cell('⟨ … ⟩'),X.cell('⟨ … ⟩'),X.cell('⟨ … ⟩'),X.cell('⟨ … ⟩')]));
@@ -955,6 +959,7 @@ var DOCS=[
    out.push(X.p('Document de crise. Objet : détecter, qualifier, contenir et, le cas échéant, notifier toute violation de données (art. 33 et 34 RGPD), dans le respect de la règle des 72 heures.',{}));
    out.push(X.h2('1. Définition et cellule de crise'));
    out.push(X.p('Une violation est toute atteinte à la sécurité entraînant destruction, perte, altération, divulgation ou accès non autorisé à des données (art. 4.12). Cellule de crise : pilote '+resp+' ('+V(f.emailRgpd)+') ; décisions et communication : '+V(f.representant)+' ; support technique / hébergeur pour le confinement.',{}));
+   out.push(X.p('Si la violation survient chez un sous-traitant, celui-ci alerte le responsable de traitement sans délai afin de faire courir le décompte des 72 heures (art. 33.2).',{}));
    out.push(X.h2('2. Logigramme de décision'));
    out.push(X.flowBox('① Constat d\'une violation de données'));
    out.push(X.flowArrow());
@@ -981,15 +986,18 @@ var DOCS=[
      ['Nombre approximatif d\'enregistrements','⟨ … ⟩'],
      ['Conséquences probables','⟨ … ⟩'],
      ['Mesures prises ou proposées','⟨ confinement, remédiation, prévention ⟩'],
+     ['Notification effectuée dans les 72 h ?','⟨ oui / non — si non, motifs du retard (art. 33.1) ⟩'],
      ['Coordonnées du point de contact',resp+' — '+V(f.emailRgpd)]
    ]));
    out.push(X.h2('5. Information des personnes concernées (art. 34)'));
    out.push(X.p('En cas de risque élevé, message type à adresser sans délai à chaque personne : « Nous vous informons qu\'une violation de données survenue le ⟨ date ⟩ est susceptible de concerner vos données (⟨ nature ⟩). Nous avons pris les mesures suivantes : ⟨ … ⟩. Par précaution, nous vous recommandons de ⟨ ex. modifier votre mot de passe ⟩. Contact : '+V(f.emailRgpd)+'. »',{i:true}));
+   out.push(X.p('L\'information individuelle n\'est pas requise (art. 34.3) si : les données étaient rendues incompréhensibles pour tout tiers non autorisé (ex. chiffrement robuste) ; des mesures ultérieures écartent la probabilité d\'un risque élevé ; ou elle exigerait des efforts disproportionnés — auquel cas une communication publique équivalente est réalisée.',{}));
    out.push(X.h2('6. Registre des violations (art. 33.5)'));
    var rr=[X.headRow(['Date','Nature / cause','Données & personnes','Gravité','CNIL ?','Personnes ?','Mesures'],[1150,1650,1650,1150,1150,1150,1590])];
    rr.push(X.row([X.cell('⟨ … ⟩'),X.cell('⟨ … ⟩'),X.cell('⟨ … ⟩'),X.cell('faible/moyen/élevé'),X.cell('o/n'),X.cell('o/n'),X.cell('⟨ … ⟩')]));
    rr.push(X.row([X.cell(''),X.cell(''),X.cell(''),X.cell(''),X.cell(''),X.cell(''),X.cell('')]));
    out.push(X.table(rr,[1150,1650,1650,1150,1150,1150,1590]));
+   out.push(X.p('Chaque violation est documentée dans ce registre en y consignant les faits, ses effets / conséquences et les mesures correctives prises (art. 33.5), que la CNIL ait été notifiée ou non.',{i:true,c:X.C.dim,size:18}));
    out.push(X.note('En cas de doute sur la qualification ou la notification, faites-vous accompagner sans attendre — le délai de 72 h est très court.',{warn:true,label:'Important'}));
    out=out.concat(X.versionTable(f));
    return out;
@@ -1014,10 +1022,11 @@ var DOCS=[
     ['Contrats de travail & dossier RH','Durée du contrat','5 ans après le départ du salarié','Suppression'],
     ['Registre unique du personnel','Présence du salarié','5 ans après le départ','Suppression'],
     ['Candidatures non retenues','—','2 ans après le dernier contact (sauf accord explicite du candidat)','Suppression'],
-    ['Données de connexion / logs','—','6 à 12 mois','Suppression'],
+    ['Données de connexion / logs','—','Logs de sécurité : 6 mois (reco CNIL) ; données d\'identification de connexion : 1 an (LCEN, décret n° 2021-1362)','Suppression'],
+    ['Coordonnées bancaires (carte, RIB)','Le temps de la transaction','Carte : 15 mois après la transaction (preuve/contestation) ; RIB : durée de la relation','Suppression'],
     ['Cookies et traceurs','13 mois maximum','—','Expiration automatique'],
     ['Vidéosurveillance (locaux non ouverts au public)','1 mois maximum (recommandation CNIL)','Au-delà : uniquement si procédure judiciaire en cours','Effacement automatique'],
-    ['Preuve du consentement','Durée du traitement concerné','+ délai de prescription','Suppression']
+    ['Preuve du consentement','Durée du traitement concerné','3 ans après le retrait ou la fin du traitement (accountability)','Suppression']
    ].forEach(function(r){ rows.push(X.row([X.cell(r[0],{b:1}),X.cell(r[1]),X.cell(r[2]),X.cell(r[3])])); });
    out.push(X.table(rows,[2500,2100,3100,1940]));
    out.push(X.h2('2. Gestion de l\'archivage intermédiaire'));
@@ -1027,6 +1036,7 @@ var DOCS=[
    out.push(X.li('Un journal de purge est conservé comme preuve de conformité (accountability, art. 5.2) ;'));
    out.push(X.li('Responsable : '+((f.dpoDesigne||has(f.dpoNom))?V(f.dpoNom):V(f.representant))+'.'));
    out.push(X.note('Pour un dossier « grand compte », chaque durée doit correspondre à une purge ou un archivage AUTOMATIQUE paramétré dans vos logiciels (RH, CRM, ERP) — c\'est la différence entre une politique déclarative et une conformité réellement appliquée.',{label:'Automatisation'}));
+   out.push(X.note('Ces durées s\'appuient notamment sur les référentiels CNIL « gestion commerciale » et « gestion des ressources humaines » ; en cas de conflit, la durée légale sectorielle prime.'));
    out.push(X.note('Certaines activités réglementées (santé, immobilier/LCB-FT, banque, formation) imposent des durées spécifiques — ajustez en conséquence.'));
    out=out.concat(X.coverage('Couverture — limitation de la conservation',[
      ['Art. 5.1.e — Limitation de la conservation','Tableau section 1'],
@@ -1053,7 +1063,7 @@ var DOCS=[
    out.push(X.li('Aucun pré-cochage : les cookies non essentiels (statistiques, publicité, réseaux sociaux) sont désactivés par défaut ;'));
    out.push(X.li('Aucun traceur non essentiel n\'est déposé avant votre consentement ; poursuivre la navigation ne vaut pas consentement ;'));
    out.push(X.li('Votre choix (acceptation ou refus) est mémorisé 6 mois ; au-delà, il vous est de nouveau demandé ;'));
-   out.push(X.li('La durée de vie d\'un cookie de mesure d\'audience n\'excède pas 13 mois.'));
+   out.push(X.li('La durée de vie d\'un cookie de mesure d\'audience n\'excède pas 13 mois, et les données qui en sont issues ne sont pas conservées au-delà de 25 mois.'));
    out.push(X.h2('3. Liste des cookies utilisés'));
    var rows=[X.headRow(['Nom du cookie','Éditeur','Finalité','Consentement','Durée'],[1600,2000,2900,1400,1740])];
    rows.push(X.row([X.cell('Cookies de session',{b:1}),X.cell('Site '+V(f.raisonSociale)),X.cell('Fonctionnement, panier, sécurité'),X.cell('Non requis'),X.cell('Session')]));
@@ -1066,6 +1076,7 @@ var DOCS=[
    }
    out.push(X.table(rows,[1600,2000,2900,1400,1740]));
    out.push(X.note('Remplacez ce tableau par la liste EXACTE de vos cookies réels (nom, éditeur, finalité, durée). C\'est le point le plus contrôlé par la CNIL en ligne.',{warn:true,label:'À personnaliser'}));
+   out.push(X.p('Certains traceurs strictement nécessaires au fonctionnement du site sont exemptés de consentement (art. 82 loi Informatique et Libertés) : cookies de session et d\'authentification, mémorisation du panier, équilibrage de charge, et le cookie conservant votre choix de consentement. Tous les autres (mesure d\'audience non exemptée, publicité, réseaux sociaux) sont soumis à votre consentement préalable.',{}));
    out.push(X.p('La mesure d\'audience peut être exemptée de consentement si elle respecte les conditions CNIL (finalité limitée, pas de recoupement ni de suivi inter-sites, données anonymisées).',{i:true,c:X.C.dim,size:18}));
    out.push(X.h2('4. Gestion de votre consentement'));
    out.push(X.p('Un gestionnaire de consentement (bandeau) vous permet d\'accepter, de refuser ou de personnaliser vos choix, et de les modifier à tout moment via le lien « Gérer les cookies ». Aucun « cookie wall » abusif n\'est imposé.',{}));
@@ -1116,7 +1127,7 @@ var DOCS=[
    out.push(X.h2('Article 11 — Contrôles et sanctions'));
    out.push(X.p('L\'entreprise peut mettre en œuvre des dispositifs de contrôle proportionnés (journalisation, filtrage), dans le respect de la vie privée et après information des salariés et consultation du CSE. Tout manquement expose l\'utilisateur aux sanctions prévues par le règlement intérieur, graduées selon la gravité.',{}));
    out.push(X.h2('Article 12 — Valeur juridique et opposabilité'));
-   out.push(X.p('Pour être opposable, la présente charte est soit annexée au règlement intérieur (procédure : consultation du CSE, transmission à l\'inspection du travail et dépôt au greffe du conseil de prud\'hommes), soit signée individuellement par chaque collaborateur lors de son embauche.',{}));
+   out.push(X.p('Les dispositions relatives aux sanctions ne sont opposables que si la présente charte est annexée au règlement intérieur — après consultation du CSE, transmission à l\'inspection du travail et dépôt au greffe du conseil de prud\'hommes — préalablement à son entrée en vigueur. La signature individuelle vaut engagement contractuel mais ne suffit pas, à elle seule, à rendre opposables les sanctions disciplinaires.',{}));
    out.push(X.note('Interdit en un coup d\'œil : partage de mots de passe · installation de logiciels non autorisés · extraction de données hors outils validés · saisie de données confidentielles dans une IA grand public · propos nuisant à l\'image de l\'entreprise.',{warn:true,label:'Récapitulatif des interdits'}));
    out=out.concat(X.signature(f,'L\'utilisateur (« Lu et approuvé »)'));
    return out;
@@ -1143,8 +1154,9 @@ var DOCS=[
     ['Formation et suivi des compétences','Exécution du contrat / obligation légale','Durée du contrat']
    ].forEach(function(r){ rows.push(X.row([X.cell(r[0],{b:1}),X.cell(r[1]),X.cell(r[2])])); });
    out.push(X.table(rows,[3400,3200,3040]));
+   out.push(X.note('Le numéro de sécurité sociale (NIR) est traité exclusivement pour la paie, les déclarations sociales (DSN) et le suivi mutuelle/retraite, dans le cadre strict autorisé par le décret n° 2019-341.'));
    out.push(X.h2('3. Dispositifs de contrôle éventuels'));
-   out.push(X.p('Le cas échéant, les dispositifs suivants vous concernent ; vous en êtes informé(e) et, lorsque requis, ils font l\'objet d\'une consultation du CSE :',{}));
+   out.push(X.p('Le cas échéant, les dispositifs suivants vous concernent ; vous en êtes informé(e) et, lorsque requis, ils font l\'objet d\'une information préalable des salariés et d\'une consultation préalable du CSE, à peine d\'inopposabilité (art. L2312-38 C. trav.) :',{}));
    var r2=[X.headRow(['Dispositif','Finalité','Base légale','Information / CSE'],[2200,2600,2500,2340])];
    [['Badges / contrôle d\'accès','Sécurité des locaux, gestion des accès','Intérêt légitime (art. 6.1.f)','Information + CSE'],
     ['Géolocalisation des véhicules','Sécurité, organisation des tournées','Intérêt légitime (encadré, subsidiaire)','Information + consultation CSE'],
@@ -1153,10 +1165,13 @@ var DOCS=[
    ].forEach(function(r){ r2.push(X.row([X.cell(r[0],{b:1}),X.cell(r[1]),X.cell(r[2]),X.cell(r[3])])); });
    out.push(X.table(r2,[2200,2600,2500,2340]));
    out.push(X.note('Les dispositifs de surveillance doivent être proportionnés et ne peuvent placer les salariés sous une surveillance constante et permanente.',{label:'Proportionnalité'}));
+   out.push(X.p('La géolocalisation est désactivée en dehors du temps de travail et ne peut constituer le moyen principal de contrôle du temps de travail ni suivre le salarié hors service (garanties CNIL).',{i:true,c:X.C.dim,size:18}));
    out.push(X.h2('4. Destinataires'));
    out.push(X.p('Services RH et hiérarchiques habilités, expert-comptable / gestionnaire de paie, organismes sociaux (URSSAF, mutuelle, prévoyance, retraite, médecine du travail) et administrations, dans la limite de leurs attributions. En cas d\'externalisation de la paie, le prestataire agit comme sous-traitant (art. 28) et le bulletin peut être déposé dans un coffre-fort numérique sécurisé.',{}));
+   out.push(X.h2('4 bis. Transferts hors UE'));
+   out.push(X.p('Vos données sont hébergées au sein de l\'Union européenne. Tout transfert hors UE (ex. outil RH/paie en SaaS) est encadré par des garanties appropriées (décision d\'adéquation ou clauses contractuelles types).',{}));
    out.push(X.h2('5. Vos droits'));
-   out.push(X.p('Vous disposez d\'un droit d\'accès à votre dossier RH, de rectification, d\'effacement (dans les limites des obligations légales), de limitation et d\'opposition. Ils s\'exercent auprès de '+V(f.emailRgpd)+'. En cas de difficulté, vous pouvez saisir le DPO puis la CNIL (www.cnil.fr).',{}));
+   out.push(X.p('Vous disposez d\'un droit d\'accès à votre dossier RH, de rectification, d\'effacement (dans les limites des obligations légales), de limitation, d\'opposition et de portabilité (pour les traitements fondés sur le contrat). Ils s\'exercent auprès de '+V(f.emailRgpd)+'. En cas de difficulté, vous pouvez saisir le DPO puis la CNIL (www.cnil.fr).',{}));
    out.push(X.pageBreak());
    out.push(X.h2('Annexe — Clause à insérer au contrat de travail'));
    out.push(X.note('Clause à recopier dans les contrats et avenants.',{label:'Modèle de clause'}));
@@ -1183,12 +1198,13 @@ var DOCS=[
    out.push(X.p('Le sous-traitant traite des données pour le compte du responsable dans le cadre de la prestation décrite en Annexe A. Le présent accord s\'applique pendant toute la durée du contrat principal.',{}));
    out.push(X.h2('Article 3 — Obligations du sous-traitant'));
    out.push(X.li('Traiter les données uniquement sur instruction documentée du responsable, y compris pour les transferts ;'));
-   out.push(X.li('Garantir la confidentialité (personnel autorisé, engagé et sensibilisé) ;'));
+   out.push(X.li('Garantir la confidentialité : personnel autorisé, engagé contractuellement à la confidentialité ou soumis à une obligation légale de confidentialité (art. 28.3.b) ;'));
    out.push(X.li('Mettre en œuvre les mesures de sécurité de l\'Annexe B (art. 32) ;'));
    out.push(X.li('Aider le responsable à répondre aux demandes d\'exercice des droits ;'));
    out.push(X.li('Aider le responsable pour la sécurité, les analyses d\'impact et les notifications (art. 32 à 36) ;'));
-   out.push(X.li('Supprimer ou restituer les données au terme de la prestation et détruire les copies (art. 8) ;'));
-   out.push(X.li('Tenir à disposition la documentation prouvant le respect de ses obligations.'));
+   out.push(X.li('Supprimer ou restituer les données à caractère personnel au terme de la prestation, selon le choix du responsable de traitement, et détruire les copies existantes (art. 28.3.g) ;'));
+   out.push(X.li('Informer immédiatement le responsable s\'il estime qu\'une instruction constitue une violation du RGPD ou d\'autres dispositions relatives à la protection des données (art. 28.3, dernier alinéa) ;'));
+   out.push(X.li('Tenir à disposition la documentation prouvant le respect de ses obligations et permettre les audits (art. 28.3.h).'));
    out.push(X.h2('Article 4 — Notification des violations (délai ferme)'));
    out.push(X.p('Le sous-traitant notifie au responsable toute violation de données constatée sur ses systèmes dans un délai maximum de 48 heures après en avoir pris connaissance, en fournissant tous les éléments utiles (nature, données et personnes concernées, mesures prises), afin de permettre au responsable de respecter son propre délai de 72 heures vis-à-vis de la CNIL.',{}));
    out.push(X.h2('Article 5 — Sous-traitance ultérieure'));
@@ -1231,6 +1247,7 @@ var DOCS=[
    out.push(X.p('Réalisée en application de l\'article 35 du RGPD selon la méthode de la CNIL (référentiel PIA, inspiré d\'EBIOS Risk Manager / ISO 27005). L\'AIPD est une étude de risques juridiques, techniques et organisationnels, obligatoire pour tout traitement susceptible d\'engendrer un risque élevé pour les droits et libertés.',{}));
    out.push(X.h2('1. Quand l\'AIPD est-elle obligatoire ?'));
    out.push(X.p('Notamment : évaluation/notation ou profilage, décision automatisée à effet juridique, surveillance systématique à grande échelle, traitement de données sensibles ou d\'infractions à grande échelle, croisement de données, personnes vulnérables, usage innovant. Se référer à la liste des types de traitements de la CNIL.',{}));
+   out.push(X.p('En pratique, un traitement réunissant au moins deux des neuf critères des lignes directrices du CEPD (WP248 rév. 01) doit en principe faire l\'objet d\'une AIPD : évaluation/scoring, décision automatisée à effet significatif, surveillance systématique, données sensibles ou hautement personnelles, données à grande échelle, croisement de données, personnes vulnérables, usage innovant, exclusion d\'un droit ou d\'un contrat. Listes CNIL : traitements soumis (délibération n° 2018-327 du 11 octobre 2018) ; traitements exemptés (délibération n° 2019-118 du 12 septembre 2019).',{}));
    out.push(X.h2('2. Description systématique du traitement'));
    out.push(X.kv([
      ['Intitulé du traitement','⟨ … ⟩'],
@@ -1268,7 +1285,7 @@ var DOCS=[
    out.push(X.h2('7. Plan d\'action des mesures complémentaires'));
    out.push(X.p('⟨ Lister les mesures restant à mettre en œuvre, avec responsable et échéance, jusqu\'à ramener le risque résiduel à un niveau acceptable. ⟩',{}));
    out.push(X.h2('8. Validation et suivi'));
-   out.push(X.p('Avis du DPO / référent : '+((f.dpoDesigne||has(f.dpoNom))?V(f.dpoNom):'⟨ … ⟩')+'. Décision du responsable : '+V(f.representant)+'. Si un risque élevé résiduel subsiste malgré les mesures, la CNIL est consultée avant la mise en œuvre (art. 36). L\'AIPD est réévaluée à chaque évolution du traitement.',{}));
+   out.push(X.p('Avis du DPO / référent : '+((f.dpoDesigne||has(f.dpoNom))?V(f.dpoNom):'⟨ … ⟩')+'. Décision du responsable : '+V(f.representant)+'. Si un risque élevé résiduel subsiste malgré les mesures, la CNIL est consultée avant la mise en œuvre (art. 36). L\'AIPD est réévaluée à chaque évolution du traitement et, en tout état de cause, réexaminée au moins tous les trois ans (recommandation CNIL).',{}));
    out=out.concat(X.versionTable(f));
    return out;
  }},
@@ -1291,6 +1308,7 @@ var DOCS=[
    ]));
    out.push(X.h2('2. Conditions de la désignation'));
    out.push(X.p('L\'intéressé est désigné sur la base de ses qualités professionnelles et de ses connaissances spécialisées du droit et des pratiques de la protection des données (art. 37.5).',{}));
+   out.push(X.p('Rappel — la désignation d\'un DPO est obligatoire (art. 37.1) lorsque : (a) le traitement est effectué par une autorité ou un organisme public ; (b) les activités de base consistent en un suivi régulier et systématique des personnes à grande échelle ; (c) les activités de base consistent en un traitement à grande échelle de données sensibles (art. 9) ou relatives à des condamnations et infractions (art. 10). En dehors de ces cas, la désignation d\'un référent reste vivement recommandée.',{}));
    out.push(X.h2('3. Notification à la CNIL (art. 37.7)'));
    out.push(X.p('Les coordonnées du '+(estDPO?'DPO':'référent')+' sont'+(estDPO?'':' , en cas de désignation d\'un DPO au sens strict,')+' communiquées à la CNIL via le téléservice de désignation, et publiées (page « données personnelles » du site). La désignation d\'un DPO n\'est pleinement opposable qu\'une fois cette notification effectuée.',{}));
    out.push(X.h2('4. Missions (art. 39 RGPD)'));
@@ -1298,9 +1316,10 @@ var DOCS=[
    out.push(X.li('Contrôler le respect du RGPD et de la politique interne de protection des données ;'));
    out.push(X.li('Conseiller sur les analyses d\'impact (AIPD) et en vérifier l\'exécution ;'));
    out.push(X.li('Coopérer avec la CNIL et faire office de point de contact ;'));
-   out.push(X.li('Tenir à jour le registre des traitements et piloter le plan d\'action de conformité.'));
+   out.push(X.li('Piloter le plan d\'action de conformité et, par délégation opérationnelle, tenir à jour le registre des traitements dont la responsabilité incombe au responsable de traitement (art. 30).'));
    out.push(X.h2('5. Indépendance et moyens'));
    out.push(X.p('L\'intéressé exerce ses missions en toute indépendance, sans recevoir d\'instruction quant à leur exercice, ne peut être relevé ni sanctionné pour cet exercice, rend compte directement au plus haut niveau de la direction, et dispose des moyens humains, techniques et budgétaires ainsi que de l\'accès aux traitements nécessaires.',{}));
+   out.push(X.p('Il est soumis au secret professionnel ou à une obligation de confidentialité dans l\'exécution de ses missions (art. 38.5), et associé, d\'une manière appropriée et en temps utile, à toutes les questions relatives à la protection des données (art. 38.1). La fonction peut être exercée par un prestataire externe sur la base d\'un contrat de service (art. 37.6). Le responsable de traitement demeure seul responsable de la conformité.',{}));
    out.push(X.h2('6. Absence de conflit d\'intérêts (art. 38.6)'));
    out.push(X.p('Le '+(estDPO?'DPO':'référent')+' ne peut occuper, au sein de l\'organisme, une fonction le conduisant à déterminer les finalités et les moyens d\'un traitement — il ne peut donc être « juge et partie ». Sont notamment incompatibles les fonctions de directeur informatique (DSI), de directeur des ressources humaines (DRH), de directeur marketing ou de dirigeant.',{}));
    if(estDPO) out.push(X.note('Étape indispensable : déclarer le DPO à la CNIL via le téléservice de désignation.',{warn:true,label:'À faire'}));
@@ -1320,8 +1339,8 @@ var DOCS=[
    out.push(X.h2('1. Gouvernance de la sécurité'));
    out.push(X.p('Responsable de la sécurité : '+((f.dpoDesigne||has(f.dpoNom))?V(f.dpoNom):V(f.representant))+'. La présente politique est revue au moins une fois par an et après tout incident majeur.',{}));
    out.push(X.h2('2. Politique de mots de passe (règles CNIL)'));
-   out.push(X.li('Longueur minimale de 12 caractères comprenant majuscules, minuscules, chiffres et caractères spéciaux — ou phrase de passe complexe d\'au moins 4 mots ;'));
-   out.push(X.li('Mots de passe personnels, confidentiels, non réutilisés ; stockage haché côté systèmes ;'));
+   out.push(X.li('Longueur minimale de 12 caractères combinant majuscules, minuscules, chiffres et caractères spéciaux, ou phrase de passe d\'au moins 7 mots (~80 bits d\'entropie, recommandation CNIL du 21 juillet 2022) ; une entropie moindre (~50 bits) n\'est admise qu\'avec une mesure complémentaire (blocage/temporisation après plusieurs échecs) ;'));
+   out.push(X.li('Mots de passe personnels, confidentiels, non réutilisés ; jamais stockés en clair mais sous forme de condensat calculé avec une fonction de hachage lente et salée (Argon2, scrypt, bcrypt ou PBKDF2) ;'));
    out.push(X.li('Blocage du compte après plusieurs échecs ; renouvellement en cas de suspicion de compromission.'));
    out.push(X.h2('3. Authentification multifacteur (MFA)'));
    out.push(X.p('L\'authentification multifacteur est généralisée à tous les accès distants et aux services critiques : VPN, messagerie, outils cloud, back-offices et comptes à privilèges.',{}));
@@ -1380,14 +1399,19 @@ var DOCS=[
    [['Sécuriser les données bancaires / sensibles','Haute',V(f.representant),'⟨ IT ⟩','⟨ … ⟩','Chiffrement + MFA activés (oui/non)'],
     ['Mettre en place le bandeau cookies conforme','Moyenne',V(f.representant),'⟨ Web ⟩','⟨ … ⟩','Taux de refus possible en 1 clic'],
     ['Contractualiser les sous-traitants (art. 28)','Haute',V(f.representant),'⟨ Achats ⟩','⟨ … ⟩','% de sous-traitants sous DPA'],
-    ['Sensibiliser le personnel','Moyenne',V(f.representant),'⟨ RH ⟩','⟨ … ⟩','% de salariés formés']
+    ['Sensibiliser le personnel','Moyenne',V(f.representant),'⟨ RH ⟩','⟨ … ⟩','% de salariés formés'],
+    ['Cartographier et classer les systèmes d\'IA (AI Act)','Haute',V(f.representant),'⟨ Référent IA ⟩','⟨ … ⟩','Cartographie IA à jour (oui/non)'],
+    ['Sensibiliser à la littératie IA (art. 4)','Moyenne',V(f.representant),'⟨ RH ⟩','depuis 02/2025','% de salariés sensibilisés IA'],
+    ['Vérifier les systèmes à haut risque (Annexe III)','Haute',V(f.representant),'⟨ Référent IA ⟩','avant le 02/08/2026','Systèmes haut risque conformes (%)']
    ].forEach(function(r){ r2.push(X.row([X.cell(r[0],{b:1}),X.cell(r[1]),X.cell(r[2]),X.cell(r[3]),X.cell(r[4]),X.cell(r[5])])); });
    out.push(X.table(r2,[2100,1150,1450,1450,1300,2090]));
    out.push(X.h2('4. Indicateurs de suivi (KPI)'));
    out.push(X.li('Demandes de droits traitées dans le délai d\'un mois (%) ;'));
    out.push(X.li('Violations notifiées dans les 72 h (%) ;'));
    out.push(X.li('Sous-traitants sous contrat art. 28 (%) ;'));
-   out.push(X.li('Collaborateurs sensibilisés (%).'));
+   out.push(X.li('Collaborateurs sensibilisés (%) ;'));
+   out.push(X.li('Systèmes d\'IA cartographiés et classés (%) ;'));
+   out.push(X.li('Collaborateurs sensibilisés à la littératie IA — art. 4 (%).'));
    out.push(X.h2('5. Registre de preuves'));
    out.push(X.p('Pour chaque action réalisée, conserver la preuve datée (document, capture, contrat, attestation de formation). Ces preuves sont opposables lors d\'un contrôle de la CNIL.',{}));
    out.push(X.h2('6. Gouvernance et revue'));
@@ -1407,9 +1431,10 @@ var DOCS=[
    out.push(X.p('La présente politique encadre l\'utilisation des systèmes d\'intelligence artificielle (IA) — y compris les IA génératives (ChatGPT, Claude, etc.) — au sein de '+V(f.raisonSociale)+', dans le respect du Règlement (UE) 2024/1689 (« AI Act ») et du RGPD.',{}));
    out.push(X.h2('1. Champ d\'application et définitions'));
    out.push(X.p('Elle s\'applique à tout usage d\'un système d\'IA par l\'entreprise ou ses collaborateurs (outils intégrés ou tiers). Un « système d\'IA » est un système automatisé qui génère des prédictions, recommandations, contenus ou décisions.',{}));
+   out.push(X.p('L\'entreprise agit en principe en tant que « déployeur » au sens de l\'article 3 de l\'AI Act ; si elle développe ou met un système d\'IA sur le marché sous sa marque, elle devient « fournisseur » et assume des obligations renforcées.',{}));
    out.push(X.h2('2. Classification des usages selon le risque (AI Act)'));
    var rows=[X.headRow(['Niveau','Exemples','Régime'],[2100,4300,3240])];
-   [['Inacceptable','Notation sociale, manipulation, catégorisation biométrique sensible, reconnaissance des émotions au travail','Interdit'],
+   [['Inacceptable','Notation sociale, manipulation, catégorisation biométrique sensible, reconnaissance des émotions au travail','Interdit (art. 5 AI Act)'],
     ['Haut risque','IA de recrutement (tri de CV), d\'évaluation des salariés, d\'accès à des services essentiels','Obligations renforcées : gestion des risques, documentation, supervision humaine, journalisation'],
     ['Risque limité','Chatbots, IA générative','Obligation de transparence'],
     ['Risque minimal','Usages bureautiques courants','Bonnes pratiques recommandées']
@@ -1421,19 +1446,20 @@ var DOCS=[
    out.push(X.h3('b) Transparence des contenus'));
    out.push(X.p('Tout livrable, texte ou média destiné au public et généré (en tout ou partie) par une IA doit être clairement identifié comme tel (art. 50 AI Act).',{}));
    out.push(X.h3('c) Supervision humaine (human-in-the-loop)'));
-   out.push(X.p('Aucune décision produisant des effets sur une personne (RH — recrutement, évaluation — ou commerciale) ne peut être prise sur le seul résultat d\'une IA : une révision humaine critique est obligatoire (art. 22 RGPD).',{}));
+   out.push(X.p('Aucune décision produisant des effets sur une personne (RH — recrutement, évaluation — ou commerciale) ne peut être prise sur le seul résultat d\'une IA : une révision humaine critique est obligatoire (art. 22 RGPD ; contrôle humain art. 14 AI Act ; obligation de supervision humaine du déployeur, art. 26 §2 AI Act).',{}));
    out.push(X.h2('4. Usages autorisés'));
    var ia=iaList(f);
    if(ia.length){ ia.forEach(function(o){ out.push(X.li(o.outil+(o.usage?' — '+o.usage:'')+(o.risque?' (risque '+o.risque+')':''))); }); }
    else { out.push(X.p('⟨ Listez les outils d\'IA autorisés dans la fiche société pour les faire apparaître ici. ⟩',{i:true})); }
    out.push(X.h2('5. Usages interdits'));
-   out.push(X.li('Toute pratique prohibée par l\'AI Act (catégorie « risque inacceptable ») ;'));
+   out.push(X.li('Toute pratique prohibée par l\'article 5 de l\'AI Act (« risque inacceptable ») ;'));
    out.push(X.li('La saisie de données personnelles ou confidentielles dans un outil d\'IA grand public ;'));
    out.push(X.li('Toute décision automatisée à effet significatif sans supervision humaine.'));
    out.push(X.h2('6. Articulation avec le RGPD'));
    out.push(X.p('Lorsqu\'un système d\'IA traite des données personnelles, le RGPD s\'applique cumulativement : base légale, information, minimisation, et AIPD si risque élevé. Les données traitées via l\'IA suivent la politique de durées de conservation de l\'entreprise.',{}));
+   out.push(X.p('Littératie IA (art. 4 AI Act) : l\'entreprise veille à ce que tout collaborateur utilisant un système d\'IA dispose d\'un niveau suffisant de compréhension de l\'IA (opportunités, risques, usage responsable), au moyen d\'une sensibilisation adaptée à sa fonction.',{}));
    out.push(X.h2('7. Gouvernance et sanctions'));
-   out.push(X.p('Référent IA / protection des données : '+((f.dpoDesigne||has(f.dpoNom))?V(f.dpoNom):V(f.emailRgpd))+'. Tout nouvel usage d\'IA lui est signalé pour évaluation préalable et inscription à la cartographie des systèmes d\'IA. Les manquements à l\'AI Act sont passibles d\'amendes pouvant atteindre 35 M€ ou 7 % du chiffre d\'affaires mondial.',{}));
+   out.push(X.p('Référent IA / protection des données : '+((f.dpoDesigne||has(f.dpoNom))?V(f.dpoNom):V(f.emailRgpd))+'. Tout nouvel usage d\'IA lui est signalé pour évaluation préalable et inscription à la cartographie des systèmes d\'IA. Les manquements à l\'AI Act sont passibles d\'amendes pouvant atteindre 35 M€ ou 7 % du chiffre d\'affaires mondial pour les pratiques interdites (art. 5), et 15 M€ ou 3 % pour les autres manquements.',{}));
    out=out.concat(X.versionTable(f));
    return out;
  }},
@@ -1456,13 +1482,14 @@ var DOCS=[
    out.push(X.h2('2. Détection des « Shadow IA »'));
    out.push(X.p('Une procédure de détection des usages d\'IA non autorisés (outils utilisés par les salariés sans accord de la direction) est mise en place : recensement déclaratif périodique, sensibilisation, revue des outils et, le cas échéant, contrôle proportionné des flux. Tout usage détecté est évalué puis autorisé et inscrit à la cartographie, ou interdit.',{}));
    out.push(X.h2('3. Évaluation des biais et de la discrimination'));
-   out.push(X.p('Lorsqu\'une IA est utilisée pour trier des candidatures, évaluer des performances ou prendre une décision affectant des personnes (usage à haut risque), la cartographie documente les tests réalisés pour détecter et corriger les biais algorithmiques, garantir la non-discrimination et assurer une supervision humaine effective.',{}));
+   out.push(X.p('Lorsqu\'une IA est utilisée pour trier des candidatures, évaluer des performances ou prendre une décision affectant des personnes (usage à haut risque relevant de l\'Annexe III de l\'AI Act, notamment l\'emploi — point 4), la cartographie documente les tests réalisés pour détecter et corriger les biais algorithmiques, garantir la non-discrimination et assurer une supervision humaine effective.',{}));
    out.push(X.h2('4. Souveraineté et transferts hors UE'));
    out.push(X.p('Pour chaque système, la localisation d\'hébergement des modèles et des données est précisée (UE / hors UE). Tout traitement ou transfert hors UE est encadré par des garanties appropriées (décision d\'adéquation ou clauses contractuelles types), conformément au RGPD.',{}));
    out.push(X.h2('5. Rappels de conformité (AI Act)'));
    out.push(X.li('Risque limité (chatbots, IA générative) : obligation de transparence ;'));
    out.push(X.li('Haut risque : gestion des risques, documentation, supervision humaine, journalisation ;'));
-   out.push(X.li('Risque inacceptable : interdit ;'));
+   out.push(X.li('Risque inacceptable : interdit (art. 5) ;'));
+   out.push(X.li('Déployeur d\'un système à haut risque (art. 26) : supervision humaine, surveillance du fonctionnement, conservation des journaux, information des travailleurs concernés (art. 26 §7) et, le cas échéant, analyse d\'impact sur les droits fondamentaux (art. 27) ;'));
    out.push(X.li('Traitement de données personnelles : application cumulative du RGPD.'));
    out.push(X.note('Calendrier AI Act : interdictions et littératie IA depuis février 2025 ; IA à usage général depuis août 2025 ; systèmes à haut risque à compter du 2 août 2026.'));
    out=out.concat(X.versionTable(f));
@@ -1492,7 +1519,7 @@ var DOCS=[
    out.push(X.p('Définition d\'un système d\'IA au sens de l\'AI Act, exemples concrets d\'outils utilisés dans l\'entreprise, distinction entre IA générative et IA d\'analyse/décision, notions de données d\'entraînement et de limites (erreurs, « hallucinations »).',{}));
    out.push(X.h3('Module 2 — Les niveaux de risque et les pratiques interdites'));
    var rr=[X.headRow(['Niveau de risque','Exemples','Règle'],[2600,4040,3000])];
-   rr.push(X.row([X.cell('Inacceptable',{b:1,shade:X.C.soft2}),X.cell('Notation sociale, manipulation, catégorisation biométrique sensible'),X.cell('Interdit')]));
+   rr.push(X.row([X.cell('Inacceptable',{b:1,shade:X.C.soft2}),X.cell('Notation sociale, manipulation, catégorisation biométrique sensible'),X.cell('Interdit (art. 5)')]));
    rr.push(X.row([X.cell('Haut risque',{b:1,shade:X.C.soft2}),X.cell('Tri de CV, évaluation, scoring affectant des personnes'),X.cell('Encadré : supervision humaine, documentation')]));
    rr.push(X.row([X.cell('Limité',{b:1,shade:X.C.soft2}),X.cell('Chatbots, IA générative'),X.cell('Transparence obligatoire')]));
    rr.push(X.row([X.cell('Minimal',{b:1,shade:X.C.soft2}),X.cell('Correcteur, filtres, suggestions simples'),X.cell('Usage libre, bonnes pratiques')]));
@@ -1552,19 +1579,22 @@ var DOCS=[
     ['Sous-traitants sous contrat (art. 28)','100 %','⟨ … ⟩'],
     ['Demandes de droits traitées dans le délai d\'un mois','100 %','⟨ … ⟩'],
     ['Violations notifiées à la CNIL sous 72 h','100 %','⟨ … ⟩'],
-    ['Violations de données subies sur l\'année','0','⟨ … ⟩']
+    ['Violations de données subies sur l\'année','0','⟨ … ⟩'],
+    ['Systèmes d\'IA recensés et classés','100 %','⟨ … ⟩'],
+    ['Collaborateurs sensibilisés à la littératie IA (art. 4)','≥ 95 %','⟨ … ⟩'],
+    ['Systèmes à haut risque avec supervision humaine documentée','100 %','⟨ … ⟩']
    ].forEach(function(r){ kpi.push(X.row([X.cell(r[0],{b:1}),X.cell(r[1]),X.cell(r[2])])); });
    out.push(X.table(kpi,[5000,2320,2320]));
    out.push(X.h2('3. Documentation en place'));
    var rows=[X.headRow(['Document','Référence','Statut'],[5000,2600,2040])];
-   [['Registre des activités de traitement','Art. 30'],['Politique de confidentialité','Art. 13-14'],['Mentions légales','LCEN'],['Procédure droits + registre','Art. 12-22'],['Procédure violations + registre','Art. 33-34'],['Politique de conservation','Art. 5.1.e'],['Politique cookies','Art. 82 LIL'],['Charte informatique','Art. 32'],['Information des salariés','Art. 13'],['Contrats de sous-traitance','Art. 28'],['Politique de sécurité (PSSI)','Art. 32'],['Plan d\'action / accountability','Art. 5.2'],['Politique & cartographie IA','AI Act']].forEach(function(r){ rows.push(X.row([X.cell(r[0],{b:1}),X.cell(r[1]),X.cell('⟨ en place / à faire ⟩')])); });
+   [['Registre des activités de traitement','Art. 30'],['Politique de confidentialité','Art. 13-14'],['Mentions légales','LCEN'],['Procédure droits + registre','Art. 12-22'],['Procédure violations + registre','Art. 33-34'],['Politique de conservation','Art. 5.1.e'],['Politique cookies','Art. 82 LIL'],['Charte informatique','Art. 32'],['Information des salariés','Art. 13'],['Contrats de sous-traitance','Art. 28'],['Politique de sécurité (PSSI)','Art. 32'],['Plan d\'action / accountability','Art. 5.2'],['Politique & cartographie IA','AI Act'],['Sensibilisation littératie IA','AI Act art. 4']].forEach(function(r){ rows.push(X.row([X.cell(r[0],{b:1}),X.cell(r[1]),X.cell('⟨ en place / à faire ⟩')])); });
    out.push(X.table(rows,[5000,2600,2040]));
    out.push(X.h2('4. Gouvernance de l\'IA (AI Act)'));
    out.push(X.p('Les systèmes d\'IA sont recensés et classés par niveau de risque (voir cartographie IA). Une politique d\'usage encadre les collaborateurs. Cette synthèse reflète les risques réels de l\'entreprise et est mise à jour à mesure qu\'ils évoluent.',{}));
    out.push(X.h2('5. Engagement'));
    out.push(X.p(V(f.raisonSociale)+' s\'engage dans une démarche de conformité continue au RGPD et à l\'AI Act, et met à jour sa documentation à chaque évolution significative de ses activités, de ses outils ou de la réglementation.',{}));
    out.push(X.h2('6. Calendrier de réévaluation'));
-   out.push(X.p('La gouvernance dans son ensemble (registre, politiques, sécurité, cartographie IA) fait l\'objet d\'une révision obligatoire au minimum une fois par an. Dernière synthèse établie le '+today()+' — prochaine revue prévue : ⟨ date à + 12 mois ⟩.',{b:true}));
+   out.push(X.p('La gouvernance dans son ensemble (registre, politiques, sécurité, cartographie IA) fait l\'objet d\'une révision obligatoire au minimum une fois par an. Dernière synthèse établie le '+today()+' — prochaine revue prévue : ⟨ date à + 12 mois ⟩. Échéances AI Act : pratiques interdites (art. 5) et littératie (art. 4) applicables depuis le 2 février 2025 ; obligations des systèmes à haut risque (Annexe III) à compter du 2 août 2026.',{b:true}));
    out=out.concat(X.signature(f,'Le référent conformité'));
    return out;
  }}
