@@ -310,6 +310,7 @@
     <div class="hero-cta">
       <a class="btn btn-primary btn-lg" href="le-controle.html">Tester ma conformité (3 min)</a>
       <a class="btn btn-light btn-lg" href="#offre">Découvrir l'offre</a>
+      <button class="btn btn-light btn-lg" id="installBtn" style="display:none" onclick="installApp()">⬇️ Installer l'application</button>
     </div>
     <div class="trustbar">
       <div><span class="ic">⚖️</span> Conforme RGPD &amp; Règlement IA</div>
@@ -573,7 +574,7 @@
   </div>
 </section>
 
-<div style="position:fixed;bottom:8px;right:10px;z-index:9999;font:700 10px/1 system-ui,sans-serif;color:#7a7f95;background:rgba(255,255,255,.82);border:1px solid #e7e9f3;padding:4px 8px;border-radius:8px;pointer-events:none">Clarté · MàJ 07/07 · b35</div>
+<div style="position:fixed;bottom:8px;right:10px;z-index:9999;font:700 10px/1 system-ui,sans-serif;color:#7a7f95;background:rgba(255,255,255,.82);border:1px solid #e7e9f3;padding:4px 8px;border-radius:8px;pointer-events:none">Clarté · MàJ 07/07 · b36</div>
 
 <!-- FOOTER -->
 <footer>
@@ -672,6 +673,22 @@
     g('cOk').style.display='block';
     return false;
   };
+
+  // Installation de l'application (PWA)
+  var deferredPrompt=null;
+  window.addEventListener('beforeinstallprompt', function(e){
+    e.preventDefault(); deferredPrompt=e;
+    var b=document.getElementById('installBtn'); if(b) b.style.display='inline-flex';
+  });
+  window.installApp=function(){
+    if(deferredPrompt){
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then(function(){ deferredPrompt=null; var b=document.getElementById('installBtn'); if(b) b.style.display='none'; });
+    } else {
+      alert("Pour installer l'application : cliquez sur l'icône d'installation dans la barre d'adresse de votre navigateur (Chrome ou Edge), à droite de l'adresse du site. Sur iPhone/Safari : Partager → « Sur l'écran d'accueil ».");
+    }
+  };
+  window.addEventListener('appinstalled', function(){ var b=document.getElementById('installBtn'); if(b) b.style.display='none'; });
 </script>
 </body>
 </html>
