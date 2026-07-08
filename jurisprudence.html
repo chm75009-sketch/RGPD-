@@ -208,7 +208,7 @@
   <b style="color:#fff">Clarté</b> · RTH NETGOCE — Conformité RGPD &amp; AI Act · <a href="index.html">Accueil</a> · <a href="le-controle.html">Le Contrôle</a> · <a href="documents.html">Espace client</a> · <a href="mentions.html">Mentions légales</a>
 </div></footer>
 
-<div class="badge">Clarté · MàJ 08/07 · b49</div>
+<div class="badge">Clarté · MàJ 08/07 · b50</div>
 
 <script>
 var TICKER=[
@@ -225,5 +225,17 @@ var TICKER=[
 ];
 (function(){ var t=document.getElementById('tickerTrack'); if(!t) return; var h=TICKER.map(function(s){return '<span class="ticker-item">'+s+'</span>';}).join(''); t.innerHTML=h+h; })();
 </script>
+<!-- Bandeau d'information vie privée — site sans aucun traceur (privacy-by-design) -->
+<div id="privacyBar" style="display:none;position:fixed;left:12px;right:12px;bottom:12px;z-index:9998;max-width:720px;margin:0 auto;background:#0c1024;color:#fff;border:1px solid rgba(255,255,255,.16);border-radius:14px;box-shadow:0 18px 50px rgba(0,0,0,.38);padding:15px 18px;font:400 13.5px/1.6 system-ui,-apple-system,sans-serif">
+  <div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap;justify-content:space-between">
+    <span style="flex:1;min-width:230px">🔒 Ce site <b>ne dépose aucun cookie publicitaire ni de mesure d'audience</b> et n'utilise aucun traceur tiers. Seul un stockage technique, dans votre navigateur, assure son fonctionnement. <a href="politique-confidentialite.html" style="color:#a5b4fc;font-weight:700">En savoir plus</a>.</span>
+    <button onclick="acceptPrivacy()" style="flex:none;background:linear-gradient(135deg,#4f46e5,#7c69f5);color:#fff;border:none;border-radius:10px;padding:10px 18px;font:700 13.5px system-ui;cursor:pointer">J'ai compris</button>
+  </div>
+</div>
+<script>
+(function(){var ok;try{ok=localStorage.getItem('clarte_privacy_ok');}catch(e){}if(!ok){var b=document.getElementById('privacyBar');if(b)b.style.display='block';}})();
+window.acceptPrivacy=function(){try{localStorage.setItem('clarte_privacy_ok','1');}catch(e){}var b=document.getElementById('privacyBar');if(b)b.style.display='none';};
+</script>
+
 </body>
 </html>

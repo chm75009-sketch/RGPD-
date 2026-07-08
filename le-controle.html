@@ -48,14 +48,10 @@
 <link rel="stylesheet" href="fonts/fonts.css">
 <!-- Librairie docx (génération du registre offert, côté navigateur) -->
 <script>
-(function(){var cdns=['https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.min.js','https://cdnjs.cloudflare.com/ajax/libs/docx/8.5.0/docx.umd.min.js','https://unpkg.com/docx@8.5.0/build/index.umd.js'];var i=0;function load(){if(i>=cdns.length){window._docxFailed=true;return;}var s=document.createElement('script');s.src=cdns[i++];s.onload=function(){if(!(window.docx&&window.docx.Document))load();};s.onerror=load;document.head.appendChild(s);}load();})();
+/* Librairie chargée en local (même origine) — aucun appel à un tiers.
+   Les CDN ne servent que de secours ultime si le fichier local était indisponible. */
+(function(){var cdns=['docx.umd.js','https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.min.js','https://cdnjs.cloudflare.com/ajax/libs/docx/8.5.0/docx.umd.min.js'];var i=0;function load(){if(i>=cdns.length){window._docxFailed=true;return;}var s=document.createElement('script');s.src=cdns[i++];s.onload=function(){if(!(window.docx&&window.docx.Document))load();};s.onerror=load;document.head.appendChild(s);}load();})();
 </script>
-<!-- EmailJS désactivé pour l'instant. Pour l'activer : décommenter les 2 lignes
-     ci-dessous, renseigner le publicKey du compte EmailJS Clarté, et passer
-     EMAILJS_READY à true dans le script en bas de page.
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-<script>(function(){ try{ if(window.emailjs) emailjs.init({publicKey:'VOTRE_PUBLIC_KEY'}); }catch(e){} })();</script>
--->
 
 <style>
   :root{
@@ -285,10 +281,14 @@
       <div class="fld"><label for="phone-signup">Téléphone</label><input id="phone-signup" type="tel" autocomplete="tel" placeholder="06 …"></div>
       <div class="fld full"><label for="email-signup">Email professionnel</label><input id="email-signup" type="email" autocomplete="email" placeholder="vous@entreprise.fr"></div>
     </div>
+    <label for="consent-rgpd" style="display:flex;gap:10px;align-items:flex-start;margin:4px 0 12px;cursor:pointer;text-align:left">
+      <input type="checkbox" id="consent-rgpd" style="margin-top:3px;width:18px;height:18px;flex:none;accent-color:var(--blue)">
+      <span style="font-size:12.5px;color:var(--faint);line-height:1.5">J'accepte que mes données soient traitées par RTH NETGOCE afin d'établir mon pré-diagnostic et de me recontacter à ce sujet.</span>
+    </label>
     <div class="err" id="signup-error"></div>
     <button class="cta" id="show-score-btn" style="width:100%;justify-content:center">Afficher mon résultat →</button>
     <div style="text-align:center;margin-top:14px"><button class="backbtn" onclick="backToQuiz()">← Retour aux questions</button></div>
-    <p class="privnote">🔐 Vos informations servent à établir votre pré-diagnostic et à vous recontacter. Elles ne sont ni vendues ni cédées. Voir la <a href="politique-confidentialite.html">politique de confidentialité</a>.</p>
+    <p class="privnote">🔐 <b>Finalité :</b> établir votre pré-diagnostic et vous recontacter. <b>Base légale :</b> votre consentement (retirable à tout moment). Vos données ne sont ni vendues, ni cédées, ni utilisées à des fins publicitaires ; elles restent dans votre navigateur et ne sont transmises que si vous nous contactez. <b>Vos droits</b> (accès, rectification, effacement…) : <a href="mailto:r.t.h@orange.fr">r.t.h@orange.fr</a>. Détails : <a href="politique-confidentialite.html">politique de confidentialité</a>.</p>
   </div>
 </section>
 
@@ -437,7 +437,7 @@
   </div>
 </section>
 
-<div style="position:fixed;bottom:8px;right:10px;z-index:9999;font:700 10px/1 system-ui,sans-serif;color:#7a7f95;background:rgba(255,255,255,.82);border:1px solid #d8d1bf;padding:4px 8px;border-radius:8px;pointer-events:none">Clarté · MàJ 08/07 · b49</div>
+<div style="position:fixed;bottom:8px;right:10px;z-index:9999;font:700 10px/1 system-ui,sans-serif;color:#7a7f95;background:rgba(255,255,255,.82);border:1px solid #d8d1bf;padding:4px 8px;border-radius:8px;pointer-events:none">Clarté · MàJ 08/07 · b50</div>
 
 <footer>
   <div class="wrap">
@@ -608,6 +608,10 @@ function submitSignup(){
   }
   if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em.value.trim())){
     err.textContent='Merci d\'indiquer un email valide.'; err.style.display='block'; return;
+  }
+  var cons=$('consent-rgpd');
+  if(!cons||!cons.checked){
+    err.textContent='Merci de cocher la case de consentement pour recevoir votre pré-diagnostic.'; err.style.display='block'; return;
   }
   code=String(Math.floor(100000+Math.random()*900000));
   var btn=$('show-score-btn'); btn.disabled=true; btn.textContent='Envoi en cours…';
@@ -1884,6 +1888,18 @@ function downloadPrediag(){ var msg=document.getElementById('pdMsg'); if(msg){ m
       .catch(function(e){ if(msg){ msg.textContent='Erreur : '+e.message; msg.style.color='#c0392b'; } });
   }catch(e){ if(msg){ msg.textContent='Erreur : '+e.message; msg.style.color='#c0392b'; } } });
 }
+</script>
+
+<!-- Bandeau d'information vie privée — site sans aucun traceur (privacy-by-design) -->
+<div id="privacyBar" style="display:none;position:fixed;left:12px;right:12px;bottom:12px;z-index:9998;max-width:720px;margin:0 auto;background:#0c1024;color:#fff;border:1px solid rgba(255,255,255,.16);border-radius:14px;box-shadow:0 18px 50px rgba(0,0,0,.38);padding:15px 18px;font:400 13.5px/1.6 system-ui,-apple-system,sans-serif">
+  <div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap;justify-content:space-between">
+    <span style="flex:1;min-width:230px">🔒 Ce site <b>ne dépose aucun cookie publicitaire ni de mesure d'audience</b> et n'utilise aucun traceur tiers. Seul un stockage technique, dans votre navigateur, assure son fonctionnement. <a href="politique-confidentialite.html" style="color:#a5b4fc;font-weight:700">En savoir plus</a>.</span>
+    <button onclick="acceptPrivacy()" style="flex:none;background:linear-gradient(135deg,#4f46e5,#7c69f5);color:#fff;border:none;border-radius:10px;padding:10px 18px;font:700 13.5px system-ui;cursor:pointer">J'ai compris</button>
+  </div>
+</div>
+<script>
+(function(){var ok;try{ok=localStorage.getItem('clarte_privacy_ok');}catch(e){}if(!ok){var b=document.getElementById('privacyBar');if(b)b.style.display='block';}})();
+window.acceptPrivacy=function(){try{localStorage.setItem('clarte_privacy_ok','1');}catch(e){}var b=document.getElementById('privacyBar');if(b)b.style.display='none';};
 </script>
 
 </body>
