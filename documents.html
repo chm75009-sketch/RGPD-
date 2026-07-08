@@ -302,7 +302,7 @@
 </div></footer>
 
 <div class="toast" id="toast"></div>
-<div style="position:fixed;bottom:8px;right:10px;z-index:9999;font:700 10px/1 system-ui,sans-serif;color:#7a7f95;background:rgba(255,255,255,.82);border:1px solid #e7e9f3;padding:4px 8px;border-radius:8px;pointer-events:none">Clarté · MàJ 08/07 · b47</div>
+<div style="position:fixed;bottom:8px;right:10px;z-index:9999;font:700 10px/1 system-ui,sans-serif;color:#7a7f95;background:rgba(255,255,255,.82);border:1px solid #e7e9f3;padding:4px 8px;border-radius:8px;pointer-events:none">Clarté · MàJ 08/07 · b48</div>
 
 <script>
 /* ================= FICHE SOCIÉTÉ (localStorage) ================= */
@@ -1438,7 +1438,66 @@ var DOCS=[
    return out;
  }},
 
-/* 17. SYNTHÈSE */
+/* 17b. FORMATION / LITTÉRATIE IA */
+{id:'formationIA',cat:'ia',icon:'🎓',title:'Support de sensibilisation — Littératie IA (art. 4 AI Act)',
+ desc:'Trame de formation et de sensibilisation des équipes à un usage responsable de l\'IA, avec quiz, émargement et attestation de suivi.',
+ need:'ⓘ À dérouler en session collective ; conservez l\'émargement comme preuve.',
+ file:'Formation_litteratie_IA_{soc}',
+ body:function(X,f){
+   var out=[];
+   out.push(X.h1('Support de sensibilisation à la littératie en intelligence artificielle'));
+   out.push(X.p('L\'article 4 du règlement (UE) 2024/1689 (« AI Act »), applicable depuis le 2 février 2025, impose à toute organisation qui déploie ou utilise des systèmes d\'IA de veiller à un niveau suffisant de « littératie IA » de ses personnels : comprendre ce qu\'est l\'IA, ses opportunités, ses risques et les règles d\'un usage responsable. Le présent support sert de trame à la sensibilisation des équipes de '+V(f.raisonSociale)+' et de preuve du respect de cette obligation.',{}));
+   out.push(X.note('La littératie IA n\'est pas une certification technique : elle vise à ce que chaque utilisateur sache utiliser l\'IA à bon escient, en connaître les limites et respecter le cadre légal et les règles internes.'));
+   out.push(X.h2('1. Objectifs pédagogiques'));
+   out.push(X.li('Comprendre ce qu\'est un système d\'IA et distinguer ses principaux usages (génération de texte, analyse, aide à la décision) ;'));
+   out.push(X.li('Identifier les niveaux de risque de l\'AI Act et les pratiques interdites ;'));
+   out.push(X.li('Connaître les obligations de transparence (contenus générés, chatbots) ;'));
+   out.push(X.li('Protéger les données personnelles et confidentielles lors de l\'usage d\'outils d\'IA ;'));
+   out.push(X.li('Adopter les bons réflexes : vérification, esprit critique, supervision humaine, signalement.'));
+   out.push(X.h2('2. Public concerné'));
+   out.push(X.p('L\'ensemble des collaborateurs susceptibles d\'utiliser un outil d\'IA dans le cadre professionnel (direction, administratif, commercial, RH, support, etc.), y compris les nouveaux arrivants dès leur prise de poste.',{}));
+   out.push(X.h2('3. Programme de la sensibilisation'));
+   out.push(X.h3('Module 1 — Qu\'est-ce que l\'IA ?'));
+   out.push(X.p('Définition d\'un système d\'IA au sens de l\'AI Act, exemples concrets d\'outils utilisés dans l\'entreprise, distinction entre IA générative et IA d\'analyse/décision, notions de données d\'entraînement et de limites (erreurs, « hallucinations »).',{}));
+   out.push(X.h3('Module 2 — Les niveaux de risque et les pratiques interdites'));
+   var rr=[X.headRow(['Niveau de risque','Exemples','Règle'],[2600,4040,3000])];
+   rr.push(X.row([X.cell('Inacceptable',{b:1,shade:X.C.soft2}),X.cell('Notation sociale, manipulation, catégorisation biométrique sensible'),X.cell('Interdit')]));
+   rr.push(X.row([X.cell('Haut risque',{b:1,shade:X.C.soft2}),X.cell('Tri de CV, évaluation, scoring affectant des personnes'),X.cell('Encadré : supervision humaine, documentation')]));
+   rr.push(X.row([X.cell('Limité',{b:1,shade:X.C.soft2}),X.cell('Chatbots, IA générative'),X.cell('Transparence obligatoire')]));
+   rr.push(X.row([X.cell('Minimal',{b:1,shade:X.C.soft2}),X.cell('Correcteur, filtres, suggestions simples'),X.cell('Usage libre, bonnes pratiques')]));
+   out.push(X.table(rr,[2600,4040,3000]));
+   out.push(X.h3('Module 3 — Transparence'));
+   out.push(X.p('Informer les personnes lorsqu\'elles interagissent avec un système d\'IA (ex. chatbot) et signaler les contenus générés ou manipulés par IA, conformément à l\'article 50 de l\'AI Act.',{}));
+   out.push(X.h3('Module 4 — IA et données personnelles / confidentialité'));
+   out.push(X.p('Ne jamais saisir de données personnelles, de secrets d\'affaires ou d\'informations confidentielles dans un outil d\'IA public : les données saisies peuvent être conservées, réutilisées, voire servir à entraîner le modèle (risque de fuite de données). Privilégier les outils validés par l\'entreprise. Le RGPD s\'applique pleinement à tout traitement de données personnelles par l\'IA.',{}));
+   out.push(X.h3('Module 5 — Bonnes pratiques d\'usage'));
+   out.push(X.li('Vérifier systématiquement les résultats produits par l\'IA (exactitude, sources) ;'));
+   out.push(X.li('Garder un esprit critique : l\'IA peut se tromper avec assurance ;'));
+   out.push(X.li('Maintenir une supervision humaine sur toute décision affectant une personne ;'));
+   out.push(X.li('Se méfier des biais et des discriminations possibles ;'));
+   out.push(X.li('Signaler tout usage douteux ou tout outil non autorisé (« Shadow IA ») au référent.'));
+   out.push(X.note('Les règles internes détaillées figurent dans la Politique d\'usage de l\'IA de l\'entreprise, à laquelle ce support renvoie.'));
+   out.push(X.h2('4. Modalités'));
+   out.push(X.kv([['Durée indicative','1 h à 2 h par session'],['Format','Présentiel ou visioconférence, en groupe'],['Fréquence','À l\'arrivée de chaque collaborateur, puis réévaluation annuelle'],['Animation',V(f.representant)+' ou le référent conformité / IA'],['Preuve conservée','Feuille d\'émargement + quiz']]));
+   out.push(X.h2('5. Quiz de validation des acquis'));
+   out.push(X.li('Peut-on saisir des données clients dans un outil d\'IA public ? (réponse attendue : non)'));
+   out.push(X.li('Citez un exemple de pratique d\'IA interdite par l\'AI Act.'));
+   out.push(X.li('Que faire avant d\'utiliser un résultat produit par une IA ? (le vérifier)'));
+   out.push(X.li('Doit-on informer un interlocuteur qu\'il échange avec un chatbot ? (oui)'));
+   out.push(X.li('À qui signaler un outil d\'IA utilisé sans autorisation ?'));
+   out.push(X.h2('6. Feuille d\'émargement'));
+   var em=[X.headRow(['Nom et prénom','Fonction','Date','Signature'],[3000,2640,1600,2400])];
+   var k; for(k=0;k<6;k++){ em.push(X.row([X.cell('⟨ … ⟩'),X.cell('⟨ … ⟩'),X.cell('⟨ … ⟩'),X.cell(' ')])); }
+   out.push(X.table(em,[3000,2640,1600,2400]));
+   out.push(X.h2('7. Attestation de suivi de la sensibilisation'));
+   out.push(X.p('Je soussigné(e) ⟨ nom du participant ⟩ atteste avoir suivi la sensibilisation à la littératie IA dispensée par '+V(f.raisonSociale)+' le ⟨ date ⟩, et avoir pris connaissance des règles d\'un usage responsable de l\'intelligence artificielle.',{}));
+   out.push(X.p('Fait à ⟨ lieu ⟩, le ⟨ date ⟩ — Signature du participant :',{}));
+   out.push(X.note('Cette attestation porte sur le suivi d\'une formation (présence et information), et non sur une certification de conformité. Elle constitue la preuve, exigée par l\'AI Act (art. 4), que l\'entreprise a sensibilisé ses équipes.'));
+   out=out.concat(X.versionTable(f));
+   return out;
+ }},
+
+/* 18. SYNTHÈSE */
 {id:'synthese',cat:'gv',icon:'📋',title:'Synthèse de conformité',
  desc:'Récapitulatif de la démarche RGPD & AI Act, à présenter en cas de contrôle ou à un partenaire.',
  need:'ⓘ À dater et faire évoluer avec votre conformité.',
