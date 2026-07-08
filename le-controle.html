@@ -44,7 +44,7 @@
 })();
 </script>
 <title>Le Contrôle — Auto-diagnostic RGPD & AI Act | RTH NETGOCE</title>
-<meta name="description" content="Auto-évaluez la conformité RGPD & AI Act de votre entreprise en 15 points (données, IA, gouvernance). Score, niveau de risque et pré-diagnostic par email. Par RTH NETGOCE.">
+<meta name="description" content="Auto-évaluez la conformité RGPD & AI Act de votre entreprise en 15 points (données, IA, gouvernance). Score, niveau de risque et pré-diagnostic à télécharger. Par RTH NETGOCE.">
 <link rel="stylesheet" href="fonts/fonts.css">
 <!-- Librairie docx (génération du registre offert, côté navigateur) -->
 <script>
@@ -237,7 +237,7 @@
         <button class="cta" onclick="startQuiz()">Passer le contrôle →</button>
       </div>
     </div>
-    <div class="reassure">🕒 Moins de 5 minutes · 16 points · <b>score et pré-diagnostic envoyés par email</b> · 🎁 <b>registre des traitements offert</b> à la fin.</div>
+    <div class="reassure">🕒 Moins de 5 minutes · 16 points · <b>score et pré-diagnostic à télécharger</b> · 🎁 <b>registre des traitements offert</b> à la fin.</div>
   </div>
 </section>
 
@@ -264,7 +264,7 @@
 <section id="signup">
   <div class="card">
     <h2 class="formtitle">Votre contrôle est terminé.</h2>
-    <p class="formsub">Pour recevoir votre <b>score</b>, votre <b>détail par famille</b> et vos <b>points sensibles</b>, indiquez où l'envoyer. Un code de validation vous sera adressé.</p>
+    <p class="formsub">Renseignez vos coordonnées pour afficher votre <b>score</b>, votre <b>détail par famille</b> et vos <b>points sensibles</b> — puis <b>télécharger votre pré-diagnostic</b> et votre <b>registre offert</b>.</p>
     <div class="formgrid">
       <div class="fld full"><label for="business">Entreprise</label><input id="business" type="text" autocomplete="organization" placeholder="Nom de votre entreprise"></div>
       <div class="fld"><label for="activity">Secteur d'activité</label>
@@ -287,7 +287,7 @@
       <div class="fld full"><label for="email-signup">Email professionnel</label><input id="email-signup" type="email" autocomplete="email" placeholder="vous@entreprise.fr"></div>
     </div>
     <div class="err" id="signup-error"></div>
-    <button class="cta" id="show-score-btn" style="width:100%;justify-content:center">Recevoir mon score →</button>
+    <button class="cta" id="show-score-btn" style="width:100%;justify-content:center">Afficher mon résultat →</button>
     <div style="text-align:center;margin-top:14px"><button class="backbtn" onclick="backToQuiz()">← Retour aux questions</button></div>
     <p class="privnote">🔐 Vos informations servent à établir votre pré-diagnostic et à vous recontacter. Elles ne sont ni vendues ni cédées. Voir la <a href="politique-confidentialite.html">politique de confidentialité</a>.</p>
   </div>
@@ -330,6 +330,13 @@
       <div class="holes">
         <h3>Vos points sensibles</h3>
         <div id="holes"></div>
+      </div>
+      <div class="dlbox" style="margin:18px 0 6px;padding:16px 18px;border:1.5px solid var(--line);border-radius:12px;background:#fbfbff;text-align:center">
+        <div style="font-size:26px;line-height:1">📄</div>
+        <div style="font-weight:800;font-size:16px;margin:6px 0 2px">Votre pré-diagnostic complet</div>
+        <div style="font-size:13.5px;color:var(--faint);margin-bottom:14px">Score, détail par famille, points sensibles, exposition estimée et recommandation — document Word (.docx) à conserver et à présenter.</div>
+        <button class="cta" onclick="downloadPrediag()" style="width:100%;justify-content:center">⬇ Télécharger mon pré-diagnostic</button>
+        <div id="pdMsg" style="font-size:13px;font-weight:700;margin-top:10px;min-height:16px"></div>
       </div>
       <div class="giftbox" style="margin:18px 0 6px;padding:18px 18px 20px;border:1.6px dashed var(--gold);border-radius:12px;background:#fffdf3;text-align:center">
         <div style="font-size:30px;line-height:1">🎁</div>
@@ -432,7 +439,7 @@
   </div>
 </section>
 
-<div style="position:fixed;bottom:8px;right:10px;z-index:9999;font:700 10px/1 system-ui,sans-serif;color:#7a7f95;background:rgba(255,255,255,.82);border:1px solid #d8d1bf;padding:4px 8px;border-radius:8px;pointer-events:none">Clarté · MàJ 08/07 · b38</div>
+<div style="position:fixed;bottom:8px;right:10px;z-index:9999;font:700 10px/1 system-ui,sans-serif;color:#7a7f95;background:rgba(255,255,255,.82);border:1px solid #d8d1bf;padding:4px 8px;border-radius:8px;pointer-events:none">Clarté · MàJ 08/07 · b39</div>
 
 <footer>
   <div class="wrap">
@@ -536,6 +543,7 @@ var CATS=['RGPD','AI Act','Gouvernance'];
 var CATMETA={'RGPD':{cls:'rg',emo:'🔐'},'AI Act':{cls:'ia',emo:'🤖'},'Gouvernance':{cls:'gv',emo:'🏛️'},'RISQUE':{cls:'rq',emo:'⚖️'}};
 
 var idx=0, score=0, failed=[], catScore={}, code="", answerLog=[];
+var VD={};
 function $(id){ return document.getElementById(id); }
 function show(id){ ['hero','quiz','signup','validation','verdict'].forEach(function(s){ var el=$(s); if(el) el.classList.toggle('on', s===id); }); if(id==='hero'){var h=$('hero'); if(h) h.style.display='block';} }
 
@@ -612,9 +620,9 @@ function submitSignup(){
       score:score, fromQuiz:true
     }));
   }catch(e){}
-  if(!EMAILJS_READY){ btn.disabled=false; btn.textContent='Recevoir mon score →'; showResults(); return; }
+  if(!EMAILJS_READY){ btn.disabled=false; btn.textContent='Afficher mon résultat →'; showResults(); return; }
   function goValidation(){
-    btn.disabled=false; btn.textContent='Recevoir mon score →';
+    btn.disabled=false; btn.textContent='Afficher mon résultat →';
     show('validation');
     var vm=$('validation-msg');
     if(vm) vm.innerHTML='Un code de validation vient d\'être envoyé à <b>'+em.value.trim().replace(/[&<>"]/g,function(c){return '&#'+c.charCodeAt(0)+';';})+'</b>. Saisissez-le ci-dessous.';
@@ -668,6 +676,7 @@ function showResults(){
   }
   head.style.background=color;
   head.querySelector('.vst').textContent=st;
+  VD={score:score,max:max,pct:pct,niveau:st,titre:t,sub:sub,expo:amt,reco:reco};
   $('vscore').innerHTML=score+' <span>/ '+max+'</span> · '+pct+'%';
   $('vtitle').textContent=t;
   $('vsub').textContent=sub;
@@ -1832,6 +1841,48 @@ function downloadRegistre(){ var msg=document.getElementById('giftMsg'); if(msg)
   ensureDocx(function(){ try{ var f=giftFiche(); if(!f.raisonSociale) f.raisonSociale='Mon entreprise'; var reg=null; for(var i=0;i<DOCS.length;i++){ if(DOCS[i].id==='registre'){ reg=DOCS[i]; break; } }
     var doc=giftBuildDoc(reg.title,reg.body,f);
     window.docx.Packer.toBlob(doc).then(function(blob){ downloadBlob(blob,'Registre_traitements_'+(f.raisonSociale||'entreprise').replace(/[^\w-]+/g,'_')+'.docx'); if(msg){ msg.textContent='✅ Registre téléchargé — ouvrez-le dans Word.'; msg.style.color='var(--green)'; } })
+      .catch(function(e){ if(msg){ msg.textContent='Erreur : '+e.message; msg.style.color='#c0392b'; } });
+  }catch(e){ if(msg){ msg.textContent='Erreur : '+e.message; msg.style.color='#c0392b'; } } });
+}
+function prediagBody(X,f){
+  var out=[];
+  var d=today();
+  out.push(X.p('Ce pré-diagnostic restitue le résultat de votre auto-évaluation « Le Contrôle » (16 points — RGPD & AI Act), réalisée le '+d+'. Il situe votre niveau de maturité, met en évidence vos points sensibles et oriente les priorités. Il ne constitue pas un audit ni un avis juridique.',{}));
+  out.push(X.h2('1. Résultat global'));
+  out.push(X.kv([
+    ['Score global',String(VD.score)+' / '+String(VD.max)+'  ('+String(VD.pct)+' %)'],
+    ['Niveau de risque',VD.niveau||''],
+    ['Exposition estimée au risque',(VD.expo||'')+'  (fourchette indicative)'],
+    ['Lecture',VD.titre+' — '+VD.sub]
+  ]));
+  out.push(X.h2('2. Détail par famille'));
+  var rows=[X.headRow(['Famille de conformité','Score','Niveau'],[5040,2300,2300])];
+  CATS.forEach(function(c){
+    var cm=15, v=catScore[c]||0, p=Math.round(v/cm*100);
+    var niv = p>=67?'Bon':(p>=34?'À renforcer':'Prioritaire');
+    rows.push(X.row([X.cell((CATMETA[c]?CATMETA[c].emo+' ':'')+c,{b:1,shade:X.C.soft2,w:5040}),X.cell(v+' / '+cm+'  ('+p+' %)',{w:2300}),X.cell(niv,{w:2300})]));
+  });
+  out.push(X.table(rows,[5040,2300,2300]));
+  out.push(X.h2('3. Points sensibles identifiés'));
+  var seen={}, any=false;
+  failed.forEach(function(h){
+    if(!h||!h.t||seen[h.t]) return; seen[h.t]=1; any=true;
+    var tag = h.sev==='ko'?'Priorité haute':(h.sev==='mid'?'À traiter':'Point de vigilance');
+    out.push(X.li([{t:h.t+' — ',b:true},{t:'['+tag+'] ',b:true,c:(h.sev==='ko'?X.C.red:X.C.gold)},{t:h.s||''}]));
+  });
+  if(!any) out.push(X.p('Aucun point sensible majeur détecté. Les points de détail se sécurisent lors d\'une revue de conformité.',{}));
+  out.push(X.h2('4. Notre recommandation'));
+  out.push(X.p(VD.reco||'',{}));
+  out.push(X.p('Pour transformer ce pré-diagnostic en dossier de conformité présentable en cas de contrôle CNIL (registre, mentions, procédures droits & violations, politique IA, plan d\'action), RTH NETGOCE — marque « Clarté » — propose un accompagnement forfaitaire. Contact : Léa Chikhaoui-Auguste — r.t.h@orange.fr — 06 61 47 61 65.',{}));
+  out.push(X.spacer(80));
+  out.push(X.note('« Le Contrôle » est un outil pédagogique d\'auto-évaluation. Le score et les fourchettes affichés illustrent un risque théorique (réf. RGPD — Règl. UE 2016/679 ; AI Act — Règl. UE 2024/1689) et ne préjugent d\'aucune sanction. Ce document n\'a pas valeur de conseil juridique.',{label:'À savoir'}));
+  return out;
+}
+function downloadPrediag(){ var msg=document.getElementById('pdMsg'); if(msg){ msg.textContent='Préparation de votre pré-diagnostic…'; msg.style.color='#6b6459'; }
+  if(!VD||!VD.max){ if(msg){ msg.textContent='Terminez d\'abord le contrôle.'; msg.style.color='#c0392b'; } return; }
+  ensureDocx(function(){ try{ var f=giftFiche(); if(!f.raisonSociale) f.raisonSociale='Mon entreprise';
+    var doc=giftBuildDoc('Pré-diagnostic RGPD & AI Act',prediagBody,f);
+    window.docx.Packer.toBlob(doc).then(function(blob){ downloadBlob(blob,'Pre-diagnostic_RGPD-IA_'+(f.raisonSociale||'entreprise').replace(/[^\w-]+/g,'_')+'.docx'); if(msg){ msg.textContent='✅ Pré-diagnostic téléchargé — ouvrez-le dans Word.'; msg.style.color='var(--green)'; } })
       .catch(function(e){ if(msg){ msg.textContent='Erreur : '+e.message; msg.style.color='#c0392b'; } });
   }catch(e){ if(msg){ msg.textContent='Erreur : '+e.message; msg.style.color='#c0392b'; } } });
 }
