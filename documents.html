@@ -303,7 +303,7 @@
 </div></footer>
 
 <div class="toast" id="toast"></div>
-<div style="position:fixed;bottom:8px;right:10px;z-index:9999;font:700 10px/1 system-ui,sans-serif;color:#7a7f95;background:rgba(255,255,255,.82);border:1px solid #e7e9f3;padding:4px 8px;border-radius:8px;pointer-events:none">Clarté · MàJ 08/07 · b54</div>
+<div style="position:fixed;bottom:8px;right:10px;z-index:9999;font:700 10px/1 system-ui,sans-serif;color:#7a7f95;background:rgba(255,255,255,.82);border:1px solid #e7e9f3;padding:4px 8px;border-radius:8px;pointer-events:none">Clarté · MàJ 08/07 · b55</div>
 
 <script>
 /* ================= FICHE SOCIÉTÉ (localStorage) ================= */
@@ -1090,8 +1090,47 @@ var DOCS=[
    out.push(X.p('Vous pouvez également configurer votre navigateur pour bloquer ou supprimer les cookies (menu « Options » / « Confidentialité »). Le blocage de certains cookies peut altérer le fonctionnement du site.',{}));
    out.push(X.h2('6. Preuve du consentement'));
    out.push(X.p('Les choix des visiteurs sont horodatés et conservés afin de démontrer le recueil valable du consentement (accountability).',{}));
-   out.push(X.h2('7. Contact'));
+   out.push(X.h2('7. Pixels de suivi dans nos e-mails'));
+   out.push(X.p('Nos communications électroniques peuvent contenir un « pixel de suivi » (image invisible) mesurant l\'ouverture du message, la date et l\'heure d\'ouverture ainsi que des informations techniques, afin d\'évaluer l\'intérêt porté à nos envois. Ce dispositif relève des mêmes règles que les traceurs (art. 82 de la loi Informatique et Libertés) et de la recommandation CNIL du 12 mars 2026 (délibération n° 2026-042).',{}));
+   out.push(X.p('Vous pouvez vous y opposer à tout moment, sans justification et sans conséquence, via le lien de désinscription ou de gestion des préférences présent dans chaque e-mail. Les données issues de la mesure d\'ouverture sont conservées 13 mois au maximum.',{}));
+   out.push(X.h2('8. Contact'));
    out.push(X.p('Pour toute question : '+V(f.emailRgpd)+'.',{}));
+   return out;
+ }},
+
+/* 7b. PIXELS DE SUIVI E-MAIL */
+{id:'pixelsemail',cat:'rg',icon:'📧',title:'Mention d\'information — pixels de suivi (e-mails)',
+ desc:'Mention conforme à la recommandation CNIL du 12 mars 2026 (délib. 2026-042) pour la mesure d\'ouverture de vos campagnes e-mail.',
+ need:'ⓘ À intégrer dans vos e-mails marketing et votre politique de confidentialité.',
+ file:'Mention_pixels_suivi_email_{soc}',
+ body:function(X,f){
+   var out=[];
+   out.push(X.h1('Information relative aux pixels de suivi dans nos e-mails'));
+   out.push(X.p('En application de l\'article 82 de la loi Informatique et Libertés et de la recommandation de la CNIL du 12 mars 2026 (délibération n° 2026-042) relative aux pixels de suivi dans les courriels, '+V(f.raisonSociale)+' vous informe de l\'usage de dispositifs de mesure d\'ouverture dans ses communications électroniques.',{}));
+   out.push(X.h2('1. Qu\'est-ce qu\'un pixel de suivi ?'));
+   out.push(X.p('Un pixel de suivi est une image de très petite taille (souvent 1 × 1 pixel), invisible, insérée dans un e-mail, dont le chargement permet de savoir que le message a été ouvert.',{}));
+   out.push(X.h2('2. Responsable du traitement'));
+   out.push(X.kv([['Responsable',V(f.raisonSociale)],['Adresse',V(f.adresse)],['Contact',V(f.emailRgpd)]]));
+   out.push(X.h2('3. Finalités'));
+   out.push(X.li('Mesurer l\'ouverture et l\'efficacité de nos communications électroniques ;'));
+   out.push(X.li('Améliorer la qualité et la pertinence des informations transmises ;'));
+   out.push(X.li('Optimiser nos actions de communication et de prospection.'));
+   out.push(X.h2('4. Données collectées'));
+   out.push(X.li('Ouverture ou non-ouverture du courriel ;'));
+   out.push(X.li('Date et heure d\'ouverture ;'));
+   out.push(X.li('Informations techniques (logiciel de messagerie, terminal) ;'));
+   out.push(X.li('Données statistiques d\'intérêt porté aux communications.'));
+   out.push(X.h2('5. Base légale'));
+   out.push(X.p('Le consentement (art. 82 de la loi Informatique et Libertés) est en principe requis, sauf exemption applicable. Pour les coordonnées déjà enregistrées, une période transitoire permet, en informant les personnes et en garantissant une opposition simple, de poursuivre la mesure d\'ouverture ; à son issue, le dispositif repose sur le consentement ou une exemption (recommandation CNIL n° 2026-042).',{}));
+   out.push(X.h2('6. Destinataires'));
+   out.push(X.p('Services habilités de '+V(f.raisonSociale)+' et, le cas échéant, ses sous-traitants (routeur d\'e-mailing) agissant pour son compte dans le cadre d\'un contrat conforme à l\'article 28 du RGPD.',{}));
+   out.push(X.h2('7. Durée de conservation'));
+   out.push(X.p('Les données issues de la mesure d\'ouverture sont conservées 13 mois au maximum à compter de leur collecte.',{}));
+   out.push(X.h2('8. Opposition et droits'));
+   out.push(X.p('Vous pouvez vous opposer à ce dispositif à tout moment, sans justification et sans conséquence sur nos échanges, via le mécanisme de gestion des préférences ou le lien de désinscription figurant dans chaque e-mail. En cas d\'opposition, aucun pixel de suivi n\'est plus inséré dans nos envois. Vous disposez également des droits d\'accès, de rectification, d\'effacement, de limitation, de portabilité et d\'opposition (art. 15 à 22 RGPD), et du droit d\'introduire une réclamation auprès de la CNIL. Contact : '+V(f.emailRgpd)+'.',{}));
+   out.push(X.h2('9. Mention courte à insérer en pied d\'e-mail'));
+   out.push(X.note('« Cet e-mail contient un dispositif de mesure d\'ouverture. Vous pouvez vous y opposer à tout moment via le lien de désinscription / gestion des préférences ci-dessous. Voir notre politique de confidentialité. »',{label:'À copier-coller'}));
+   out=out.concat(X.versionTable(f));
    return out;
  }},
 
