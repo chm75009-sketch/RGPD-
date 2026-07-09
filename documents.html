@@ -303,7 +303,7 @@
 </div></footer>
 
 <div class="toast" id="toast"></div>
-<div style="position:fixed;bottom:8px;right:10px;z-index:9999;font:700 10px/1 system-ui,sans-serif;color:#7a7f95;background:rgba(255,255,255,.82);border:1px solid #e7e9f3;padding:4px 8px;border-radius:8px;pointer-events:none">Clarté · MàJ 08/07 · b52</div>
+<div style="position:fixed;bottom:8px;right:10px;z-index:9999;font:700 10px/1 system-ui,sans-serif;color:#7a7f95;background:rgba(255,255,255,.82);border:1px solid #e7e9f3;padding:4px 8px;border-radius:8px;pointer-events:none">Clarté · MàJ 08/07 · b53</div>
 
 <script>
 /* ================= FICHE SOCIÉTÉ (localStorage) ================= */
@@ -1474,11 +1474,11 @@ var DOCS=[
    out.push(X.h1('Cartographie et classification des systèmes d\'intelligence artificielle'));
    out.push(X.p('Ce registre recense les systèmes d\'IA utilisés par '+V(f.raisonSociale)+', évalue leur niveau de risque au sens de l\'AI Act (Règl. UE 2024/1689) et croise ces éléments avec le registre des traitements (RGPD).',{}));
    out.push(X.h2('1. Inventaire des systèmes d\'IA'));
-   var rows=[X.headRow(['Système / outil','Usage','Fournisseur / hébergement (UE ?)','Niveau de risque','Biais testé ?','Mesures'],[1700,1650,1900,1350,1140,1900])];
+   var rows=[X.headRow(['Système / outil','Usage','Rôle (art. 3)','Fournisseur / héberg. (UE ?)','Niveau de risque','Biais testé ?','Mesures'],[1500,1350,1250,1600,1150,900,1740])];
    var ia=iaList(f);
-   if(ia.length){ ia.forEach(function(o){ rows.push(X.row([X.cell(o.outil,{b:1}),X.cell(o.usage||'⟨ … ⟩'),X.cell('⟨ fournisseur / UE ? ⟩'),X.cell(o.risque||'limité'),X.cell('⟨ oui/non ⟩'),X.cell('Transparence, supervision')])); }); }
-   else { rows.push(X.row([X.cell('⟨ Outil ⟩',{b:1}),X.cell('⟨ Usage ⟩'),X.cell('⟨ Fournisseur / UE ? ⟩'),X.cell('⟨ Risque ⟩'),X.cell('⟨ oui/non ⟩'),X.cell('⟨ Mesures ⟩')])); }
-   out.push(X.table(rows,[1700,1650,1900,1350,1140,1900]));
+   if(ia.length){ ia.forEach(function(o){ rows.push(X.row([X.cell(o.outil,{b:1}),X.cell(o.usage||'⟨ … ⟩'),X.cell('Déployeur'),X.cell('⟨ fournisseur / UE ? ⟩'),X.cell(o.risque||'limité'),X.cell('⟨ oui/non ⟩'),X.cell('Transparence, supervision')])); }); }
+   else { rows.push(X.row([X.cell('⟨ Outil ⟩',{b:1}),X.cell('⟨ Usage ⟩'),X.cell('Déployeur / fournisseur'),X.cell('⟨ Fournisseur / UE ? ⟩'),X.cell('⟨ Risque ⟩'),X.cell('⟨ oui/non ⟩'),X.cell('⟨ Mesures ⟩')])); }
+   out.push(X.table(rows,[1500,1350,1250,1600,1150,900,1740]));
    out.push(X.h2('2. Détection des « Shadow IA »'));
    out.push(X.p('Une procédure de détection des usages d\'IA non autorisés (outils utilisés par les salariés sans accord de la direction) est mise en place : recensement déclaratif périodique, sensibilisation, revue des outils et, le cas échéant, contrôle proportionné des flux. Tout usage détecté est évalué puis autorisé et inscrit à la cartographie, ou interdit.',{}));
    out.push(X.h2('3. Évaluation des biais et de la discrimination'));
@@ -1513,7 +1513,7 @@ var DOCS=[
    out.push(X.li('Protéger les données personnelles et confidentielles lors de l\'usage d\'outils d\'IA ;'));
    out.push(X.li('Adopter les bons réflexes : vérification, esprit critique, supervision humaine, signalement.'));
    out.push(X.h2('2. Public concerné'));
-   out.push(X.p('L\'ensemble des collaborateurs susceptibles d\'utiliser un outil d\'IA dans le cadre professionnel (direction, administratif, commercial, RH, support, etc.), y compris les nouveaux arrivants dès leur prise de poste.',{}));
+   out.push(X.p('L\'ensemble des collaborateurs susceptibles d\'utiliser un outil d\'IA dans le cadre professionnel (direction, administratif, commercial, RH, support, etc.), y compris les nouveaux arrivants dès leur prise de poste. Le niveau de sensibilisation est adapté à la fonction, aux connaissances et au contexte d\'usage de chaque public, comme l\'exige l\'art. 4.',{}));
    out.push(X.h2('3. Programme de la sensibilisation'));
    out.push(X.h3('Module 1 — Qu\'est-ce que l\'IA ?'));
    out.push(X.p('Définition d\'un système d\'IA au sens de l\'AI Act, exemples concrets d\'outils utilisés dans l\'entreprise, distinction entre IA générative et IA d\'analyse/décision, notions de données d\'entraînement et de limites (erreurs, « hallucinations »).',{}));
