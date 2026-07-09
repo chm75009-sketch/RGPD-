@@ -303,7 +303,7 @@
 </div></footer>
 
 <div class="toast" id="toast"></div>
-<div style="position:fixed;bottom:8px;right:10px;z-index:9999;font:700 10px/1 system-ui,sans-serif;color:#7a7f95;background:rgba(255,255,255,.82);border:1px solid #e7e9f3;padding:4px 8px;border-radius:8px;pointer-events:none">Clarté · MàJ 08/07 · b53</div>
+<div style="position:fixed;bottom:8px;right:10px;z-index:9999;font:700 10px/1 system-ui,sans-serif;color:#7a7f95;background:rgba(255,255,255,.82);border:1px solid #e7e9f3;padding:4px 8px;border-radius:8px;pointer-events:none">Clarté · MàJ 08/07 · b54</div>
 
 <script>
 /* ================= FICHE SOCIÉTÉ (localStorage) ================= */
@@ -723,6 +723,12 @@ var DOCS=[
    out.push(X.p('Conformément à l\'article 30, chaque activité de traitement fait l\'objet d\'une fiche autonome regroupant toutes ses caractéristiques : finalité, base légale, personnes et données concernées, destinataires et sous-traitants qui lui sont propres, transferts hors UE, durée de conservation et mesures de sécurité. Les destinataires et durées diffèrent d\'un traitement à l\'autre.',{}));
    out.push(X.note('Registre pré-rempli à partir du secteur « '+SECTORS[sectorKey(f)].label+' ». Vérifiez chaque fiche, complétez les mentions « ⟨ … ⟩ » et remplacez les prestataires par leurs noms réels pour un registre incontestable en audit.',{warn:true,label:'À compléter'}));
    var st=subList(f);
+   out.push(X.h3('Vue d\'ensemble — tableau synoptique'));
+   var syn=[X.headRow(['N°','Traitement (finalité)','Base légale (art. 6)','Durée de conservation'],[850,4190,2200,2400])];
+   procs.forEach(function(pr,i){ syn.push(X.row([X.cell(TID(i),{b:1,shade:X.C.soft2}),X.cell(pr.f,{b:1}),X.cell(pr.b),X.cell(pr.c)])); });
+   out.push(X.table(syn,[850,4190,2200,2400]));
+   out.push(X.p('Le détail complet de chaque traitement (personnes, données, destinataires propres, transferts, sécurité) figure dans sa fiche ci-dessous.',{i:true,c:X.C.dim,size:18}));
+   out.push(X.spacer(30));
    procs.forEach(function(pr,i){
      var dst=destFor(pr);
      out.push(X.h3('Fiche '+TID(i)+' — '+pr.f));
