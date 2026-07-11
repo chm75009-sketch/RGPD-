@@ -304,7 +304,7 @@
 </div></footer>
 
 <div class="toast" id="toast"></div>
-<div style="position:fixed;bottom:8px;right:10px;z-index:9999;font:700 10px/1 system-ui,sans-serif;color:#7a7f95;background:rgba(255,255,255,.82);border:1px solid #e7e9f3;padding:4px 8px;border-radius:8px;pointer-events:none">Clarté · MàJ 08/07 · b57</div>
+<div style="position:fixed;bottom:8px;right:10px;z-index:9999;font:700 10px/1 system-ui,sans-serif;color:#7a7f95;background:rgba(255,255,255,.82);border:1px solid #e7e9f3;padding:4px 8px;border-radius:8px;pointer-events:none">Clarté · MàJ 08/07 · b58</div>
 
 <script>
 /* ================= FICHE SOCIÉTÉ (localStorage) ================= */
@@ -701,7 +701,48 @@ function buildDoc(title, bodyFn){
 function ensureXlsx(cb){ if(window.XLSX&&window.XLSX.utils) return cb(); if(window._xlsxFailed){ toast('Génération Excel indisponible.','err'); return; } var n=0,iv=setInterval(function(){ n++; if(window.XLSX&&window.XLSX.utils){ clearInterval(iv); cb(); } else if(n>50){ clearInterval(iv); toast('Génération Excel indisponible.','err'); } },150); }
 function buildXlsxWB(f){
   var X=window.XLSX, wb=X.utils.book_new();
-  function sheet(name,head,rows,widths){ var ws=X.utils.aoa_to_sheet([head].concat(rows)); ws['!cols']=(widths||head.map(function(){return 22;})).map(function(w){return {wch:w};}); ws['!autofilter']={ref:X.utils.encode_range({s:{r:0,c:0},e:{r:rows.length,c:head.length-1}})}; X.utils.book_append_sheet(wb,ws,name); }
+  var BD={style:'thin',color:{rgb:'D8D8E0'}};
+  var S_HEAD={fill:{fgColor:{rgb:'4F46E5'}},font:{bold:true,color:{rgb:'FFFFFF'},sz:10,name:'Calibri'},alignment:{vertical:'center',horizontal:'left',wrapText:true},border:{top:BD,bottom:BD,left:BD,right:BD}};
+  var S_CELL={font:{sz:10,name:'Calibri',color:{rgb:'222735'}},alignment:{vertical:'top',wrapText:true},border:{top:BD,bottom:BD,left:BD,right:BD}};
+  var S_ZEB={fill:{fgColor:{rgb:'F4F6FF'}},font:S_CELL.font,alignment:S_CELL.alignment,border:S_CELL.border};
+  function sheet(name,head,rows,widths){
+    var ws=X.utils.aoa_to_sheet([head].concat(rows));
+    ws['!cols']=(widths||head.map(function(){return 22;})).map(function(w){return {wch:w};});
+    ws['!rows']=[{hpt:30}];
+    ws['!autofilter']={ref:X.utils.encode_range({s:{r:0,c:0},e:{r:rows.length,c:head.length-1}})};
+    for(var c=0;c<head.length;c++){ var hc=ws[X.utils.encode_cell({r:0,c:c})]; if(hc) hc.s=S_HEAD; }
+    for(var r=1;r<=rows.length;r++){ for(var c2=0;c2<head.length;c2++){ var cl=ws[X.utils.encode_cell({r:r,c:c2})]; if(cl) cl.s=(r%2===0)?S_ZEB:S_CELL; } }
+    X.utils.book_append_sheet(wb,ws,name);
+  }
+  /* Onglet de garde « Lisez-moi » */
+  (function(){
+    var soc=V(f.raisonSociale);
+    var rowsG=[[soc],['Registre des traitements & tableaux de suivi — RGPD & AI Act'],['Établi le '+today()+' — généré via Clarté (RTH NETGOCE)'],[''],
+      ['Comment utiliser ce classeur'],
+      ['1. Chaque onglet est un tableau vivant : mettez-le à jour à chaque évolution (nouveau traitement, nouvel outil, incident).'],
+      ['2. Les filtres automatiques sont actifs sur la première ligne de chaque onglet.'],
+      ['3. Remplacez toute mention « à compléter » par vos informations réelles.'],
+      ['4. Revue complète au minimum une fois par an — consignez la date en colonne « Dernière revue ».'],[''],
+      ['Sommaire des onglets'],
+      ['Registre des traitements','Une ligne par traitement — art. 30 RGPD'],
+      ['Durées de conservation','Référentiel des durées avec bases légales'],
+      ['Cartographie IA','Inventaire et classification AI Act'],
+      ['Plan d\'action','Suivi RACI des actions de conformité'],
+      ['Journal des violations','À tenir — art. 33.5 RGPD'],
+      ['Journal demandes de droits','À tenir — art. 12 à 22 RGPD'],
+      ['Journal incidents IA','À tenir — gouvernance IA'],[''],
+      ['Document fourni à titre indicatif — à vérifier, personnaliser et compléter sous la seule responsabilité de '+soc+'. N\'engage pas la responsabilité de RTH NETGOCE (marque « Clarté »).']];
+    var ws=X.utils.aoa_to_sheet(rowsG);
+    ws['!cols']=[{wch:34},{wch:56}];
+    ws['A1'].s={font:{bold:true,sz:18,name:'Calibri',color:{rgb:'11162E'}}};
+    ws['A2'].s={font:{bold:true,sz:13,name:'Calibri',color:{rgb:'4F46E5'}}};
+    ws['A3'].s={font:{sz:10,name:'Calibri',color:{rgb:'6B7280'}}};
+    ws['A5'].s={font:{bold:true,sz:12,name:'Calibri',color:{rgb:'11162E'}}};
+    ws['A11'].s={font:{bold:true,sz:12,name:'Calibri',color:{rgb:'11162E'}}};
+    for(var i=12;i<=18;i++){ var c=ws['A'+i]; if(c) c.s={font:{bold:true,sz:10,name:'Calibri',color:{rgb:'3730A3'}}}; var d=ws['B'+i]; if(d) d.s={font:{sz:10,name:'Calibri',color:{rgb:'6B7280'}}}; }
+    var last=ws['A20']; if(last) last.s={font:{italic:true,sz:9,name:'Calibri',color:{rgb:'B8322B'}},alignment:{wrapText:true}};
+    X.utils.book_append_sheet(wb,ws,'Lisez-moi');
+  })();
   function TID(i){ return 'T'+(i+1<10?'0':'')+(i+1); }
   var procs=sectorProc(f).slice(); lines(f.traitementsSupp).forEach(function(l){ procs.push({f:l,per:'à préciser',don:'à préciser',b:'à préciser',c:'à préciser'}); });
   sheet('Registre des traitements',['N°','Traitement (finalité)','Base légale (art. 6)','Personnes concernées','Catégories de données','Données sensibles (art. 9)','Destinataires internes','Destinataires externes','Sous-traitants (art. 28)','Transferts hors UE','Durée de conservation','Mesures de sécurité','Responsable opérationnel','AIPD requise ?','Dernière revue'],

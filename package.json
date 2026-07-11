@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "playwright-core": "^1.61.1",
-    "xlsx": "^0.18.5"
+    "xlsx": "^0.18.5",
+    "xlsx-js-style": "^1.2.0"
   }
 }
