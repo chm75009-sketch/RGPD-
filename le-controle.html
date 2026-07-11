@@ -437,7 +437,7 @@
   </div>
 </section>
 
-<div style="position:fixed;bottom:8px;right:10px;z-index:9999;font:700 10px/1 system-ui,sans-serif;color:#7a7f95;background:rgba(255,255,255,.82);border:1px solid #d8d1bf;padding:4px 8px;border-radius:8px;pointer-events:none">Clarté · MàJ 08/07 · b56</div>
+<div style="position:fixed;bottom:8px;right:10px;z-index:9999;font:700 10px/1 system-ui,sans-serif;color:#7a7f95;background:rgba(255,255,255,.82);border:1px solid #d8d1bf;padding:4px 8px;border-radius:8px;pointer-events:none">Clarté · MàJ 08/07 · b57</div>
 
 <footer>
   <div class="wrap">
@@ -959,7 +959,7 @@ function sectorKey(f){
 }
 function sectorProc(f){
   var base=SECTORS[sectorKey(f)].proc.slice();
-  function hasKw(){ var a=arguments; return base.some(function(b){ var s=(b.f+' '+b.per).toLowerCase(); for(var i=0;i<a.length;i++){ if(s.indexOf(a[i])>=0) return true; } return false; }); }
+  function hasKw(){ var a=arguments; return base.some(function(b){ var s=(b.f||'').toLowerCase(); for(var i=0;i<a.length;i++){ if(s.indexOf(a[i])>=0) return true; } return false; }); }
   var salaries = f.hasSalaries || (f.donnees && f.donnees.indexOf('Salariés')>=0);
   if(salaries && !hasKw('salari','personnel','ressources humaines'))
     base.push({f:'Gestion des ressources humaines (paie et administration du personnel)',per:'Salariés, stagiaires',don:'Identité, RIB, contrat, temps de travail, données de paie',b:'Obligation légale / exécution du contrat (art. 6.1.c/b)',c:'Durée du contrat + délais légaux (bulletins de paie 5 ans)'});

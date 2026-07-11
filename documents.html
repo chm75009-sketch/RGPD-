@@ -65,6 +65,7 @@
   }
   load();
 })();
+(function(){var srcs=['xlsx.min.js','https://cdn.sheetjs.com/xlsx-0.18.5/package/dist/xlsx.full.min.js'];var i=0;function load(){if(i>=srcs.length){window._xlsxFailed=true;return;}var s=document.createElement('script');s.src=srcs[i++];s.onload=function(){if(!(window.XLSX&&window.XLSX.utils))load();};s.onerror=load;document.head.appendChild(s);}load();})();
 </script>
 <style>
   :root{
@@ -303,7 +304,7 @@
 </div></footer>
 
 <div class="toast" id="toast"></div>
-<div style="position:fixed;bottom:8px;right:10px;z-index:9999;font:700 10px/1 system-ui,sans-serif;color:#7a7f95;background:rgba(255,255,255,.82);border:1px solid #e7e9f3;padding:4px 8px;border-radius:8px;pointer-events:none">Clarté · MàJ 08/07 · b56</div>
+<div style="position:fixed;bottom:8px;right:10px;z-index:9999;font:700 10px/1 system-ui,sans-serif;color:#7a7f95;background:rgba(255,255,255,.82);border:1px solid #e7e9f3;padding:4px 8px;border-radius:8px;pointer-events:none">Clarté · MàJ 08/07 · b57</div>
 
 <script>
 /* ================= FICHE SOCIÉTÉ (localStorage) ================= */
@@ -579,7 +580,7 @@ function sectorKey(f){
 }
 function sectorProc(f){
   var base=SECTORS[sectorKey(f)].proc.slice();
-  function hasKw(){ var a=arguments; return base.some(function(b){ var s=(b.f+' '+b.per).toLowerCase(); for(var i=0;i<a.length;i++){ if(s.indexOf(a[i])>=0) return true; } return false; }); }
+  function hasKw(){ var a=arguments; return base.some(function(b){ var s=(b.f||'').toLowerCase(); for(var i=0;i<a.length;i++){ if(s.indexOf(a[i])>=0) return true; } return false; }); }
   var salaries = f.hasSalaries || (f.donnees && f.donnees.indexOf('Salariés')>=0);
   if(salaries && !hasKw('salari','personnel','ressources humaines'))
     base.push({f:'Gestion des ressources humaines (paie et administration du personnel)',per:'Salariés, stagiaires',don:'Identité, RIB, contrat, temps de travail, données de paie',b:'Obligation légale / exécution du contrat (art. 6.1.c/b)',c:'Durée du contrat + délais légaux (bulletins de paie 5 ans)'});
@@ -697,7 +698,49 @@ function buildDoc(title, bodyFn){
   return doc;
 }
 
+function ensureXlsx(cb){ if(window.XLSX&&window.XLSX.utils) return cb(); if(window._xlsxFailed){ toast('Génération Excel indisponible.','err'); return; } var n=0,iv=setInterval(function(){ n++; if(window.XLSX&&window.XLSX.utils){ clearInterval(iv); cb(); } else if(n>50){ clearInterval(iv); toast('Génération Excel indisponible.','err'); } },150); }
+function buildXlsxWB(f){
+  var X=window.XLSX, wb=X.utils.book_new();
+  function sheet(name,head,rows,widths){ var ws=X.utils.aoa_to_sheet([head].concat(rows)); ws['!cols']=(widths||head.map(function(){return 22;})).map(function(w){return {wch:w};}); ws['!autofilter']={ref:X.utils.encode_range({s:{r:0,c:0},e:{r:rows.length,c:head.length-1}})}; X.utils.book_append_sheet(wb,ws,name); }
+  function TID(i){ return 'T'+(i+1<10?'0':'')+(i+1); }
+  var procs=sectorProc(f).slice(); lines(f.traitementsSupp).forEach(function(l){ procs.push({f:l,per:'à préciser',don:'à préciser',b:'à préciser',c:'à préciser'}); });
+  sheet('Registre des traitements',['N°','Traitement (finalité)','Base légale (art. 6)','Personnes concernées','Catégories de données','Données sensibles (art. 9)','Destinataires internes','Destinataires externes','Sous-traitants (art. 28)','Transferts hors UE','Durée de conservation','Mesures de sécurité','Responsable opérationnel','AIPD requise ?','Dernière revue'],
+    procs.map(function(pr,i){ var d=destFor(pr); return [TID(i),pr.f,pr.b,pr.per,pr.don,sensFor(pr),d.internes,d.ext,d.st,transfFor(pr),pr.c,secFor(pr),'à compléter','oui / non','']; }),
+    [5,38,26,20,26,30,26,28,34,26,24,32,20,12,12]);
+  sheet('Durées de conservation',['Type de donnée','Base active','Archivage intermédiaire','Sort final'],[
+    ['Clients (relation en cours)','Durée de la relation','3 ans après la fin de la relation','Suppression / anonymisation'],
+    ['Prospects (sans achat)','—','3 ans après le dernier contact','Suppression'],
+    ['Factures / pièces comptables','Exercice en cours','10 ans (art. L123-22 C. com.)','Suppression'],
+    ['Contrats / litiges','Durée du contrat','5 ans (art. 2224 C. civ.)','Suppression'],
+    ['Bulletins de paie','—','5 ans (art. L3243-4 C. trav.)','Suppression / retraite'],
+    ['Dossier RH','Durée du contrat','5 ans après le départ','Suppression'],
+    ['Candidatures non retenues','—','2 ans après le dernier contact','Suppression'],
+    ['Logs / données de connexion','—','Logs sécurité 6 mois ; identification 1 an (LCEN)','Suppression'],
+    ['Coordonnées bancaires','Temps de la transaction','Carte 15 mois ; RIB durée de la relation','Suppression'],
+    ['Cookies et traceurs','13 mois max','Données d\'audience 25 mois max','Expiration'],
+    ['Vidéosurveillance','1 mois max','Si procédure judiciaire uniquement','Effacement auto'],
+    ['Preuve du consentement','Durée du traitement','3 ans (accountability)','Suppression']
+  ],[30,22,40,24]);
+  var ia=iaList(f); sheet('Cartographie IA',['Système / outil','Usage','Rôle (art. 3)','Fournisseur / hébergement UE ?','Niveau de risque','Biais testé ?','Mesures','Statut','Dernière revue'],
+    (ia.length?ia.map(function(o){ return [o.outil,o.usage||'',' Déployeur','à compléter',o.risque||'limité','oui / non','Transparence, supervision','production','']; }):[['(aucun outil déclaré)','','','','','','','','']]),[22,22,14,24,14,10,26,12,12]);
+  sheet('Plan d\'action',['Action','Criticité','A (approuve)','R (réalise)','Échéance','Indicateur','Statut'],[
+    ['Sécuriser les données sensibles (chiffrement + MFA)','Haute',V(f.representant),'IT','','Chiffrement + MFA activés','À faire'],
+    ['Bandeau cookies conforme','Moyenne',V(f.representant),'Web','','Refus possible en 1 clic','À faire'],
+    ['Contractualiser les sous-traitants (art. 28)','Haute',V(f.representant),'Achats','','% sous DPA','À faire'],
+    ['Sensibiliser le personnel (RGPD + littératie IA)','Moyenne',V(f.representant),'RH','','% formés','À faire'],
+    ['Cartographier et classer les systèmes d\'IA','Haute',V(f.representant),'Référent IA','','Cartographie à jour','À faire'],
+    ['Vérifier les systèmes à haut risque (Annexe III)','Haute',V(f.representant),'Référent IA','02/08/2026','Systèmes conformes','À faire']
+  ],[42,10,16,14,12,24,10]);
+  sheet('Journal des violations',['Date','Nature / cause','Données & personnes','Gravité','Effets / conséquences','Notifiée CNIL ? (72 h)','Personnes informées ?','Mesures prises','Clôturé le'],[['','','','','','','','','']],[12,26,26,10,26,14,14,28,12]);
+  sheet('Journal demandes de droits',['Date reçue','Demandeur','Droit exercé','Traitement concerné','Suite donnée','Date de réponse (≤ 1 mois)'],[['','','','','','']],[12,20,16,22,26,16]);
+  sheet('Journal incidents IA',['Date','Système','Nature de l\'incident','Gravité','Mesures prises','Clos le'],[['','','','','','']],[12,18,30,12,28,12]);
+  return wb;
+}
 function generate(docDef){
+  if(docDef.xlsx){ ensureXlsx(function(){ try{ var f=collectFiche(); if(!f.raisonSociale){ toast('Renseignez au moins la raison sociale.','err'); $('raisonSociale').focus(); return; }
+    var wb=buildXlsxWB(f); var out=window.XLSX.write(wb,{bookType:'xlsx',type:'array'});
+    downloadBlob(new Blob([out],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}), docDef.file.replace('{soc}',(f.raisonSociale||'societe').replace(/[^\w-]+/g,'_'))+'.xlsx');
+    toast('✅ '+docDef.title+' téléchargé','ok'); }catch(e){ toast('Erreur : '+e.message,'err'); console.error(e); } }); return; }
   ensureDocx(function(){
     try{
       var f=collectFiche();
@@ -1183,6 +1226,13 @@ var DOCS=[
    out=out.concat(X.versionTable(f));
    return out;
  }},
+
+/* 7c. CLASSEUR EXCEL DE SUIVI */
+{id:'excel',cat:'gv',icon:'📊',title:'Registre & tableaux de suivi (Excel)',xlsx:true,
+ desc:'Le registre des traitements et tous les tableaux vivants (durées, cartographie IA, plan d\'action, journaux violations / droits / incidents) en un classeur Excel filtrable, prêt à tenir à jour.',
+ need:'ⓘ Format des grands groupes : une ligne par traitement, filtres automatiques, 7 onglets.',
+ file:'Registre_et_suivi_{soc}',
+ body:function(X,f){ return [X.p('Ce document est généré au format Excel.',{})]; }},
 
 /* 8. CHARTE INFORMATIQUE */
 {id:'charte',cat:'gv',icon:'💻',title:'Charte informatique (usage des outils)',

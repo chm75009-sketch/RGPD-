@@ -1,6 +1,6 @@
 /* Service worker Clarté — installation PWA + usage hors-ligne.
    Ne collecte rien. Bump CACHE à chaque mise à jour importante. */
-const CACHE = 'clarte-b56';
+const CACHE = 'clarte-b57';
 const ASSETS = [
   'index.html',
   'le-controle.html',
@@ -10,6 +10,7 @@ const ASSETS = [
   'politique-confidentialite.html',
   'manifest.webmanifest',
   'docx.umd.js',
+  'xlsx.min.js',
   'fonts/fonts.css',
   'fonts/manrope-latin.woff2',
   'fonts/manrope-latinext.woff2',
