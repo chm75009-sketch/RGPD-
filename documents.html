@@ -303,7 +303,7 @@
 </div></footer>
 
 <div class="toast" id="toast"></div>
-<div style="position:fixed;bottom:8px;right:10px;z-index:9999;font:700 10px/1 system-ui,sans-serif;color:#7a7f95;background:rgba(255,255,255,.82);border:1px solid #e7e9f3;padding:4px 8px;border-radius:8px;pointer-events:none">Clarté · MàJ 08/07 · b55</div>
+<div style="position:fixed;bottom:8px;right:10px;z-index:9999;font:700 10px/1 system-ui,sans-serif;color:#7a7f95;background:rgba(255,255,255,.82);border:1px solid #e7e9f3;padding:4px 8px;border-radius:8px;pointer-events:none">Clarté · MàJ 08/07 · b56</div>
 
 <script>
 /* ================= FICHE SOCIÉTÉ (localStorage) ================= */
@@ -371,11 +371,14 @@ function DX(){
   var C={ink:'11162E',indigo:'4F46E5',indigo2:'3730A3',gold:'B8860B',dim:'6B7280',red:'B8322B',green:'1E7A46',line:'D8D8E0',soft:'EEF0FF',soft2:'F4F6FF',warn:'FFF6E0'};
   var TXT='222735';
   function t(text,o){o=o||{};return new d.TextRun({text:text==null?'':String(text),size:o.size||21,font:FONT,bold:!!o.b,italics:!!o.i,color:o.c||TXT});}
-  function p(text,o){o=o||{};if(o.color&&!o.c)o.c=o.color;return new d.Paragraph({spacing:{before:o.before==null?40:o.before,after:o.after==null?70:o.after,line:264},alignment:o.center?d.AlignmentType.CENTER:(o.right?d.AlignmentType.RIGHT:(o.justify===false?d.AlignmentType.LEFT:d.AlignmentType.JUSTIFIED)),children:[t(text,o)]});}
+  function rr(text,o){o=o||{};var sx=text==null?'':String(text);if(sx.indexOf('⟨')<0)return [t(sx,o)];
+    return sx.split(/(⟨[^⟩]*⟩)/g).filter(Boolean).map(function(seg){var ph=seg.charAt(0)==='⟨';
+      return new d.TextRun({text:seg,size:o.size||21,font:FONT,bold:ph||!!o.b,italics:!!o.i,color:ph?C.gold:(o.c||TXT),highlight:ph?'yellow':undefined});});}
+  function p(text,o){o=o||{};if(o.color&&!o.c)o.c=o.color;return new d.Paragraph({spacing:{before:o.before==null?40:o.before,after:o.after==null?70:o.after,line:264},alignment:o.center?d.AlignmentType.CENTER:(o.right?d.AlignmentType.RIGHT:(o.justify===false?d.AlignmentType.LEFT:d.AlignmentType.JUSTIFIED)),children:rr(text,o)});}
   function runs(arr,o){o=o||{};return new d.Paragraph({spacing:{before:o.before==null?40:o.before,after:o.after==null?70:o.after,line:264},alignment:o.justify===false?d.AlignmentType.LEFT:d.AlignmentType.JUSTIFIED,children:arr.map(function(r){return t(r.t,{size:r.size,b:r.b,i:r.i,c:r.c});})});}
-  function h1(text){return new d.Paragraph({spacing:{before:40,after:150},children:[new d.TextRun({text:text,bold:true,size:32,font:FONT,color:C.indigo})]});}
-  function h2(text){return new d.Paragraph({spacing:{before:280,after:120},keepNext:true,border:{bottom:{style:d.BorderStyle.SINGLE,size:6,color:C.indigo}},children:[new d.TextRun({text:text,bold:true,size:23,font:FONT,color:C.ink})]});}
-  function h3(text){return new d.Paragraph({spacing:{before:170,after:70},keepNext:true,children:[new d.TextRun({text:text,bold:true,size:21,font:FONT,color:C.indigo2})]});}
+  function h1(text){return new d.Paragraph({heading:d.HeadingLevel.HEADING_1,children:[new d.TextRun({text:text})]});}
+  function h2(text){return new d.Paragraph({heading:d.HeadingLevel.HEADING_2,children:[new d.TextRun({text:text})]});}
+  function h3(text){return new d.Paragraph({heading:d.HeadingLevel.HEADING_3,children:[new d.TextRun({text:text})]});}
   function li(text,o){o=o||{};return new d.Paragraph({bullet:{level:o.level||0},spacing:{before:20,after:40,line:262},children:Array.isArray(text)?text.map(function(r){return t(r.t,r);}):[t(text,{})]});}
   function spacer(h){return new d.Paragraph({spacing:{before:h||50,after:h||50},children:[t('',{})]});}
   function pageBreak(){return new d.Paragraph({children:[new d.PageBreak()]});}
@@ -389,7 +392,7 @@ function DX(){
       margins:{top:55,bottom:55,left:110,right:110},
       verticalAlign:d.VerticalAlign.CENTER,
       children:kids.map(function(x){
-        if(typeof x==='string'||typeof x==='number'||x==null) return new d.Paragraph({spacing:{before:10,after:10,line:250},children:[new d.TextRun({text:x==null?'':String(x),bold:!!o.head||!!o.b,size:o.head?18:19,font:FONT,color:o.head?'FFFFFF':(o.c||TXT)})]});
+        if(typeof x==='string'||typeof x==='number'||x==null) return new d.Paragraph({spacing:{before:10,after:10,line:250},children:rr(x==null?'':String(x),{b:!!o.head||!!o.b,size:o.head?18:19,c:o.head?'FFFFFF':(o.c||TXT)})});
         return x; /* déjà un élément docx (Paragraph/Table) */
       })
     });
@@ -404,7 +407,7 @@ function DX(){
   }
   function bd(){return {style:d.BorderStyle.SINGLE,size:3,color:C.line};}
   function row(cells){return new d.TableRow({children:cells,cantSplit:true});}
-  function headRow(labels,widths){return row(labels.map(function(l,i){return cell(l,{head:1,w:widths?widths[i]:undefined});}));}
+  function headRow(labels,widths){return new d.TableRow({tableHeader:true,cantSplit:true,children:labels.map(function(l,i){return cell(l,{head:1,w:widths?widths[i]:undefined});})});}
   // Tableau de conformité « Exigence -> Couverture »
   function coverage(title,pairs){
     var rows=[headRow(['Exigence réglementaire','Traitement dans le présent document'],[3400,6240])];
@@ -660,14 +663,28 @@ function buildDoc(title, bodyFn){
     X.p('Établi le '+today(),{color:X.C.dim,size:20}),
     new d.Paragraph({spacing:{before:40,after:200},children:[new d.TextRun({text:'',size:2})]}),
     X.warnBox(f),
+    X.spacer(80),
+    X.note('Comment utiliser ce document : (1) recherchez le caractère « ⟨ » et remplacez chaque mention surlignée en jaune par vos informations ; (2) supprimez les encadrés « Note » devenus inutiles ; (3) actualisez le sommaire (clic droit → « Mettre à jour les champs ») ; (4) faites valider, datez et signez ; (5) consignez la validation dans le tableau de gestion des versions en fin de document.',{label:'Mode d\'emploi'}),
+    new d.Paragraph({children:[new d.PageBreak()]}),
+    new d.Paragraph({spacing:{after:120},children:[new d.TextRun({text:'Sommaire',bold:true,size:28,font:X.FONT,color:X.C.ink})]}),
+    new d.TableOfContents('Sommaire',{hyperlink:true,headingStyleRange:'1-3'}),
     new d.Paragraph({children:[new d.PageBreak()]})
   ];
   var body=bodyFn(X,f);
   var doc=new d.Document({
-    styles:{default:{document:{run:{font:X.FONT,size:21}}}},
+    creator:V(f.raisonSociale),lastModifiedBy:V(f.raisonSociale),title:title,
+    subject:'Conformité RGPD & AI Act — '+V(f.raisonSociale),
+    description:'Modèle généré via Clarté (RTH NETGOCE) — à personnaliser avant usage.',
+    features:{updateFields:true},
+    styles:{default:{document:{run:{font:X.FONT,size:21}}},
+     paragraphStyles:[
+      {id:'Heading1',name:'Heading 1',basedOn:'Normal',next:'Normal',quickFormat:true,run:{font:X.FONT,size:34,bold:true,color:X.C.indigo},paragraph:{spacing:{before:40,after:160}}},
+      {id:'Heading2',name:'Heading 2',basedOn:'Normal',next:'Normal',quickFormat:true,run:{font:X.FONT,size:25,bold:true,color:X.C.ink},paragraph:{spacing:{before:300,after:120},keepNext:true,border:{bottom:{style:d.BorderStyle.SINGLE,size:6,color:X.C.indigo}}}},
+      {id:'Heading3',name:'Heading 3',basedOn:'Normal',next:'Normal',quickFormat:true,run:{font:X.FONT,size:22,bold:true,color:X.C.indigo2},paragraph:{spacing:{before:170,after:70},keepNext:true}}
+     ]},
     sections:[{
       properties:{page:{size:{width:11906,height:16838},margin:{top:1134,right:1134,bottom:1134,left:1134}}},
-      headers:{default:new d.Header({children:[new d.Paragraph({border:{bottom:{style:d.BorderStyle.SINGLE,size:4,color:X.C.indigo}},spacing:{after:80},children:[new d.TextRun({text:head,font:X.FONT,size:16,color:'888888'})]})]})},
+      headers:{default:new d.Header({children:[new d.Paragraph({border:{bottom:{style:d.BorderStyle.SINGLE,size:4,color:X.C.indigo}},spacing:{after:80},tabStops:[{type:d.TabStopType.RIGHT,position:9640}],children:[new d.TextRun({text:head,font:X.FONT,size:16,color:'888888'}),new d.TextRun({text:'\t'+title,font:X.FONT,size:16,color:'888888'})]})]})},
       footers:{default:new d.Footer({children:[new d.Paragraph({border:{top:{style:d.BorderStyle.SINGLE,size:4,color:X.C.indigo}},spacing:{before:80},children:[
         new d.TextRun({text:'Document généré avec Clarté · RTH NETGOCE — Page ',font:X.FONT,size:15,color:'999999'}),
         new d.TextRun({children:[d.PageNumber.CURRENT],font:X.FONT,size:15,color:'999999'}),
@@ -735,6 +752,8 @@ var DOCS=[
      out.push(X.kv([
        ['Objectifs poursuivis (finalité)',pr.f],
        ['Base légale (art. 6)',pr.b],
+       ['Responsable opérationnel (métier)','⟨ fonction — ex. Responsable RH, Direction commerciale ⟩'],
+       ['AIPD requise ? (art. 35)','⟨ oui / non — oui si 2 critères CNIL ou plus ⟩ — voir document « Analyse d\'impact (AIPD) »'],
        ['Logiciel / application','⟨ à préciser ⟩'],
        ['Catégories de personnes concernées',pr.per],
        ['Catégories de données collectées',pr.don],
@@ -803,6 +822,7 @@ var DOCS=[
    out.push(X.h2('1. Qui sommes-nous ?'));
    out.push(X.p(respLine(f)));
    out.push(X.p(dpoLine(f)));
+   out.push(X.note('Nous collectons uniquement les données nécessaires à nos services. Nous ne les vendons jamais. Elles sont hébergées '+(f.hebergeurPays||'⟨ pays ⟩')+' et supprimées à l\'issue des durées légales. Vous pouvez exercer vos droits à tout moment : '+V(f.emailRgpd)+' — réponse sous un mois.',{label:'L\'essentiel en 30 secondes'}));
    out.push(X.p('Pour toute question relative à vos données : '+mailDroits+'.',{b:true}));
    out.push(X.h2('2. Quelles données collectons-nous et pourquoi ?'));
    out.push(X.p('Nous ne collectons que les données strictement nécessaires (minimisation, art. 5.1.c). Le tableau ci-dessous relie chaque finalité aux données, à la base légale (art. 6) et à la durée :',{}));
@@ -950,6 +970,10 @@ var DOCS=[
    out.push(X.table(rr,[1450,1900,1700,1900,1650,1040]));
    out.push(X.h2('8. Modèle d\'accusé de réception'));
    out.push(X.p('« Nous accusons réception, le ⟨ date ⟩, de votre demande d\'exercice de vos droits (⟨ droit ⟩). Elle sera traitée dans un délai maximum d\'un mois. Le cas échéant, un justificatif d\'identité pourra vous être demandé. Contact : '+V(f.emailRgpd)+'. »',{i:true}));
+   out.push(X.h2('9. Modèle de prorogation du délai (art. 12.3)'));
+   out.push(X.p('« Nous avons bien reçu votre demande du ⟨ date ⟩. En raison de sa complexité ⟨ ou : du nombre de demandes ⟩, le délai de réponse est prolongé de deux mois, conformément à l\'article 12.3 du RGPD, soit une réponse au plus tard le ⟨ date + 3 mois ⟩. Motif : ⟨ volume des données à extraire / vérifications auprès de nos sous-traitants ⟩. »',{i:true}));
+   out.push(X.h2('10. Modèle de refus motivé'));
+   out.push(X.p('« Après examen, nous ne pouvons donner suite à votre demande d\'⟨ effacement ⟩ pour le motif suivant : ⟨ obligation légale de conservation des pièces comptables pendant 10 ans — art. L123-22 C. com. / art. 17.3.b RGPD ⟩. Vos données seront supprimées à l\'échéance de ce délai, soit le ⟨ date ⟩. Vous pouvez introduire une réclamation auprès de la CNIL (www.cnil.fr) ou exercer un recours juridictionnel. »',{i:true}));
    out=out.concat(X.versionTable(f));
    return out;
  }},
@@ -966,6 +990,15 @@ var DOCS=[
    out.push(X.h2('1. Définition et cellule de crise'));
    out.push(X.p('Une violation est toute atteinte à la sécurité entraînant destruction, perte, altération, divulgation ou accès non autorisé à des données (art. 4.12). Cellule de crise : pilote '+resp+' ('+V(f.emailRgpd)+') ; décisions et communication : '+V(f.representant)+' ; support technique / hébergeur pour le confinement.',{}));
    out.push(X.p('Si la violation survient chez un sous-traitant, celui-ci alerte le responsable de traitement sans délai afin de faire courir le décompte des 72 heures (art. 33.2).',{}));
+   out.push(X.h3('Annuaire de crise (à compléter et tester)'));
+   out.push(X.kv([
+    ['Pilote de crise',resp+' — '+V(f.emailRgpd)+' — ⟨ portable ⟩'],
+    ['Direction (décision / communication)',V(f.representant)+' — ⟨ portable ⟩'],
+    ['Prestataire informatique / hébergeur','⟨ nom — n° d\'astreinte ⟩'],
+    ['Assureur cyber','⟨ compagnie — n° de police — hotline ⟩'],
+    ['Conseil juridique','⟨ cabinet — contact ⟩'],
+    ['Téléservice CNIL','notifications.cnil.fr — compte créé à l\'avance : ⟨ identifiant ⟩']
+   ]));
    out.push(X.h2('2. Logigramme de décision'));
    out.push(X.flowBox('① Constat d\'une violation de données'));
    out.push(X.flowArrow());
@@ -995,6 +1028,7 @@ var DOCS=[
      ['Notification effectuée dans les 72 h ?','⟨ oui / non — si non, motifs du retard (art. 33.1) ⟩'],
      ['Coordonnées du point de contact',resp+' — '+V(f.emailRgpd)]
    ]));
+   out.push(X.p('Si toutes les informations ne sont pas disponibles sous 72 heures, une notification initiale est adressée dans le délai puis complétée de manière échelonnée (art. 33.4). Ne jamais attendre un dossier complet pour notifier.',{b:true}));
    out.push(X.h2('5. Information des personnes concernées (art. 34)'));
    out.push(X.p('En cas de risque élevé, message type à adresser sans délai à chaque personne : « Nous vous informons qu\'une violation de données survenue le ⟨ date ⟩ est susceptible de concerner vos données (⟨ nature ⟩). Nous avons pris les mesures suivantes : ⟨ … ⟩. Par précaution, nous vous recommandons de ⟨ ex. modifier votre mot de passe ⟩. Contact : '+V(f.emailRgpd)+'. »',{i:true}));
    out.push(X.p('L\'information individuelle n\'est pas requise (art. 34.3) si : les données étaient rendues incompréhensibles pour tout tiers non autorisé (ex. chiffrement robuste) ; des mesures ultérieures écartent la probabilité d\'un risque élevé ; ou elle exigerait des efforts disproportionnés — auquel cas une communication publique équivalente est réalisée.',{}));
@@ -1042,6 +1076,14 @@ var DOCS=[
    out.push(X.li('Un journal de purge est conservé comme preuve de conformité (accountability, art. 5.2) ;'));
    out.push(X.li('Responsable : '+((f.dpoDesigne||has(f.dpoNom))?V(f.dpoNom):V(f.representant))+'.'));
    out.push(X.note('Pour un dossier « grand compte », chaque durée doit correspondre à une purge ou un archivage AUTOMATIQUE paramétré dans vos logiciels (RH, CRM, ERP) — c\'est la différence entre une politique déclarative et une conformité réellement appliquée.',{label:'Automatisation'}));
+   out.push(X.h3('Calendrier de purge opérationnel'));
+   var cp=[X.headRow(['Échéance','Action','Système','Responsable','Preuve'],[1500,3000,1900,1600,1640])];
+   [['Janvier (annuel)','Purge des prospects inactifs > 3 ans','CRM ⟨ nom ⟩','⟨ … ⟩','Journal de purge'],
+    ['Janvier (annuel)','Suppression des candidatures > 2 ans','Boîte recrutement','⟨ … ⟩','Journal de purge'],
+    ['Au départ de chaque salarié','Déclenchement du compte à rebours dossier RH (5 ans)','Dossier RH','⟨ … ⟩','Fiche de sortie'],
+    ['En continu (automatique)','Écrasement vidéo à 30 j ; expiration cookies à 13 mois','Enregistreur / CMP','—','Paramétrage documenté']
+   ].forEach(function(r){ cp.push(X.row([X.cell(r[0],{b:1}),X.cell(r[1]),X.cell(r[2]),X.cell(r[3]),X.cell(r[4])])); });
+   out.push(X.table(cp,[1500,3000,1900,1600,1640]));
    out.push(X.note('Ces durées s\'appuient notamment sur les référentiels CNIL « gestion commerciale » et « gestion des ressources humaines » ; en cas de conflit, la durée légale sectorielle prime.'));
    out.push(X.note('Certaines activités réglementées (santé, immobilier/LCB-FT, banque, formation) imposent des durées spécifiques — ajustez en conséquence.'));
    out=out.concat(X.coverage('Couverture — limitation de la conservation',[
@@ -1128,6 +1170,14 @@ var DOCS=[
    out.push(X.p('Les données issues de la mesure d\'ouverture sont conservées 13 mois au maximum à compter de leur collecte.',{}));
    out.push(X.h2('8. Opposition et droits'));
    out.push(X.p('Vous pouvez vous opposer à ce dispositif à tout moment, sans justification et sans conséquence sur nos échanges, via le mécanisme de gestion des préférences ou le lien de désinscription figurant dans chaque e-mail. En cas d\'opposition, aucun pixel de suivi n\'est plus inséré dans nos envois. Vous disposez également des droits d\'accès, de rectification, d\'effacement, de limitation, de portabilité et d\'opposition (art. 15 à 22 RGPD), et du droit d\'introduire une réclamation auprès de la CNIL. Contact : '+V(f.emailRgpd)+'.',{}));
+   out.push(X.h3('Plan de mise en conformité'));
+   var pm=[X.headRow(['Action','Échéance','Responsable'],[5200,2300,2140])];
+   [['Informer la base existante (mention dans les 2 prochaines campagnes + politique de confidentialité à jour)','⟨ date ⟩','⟨ … ⟩'],
+    ['Activer un lien d\'opposition au pixel distinct de la désinscription','⟨ date ⟩','⟨ … ⟩'],
+    ['Paramétrer le routeur : désactivation du pixel pour les opposants sous 72 h','⟨ date ⟩','⟨ … ⟩'],
+    ['À l\'issue de la période transitoire : basculer sur consentement ou exemption','⟨ date butoir délib. 2026-042 ⟩','⟨ … ⟩']
+   ].forEach(function(r){ pm.push(X.row([X.cell(r[0],{b:1}),X.cell(r[1]),X.cell(r[2])])); });
+   out.push(X.table(pm,[5200,2300,2140]));
    out.push(X.h2('9. Mention courte à insérer en pied d\'e-mail'));
    out.push(X.note('« Cet e-mail contient un dispositif de mesure d\'ouverture. Vous pouvez vous y opposer à tout moment via le lien de désinscription / gestion des préférences ci-dessous. Voir notre politique de confidentialité. »',{label:'À copier-coller'}));
    out=out.concat(X.versionTable(f));
@@ -1169,6 +1219,13 @@ var DOCS=[
    out.push(X.p('En mobilité et en télétravail : chiffrement et verrouillage des équipements, éviter les Wi-Fi publics non sûrs, protéger la confidentialité des écrans. L\'usage d\'un équipement personnel (BYOD) à des fins professionnelles doit être autorisé et sécurisé.',{}));
    out.push(X.h2('Article 10 — Départ du collaborateur'));
    out.push(X.p('Au départ : restitution de l\'ensemble du matériel, révocation immédiate des accès et comptes, suppression des données professionnelles éventuellement présentes sur des supports personnels autorisés.',{}));
+   out.push(X.h2('Article 10 bis — Que faire en cas d\'incident (réflexe en 5 étapes)'));
+   out.push(X.li('1. Déconnecter le poste du réseau (câble / Wi-Fi) — ne pas éteindre la machine ;'));
+   out.push(X.li('2. Ne rien supprimer, ne pas tenter de « réparer » soi-même ;'));
+   out.push(X.li('3. Prévenir immédiatement '+V(f.emailRgpd)+' et son responsable, même en cas de simple doute ;'));
+   out.push(X.li('4. Noter l\'heure, ce qui a été vu et fait ;'));
+   out.push(X.li('5. Changer ses mots de passe depuis un autre équipement si des identifiants sont concernés.'));
+   out.push(X.note('Signaler un doute n\'est jamais sanctionné : le signalement précoce est la première mesure de sécurité. La suite est gérée selon la Procédure de violation de données.',{label:'Culture du signalement'}));
    out.push(X.h2('Article 11 — Contrôles et sanctions'));
    out.push(X.p('L\'entreprise peut mettre en œuvre des dispositifs de contrôle proportionnés (journalisation, filtrage), dans le respect de la vie privée et après information des salariés et consultation du CSE. Tout manquement expose l\'utilisateur aux sanctions prévues par le règlement intérieur, graduées selon la gravité.',{}));
    out.push(X.h2('Article 12 — Valeur juridique et opposabilité'));
@@ -1211,6 +1268,8 @@ var DOCS=[
    out.push(X.table(r2,[2200,2600,2500,2340]));
    out.push(X.note('Les dispositifs de surveillance doivent être proportionnés et ne peuvent placer les salariés sous une surveillance constante et permanente.',{label:'Proportionnalité'}));
    out.push(X.p('La géolocalisation est désactivée en dehors du temps de travail et ne peut constituer le moyen principal de contrôle du temps de travail ni suivre le salarié hors service (garanties CNIL).',{i:true,c:X.C.dim,size:18}));
+   out.push(X.h2('3 bis. Outils algorithmiques et intelligence artificielle'));
+   out.push(X.p('Si un outil d\'IA ou un algorithme est utilisé dans la gestion RH (tri de candidatures, planification, évaluation), vous en êtes informé(e) préalablement, ainsi que le CSE. Un système d\'IA à haut risque (Annexe III AI Act — emploi) donne lieu à une information spécifique des travailleurs avant sa mise en service (art. 26.7 du Règl. UE 2024/1689). Aucune décision produisant des effets juridiques à votre égard n\'est prise sur le seul fondement d\'un traitement automatisé (art. 22 RGPD) : une intervention humaine est toujours garantie et vous pouvez demander le réexamen humain de toute décision assistée par algorithme.',{}));
    out.push(X.h2('4. Destinataires'));
    out.push(X.p('Services RH et hiérarchiques habilités, expert-comptable / gestionnaire de paie, organismes sociaux (URSSAF, mutuelle, prévoyance, retraite, médecine du travail) et administrations, dans la limite de leurs attributions. En cas d\'externalisation de la paie, le prestataire agit comme sous-traitant (art. 28) et le bulletin peut être déposé dans un coffre-fort numérique sécurisé.',{}));
    out.push(X.h2('4 bis. Transferts hors UE'));
@@ -1250,6 +1309,13 @@ var DOCS=[
    out.push(X.li('Supprimer ou restituer les données à caractère personnel au terme de la prestation, selon le choix du responsable de traitement, et détruire les copies existantes (art. 28.3.g) ;'));
    out.push(X.li('Informer immédiatement le responsable s\'il estime qu\'une instruction constitue une violation du RGPD ou d\'autres dispositions relatives à la protection des données (art. 28.3, dernier alinéa) ;'));
    out.push(X.li('Tenir à disposition la documentation prouvant le respect de ses obligations et permettre les audits (art. 28.3.h).'));
+   out.push(X.h3('Délais fermes d\'assistance'));
+   out.push(X.kv([
+    ['Demande d\'exercice de droits transmise par le responsable','Éléments fournis sous 10 jours ouvrés'],
+    ['Violation de données','Notification sous 48 h (art. 4), rapport complet sous 72 h'],
+    ['Contribution à une AIPD ou consultation CNIL','Sous 15 jours ouvrés'],
+    ['Demande d\'audit','Dates proposées sous 15 jours, préavis 30 jours (sauf violation : sans délai)']
+   ]));
    out.push(X.h2('Article 4 — Notification des violations (délai ferme)'));
    out.push(X.p('Le sous-traitant notifie au responsable toute violation de données constatée sur ses systèmes dans un délai maximum de 48 heures après en avoir pris connaissance, en fournissant tous les éléments utiles (nature, données et personnes concernées, mesures prises), afin de permettre au responsable de respecter son propre délai de 72 heures vis-à-vis de la CNIL.',{}));
    out.push(X.h2('Article 5 — Sous-traitance ultérieure'));
@@ -1277,6 +1343,21 @@ var DOCS=[
    out.push(X.li('Procédure de gestion des violations.'));
    out.push(X.h2('Annexe C — Sous-traitants ultérieurs autorisés'));
    out.push(X.p('⟨ Liste à la date de signature : nom, prestation, localisation, garanties. ⟩',{}));
+   out.push(X.h2('Annexe D — Questionnaire d\'audit et de due diligence du sous-traitant'));
+   out.push(X.p('À faire compléter avant la contractualisation, puis à chaque revue annuelle. Toute réponse « Non » appelle un plan de remédiation daté.',{i:true,c:X.C.dim,size:18}));
+   var ra=[X.headRow(['#','Point de contrôle','Oui / Non','Preuve'],[600,5040,1400,2600])];
+   [['1','Certification sécurité (ISO 27001, HDS, SecNumCloud, SOC 2) en cours de validité','','Certificat'],
+    ['2','Registre des catégories d\'activités de traitement tenu (art. 30.2)','','Extrait'],
+    ['3','DPO ou contact protection des données désigné et joignable','','Coordonnées'],
+    ['4','Localisation exhaustive des données et des accès (y compris support hors UE)','','Cartographie'],
+    ['5','Liste des sous-traitants ultérieurs à jour et notifiée','','Annexe C à jour'],
+    ['6','Chiffrement au repos et en transit effectif sur le périmètre confié','','Attestation technique'],
+    ['7','Test de restauration des sauvegardes de moins de 12 mois','','Rapport de test'],
+    ['8','Procédure de notification des violations compatible avec le délai de 48 h','','Procédure'],
+    ['9','Violations subies sur les 24 derniers mois et mesures prises','','Déclaration'],
+    ['10','Assurance cyber couvrant les dommages aux données confiées','','Attestation']
+   ].forEach(function(r){ ra.push(X.row([X.cell(r[0]),X.cell(r[1],{b:1}),X.cell(r[2]),X.cell(r[3])])); });
+   out.push(X.table(ra,[600,5040,1400,2600]));
    out=out.concat(X.signature(f,'Le sous-traitant'));
    return out;
  }},
@@ -1319,6 +1400,15 @@ var DOCS=[
     ['Disparition des données','Panne, sinistre, rançongiciel','Indisponibilité, perte d\'information, préjudice','⟨ … ⟩','⟨ … ⟩']
    ].forEach(function(r){ rows.push(X.row([X.cell(r[0],{b:1}),X.cell(r[1]),X.cell(r[2]),X.cell(r[3]),X.cell(r[4])])); });
    out.push(X.table(rows,[2000,2100,2500,1500,1540]));
+   out.push(X.h3('Grille de cotation et seuil d\'acceptabilité'));
+   var rm=[X.headRow(['Gravité \\ Vraisemblance','Négligeable','Limitée','Importante','Maximale'],[2440,1800,1800,1800,1800])];
+   [['Maximale','À traiter','Inacceptable','Inacceptable','Inacceptable'],
+    ['Importante','Acceptable','À traiter','Inacceptable','Inacceptable'],
+    ['Limitée','Acceptable','Acceptable','À traiter','À traiter'],
+    ['Négligeable','Acceptable','Acceptable','Acceptable','À traiter']
+   ].forEach(function(r){ rm.push(X.row([X.cell(r[0],{b:1}),X.cell(r[1]),X.cell(r[2]),X.cell(r[3]),X.cell(r[4])])); });
+   out.push(X.table(rm,[2440,1800,1800,1800,1800]));
+   out.push(X.p('« Inacceptable » : le traitement ne peut être mis en œuvre en l\'état — mesures obligatoires ou consultation CNIL (art. 36). « À traiter » : plan d\'action avant mise en œuvre. « Acceptable » : risque résiduel accepté et motivé au §8.',{i:true,c:X.C.dim,size:18}));
    out.push(X.h2('6. Mesures de réduction du risque'));
    out.push(X.p('Pour chaque risque majeur, une mesure de sécurité concrète est associée :',{}));
    var r2=[X.headRow(['Risque','Mesures concrètes'],[3000,6640])];
@@ -1364,6 +1454,18 @@ var DOCS=[
    out.push(X.li('Piloter le plan d\'action de conformité et, par délégation opérationnelle, tenir à jour le registre des traitements dont la responsabilité incombe au responsable de traitement (art. 30).'));
    out.push(X.h2('5. Indépendance et moyens'));
    out.push(X.p('L\'intéressé exerce ses missions en toute indépendance, sans recevoir d\'instruction quant à leur exercice, ne peut être relevé ni sanctionné pour cet exercice, rend compte directement au plus haut niveau de la direction, et dispose des moyens humains, techniques et budgétaires ainsi que de l\'accès aux traitements nécessaires.',{}));
+   out.push(X.kv([
+    ['Temps alloué à la mission','⟨ ex. 2 jours / mois ⟩, ajusté selon l\'actualité'],
+    ['Budget annuel (formation, outillage, conseil)','⟨ … € ⟩'],
+    ['Formation continue','Au moins ⟨ 2 ⟩ jours / an (actualité CNIL, CEPD, AI Act)'],
+    ['Reporting','Rapport annuel présenté à la direction']
+   ]));
+   out.push(X.h3('Rapport annuel — contenu minimal'));
+   out.push(X.li('Bilan des demandes de droits (volume, délais, suites) et des violations (nombre, notifications, leçons) ;'));
+   out.push(X.li('État du registre, des AIPD et des contrats art. 28 (couverture, retards) ;'));
+   out.push(X.li('Actions de sensibilisation menées et taux de participation ;'));
+   out.push(X.li('Avis rendus et suites données (les avis écartés sont documentés et motivés) ;'));
+   out.push(X.li('Priorités proposées pour l\'année suivante (alimente le Plan d\'action).'));
    out.push(X.p('Il est soumis au secret professionnel ou à une obligation de confidentialité dans l\'exécution de ses missions (art. 38.5), et associé, d\'une manière appropriée et en temps utile, à toutes les questions relatives à la protection des données (art. 38.1). La fonction peut être exercée par un prestataire externe sur la base d\'un contrat de service (art. 37.6). Le responsable de traitement demeure seul responsable de la conformité.',{}));
    out.push(X.h2('6. Absence de conflit d\'intérêts (art. 38.6)'));
    out.push(X.p('Le '+(estDPO?'DPO':'référent')+' ne peut occuper, au sein de l\'organisme, une fonction le conduisant à déterminer les finalités et les moyens d\'un traitement — il ne peut donc être « juge et partie ». Sont notamment incompatibles les fonctions de directeur informatique (DSI), de directeur des ressources humaines (DRH), de directeur marketing ou de dirigeant.',{}));
@@ -1402,6 +1504,14 @@ var DOCS=[
    out.push(X.h2('7. Sauvegardes et continuité'));
    out.push(X.li('Sauvegardes régulières, externalisées et chiffrées (règle 3-2-1) ;'));
    out.push(X.li('Tests de restauration réguliers ; plan de reprise et de continuité (PRA/PCA) documenté.'));
+   out.push(X.h3('Objectifs de reprise et plan de test'));
+   out.push(X.kv([
+    ['RTO (durée maximale d\'interruption admise)','⟨ ex. 24 h ⟩ pour les systèmes critiques'],
+    ['RPO (perte de données maximale admise)','⟨ ex. 24 h ⟩ — fréquence de sauvegarde alignée'],
+    ['Test de restauration d\'un fichier','Trimestriel — preuve : rapport daté'],
+    ['Test de restauration complète','Annuel — preuve : rapport daté avec durée constatée vs RTO'],
+    ['Exercice de crise (rançongiciel, sur table)','Annuel — preuve : compte rendu et actions correctives']
+   ]));
    out.push(X.h2('8. Chiffrement et protection des données'));
    out.push(X.li('Chiffrement des données sensibles au repos et en transit (HTTPS/TLS) ;'));
    out.push(X.li('Minimisation, cloisonnement et journalisation des accès aux données sensibles.'));
@@ -1457,6 +1567,17 @@ var DOCS=[
    out.push(X.li('Collaborateurs sensibilisés (%) ;'));
    out.push(X.li('Systèmes d\'IA cartographiés et classés (%) ;'));
    out.push(X.li('Collaborateurs sensibilisés à la littératie IA — art. 4 (%).'));
+   out.push(X.h2('4 bis. Calendrier annuel récurrent'));
+   var rc2=[X.headRow(['Fréquence','Action récurrente','Document de référence'],[1600,4840,3200])];
+   [['Trimestrielle','Test de restauration d\'une sauvegarde','Politique de sécurité §7'],
+    ['Semestrielle','Revue des habilitations et des comptes à privilèges','Politique de sécurité §4'],
+    ['Annuelle','Revue du registre, des durées de conservation et des cookies déposés','Registre / Politique de conservation'],
+    ['Annuelle','Sensibilisation RGPD + littératie IA (émargement conservé)','Charte informatique / Support littératie IA'],
+    ['Annuelle','Revue des sous-traitants : Annexe C à jour + questionnaire d\'audit','DPA — Annexes C et D'],
+    ['Annuelle','Exercice de crise (violation de données simulée)','Procédure de violation'],
+    ['Annuelle','Rapport du DPO / référent à la direction','Lettre de mission DPO']
+   ].forEach(function(r){ rc2.push(X.row([X.cell(r[0],{b:1}),X.cell(r[1]),X.cell(r[2])])); });
+   out.push(X.table(rc2,[1600,4840,3200]));
    out.push(X.h2('5. Registre de preuves'));
    out.push(X.p('Pour chaque action réalisée, conserver la preuve datée (document, capture, contrat, attestation de formation). Ces preuves sont opposables lors d\'un contrôle de la CNIL.',{}));
    out.push(X.h2('6. Gouvernance et revue'));
@@ -1500,11 +1621,30 @@ var DOCS=[
    out.push(X.li('Toute pratique prohibée par l\'article 5 de l\'AI Act (« risque inacceptable ») ;'));
    out.push(X.li('La saisie de données personnelles ou confidentielles dans un outil d\'IA grand public ;'));
    out.push(X.li('Toute décision automatisée à effet significatif sans supervision humaine.'));
-   out.push(X.h2('6. Articulation avec le RGPD'));
+   out.push(X.h2('6. Exemples pratiques de prompts'));
+   var pr=[X.headRow(['✔ Autorisé','✘ Interdit'],[4820,4820])];
+   [['« Reformule ce paragraphe de nos CGV (texte public) en langage simple. »','« Rédige une réponse à la réclamation de Mme Dupont, cliente, dont voici le courrier. » (donnée personnelle)'],
+    ['« Propose une trame d\'entretien annuel générique pour un poste commercial. »','« Analyse ces 40 CV et classe les candidats. » (haut risque — tri de candidatures sans cadre validé)'],
+    ['« Résume cet article de presse sur notre secteur. »','« Voici notre fichier de prix d\'achat fournisseurs, calcule nos marges. » (secret d\'affaires)']
+   ].forEach(function(r){ pr.push(X.row([X.cell(r[0]),X.cell(r[1])])); });
+   out.push(X.table(pr,[4820,4820]));
+   out.push(X.h2('7. Articulation avec le RGPD'));
    out.push(X.p('Lorsqu\'un système d\'IA traite des données personnelles, le RGPD s\'applique cumulativement : base légale, information, minimisation, et AIPD si risque élevé. Les données traitées via l\'IA suivent la politique de durées de conservation de l\'entreprise.',{}));
    out.push(X.p('Littératie IA (art. 4 AI Act) : l\'entreprise veille à ce que tout collaborateur utilisant un système d\'IA dispose d\'un niveau suffisant de compréhension de l\'IA (opportunités, risques, usage responsable), au moyen d\'une sensibilisation adaptée à sa fonction.',{}));
-   out.push(X.h2('7. Gouvernance et sanctions'));
+   out.push(X.h2('8. Procédure d\'approbation d\'un nouvel outil d\'IA'));
+   out.push(X.p('Aucun outil d\'IA ne peut être utilisé à des fins professionnelles sans validation préalable selon le circuit suivant :',{}));
+   var wf=[X.headRow(['Étape','Acteur','Délai indicatif'],[4600,2800,2240])];
+   [['1. Demande motivée (outil, usage, données concernées)','Demandeur','—'],
+    ['2. Évaluation : classification AI Act, RGPD (AIPD si besoin), grille fournisseur','Référent IA','10 jours ouvrés'],
+    ['3. Décision : autorisé / autorisé sous conditions / refusé','Direction + référent IA','5 jours ouvrés'],
+    ['4. Inscription à la cartographie des systèmes d\'IA et paramétrage sécurisé','Référent IA','Avant tout usage'],
+    ['5. Information des utilisateurs et, si besoin, sensibilisation ciblée','Référent IA','Avant tout usage']
+   ].forEach(function(r){ wf.push(X.row([X.cell(r[0],{b:1}),X.cell(r[1]),X.cell(r[2])])); });
+   out.push(X.table(wf,[4600,2800,2240]));
+   out.push(X.note('Tout usage d\'un outil non validé (« Shadow IA ») doit cesser immédiatement et être déclaré au référent, sans sanction en cas de déclaration spontanée.'));
+   out.push(X.h2('9. Gouvernance, incidents et sanctions'));
    out.push(X.p('Référent IA / protection des données : '+((f.dpoDesigne||has(f.dpoNom))?V(f.dpoNom):V(f.emailRgpd))+'. Tout nouvel usage d\'IA lui est signalé pour évaluation préalable et inscription à la cartographie des systèmes d\'IA. Les manquements à l\'AI Act sont passibles d\'amendes pouvant atteindre 35 M€ ou 7 % du chiffre d\'affaires mondial pour les pratiques interdites (art. 5), et 15 M€ ou 3 % pour les autres manquements.',{}));
+   out.push(X.p('Tout incident lié à l\'IA (fuite de données via un prompt, résultat discriminatoire, contenu généré erroné diffusé, dysfonctionnement grave) est signalé au référent IA sous 24 heures et consigné au registre des incidents IA tenu en annexe de la cartographie. En cas de violation de données personnelles, la procédure de violation (notification CNIL sous 72 h) s\'applique cumulativement.',{}));
    out=out.concat(X.versionTable(f));
    return out;
  }},
@@ -1530,7 +1670,23 @@ var DOCS=[
    out.push(X.p('Lorsqu\'une IA est utilisée pour trier des candidatures, évaluer des performances ou prendre une décision affectant des personnes (usage à haut risque relevant de l\'Annexe III de l\'AI Act, notamment l\'emploi — point 4), la cartographie documente les tests réalisés pour détecter et corriger les biais algorithmiques, garantir la non-discrimination et assurer une supervision humaine effective.',{}));
    out.push(X.h2('4. Souveraineté et transferts hors UE'));
    out.push(X.p('Pour chaque système, la localisation d\'hébergement des modèles et des données est précisée (UE / hors UE). Tout traitement ou transfert hors UE est encadré par des garanties appropriées (décision d\'adéquation ou clauses contractuelles types), conformément au RGPD.',{}));
-   out.push(X.h2('5. Rappels de conformité (AI Act)'));
+   out.push(X.h2('5. Grille d\'évaluation des fournisseurs d\'IA'));
+   out.push(X.p('Chaque fournisseur est évalué avant contractualisation puis à chaque renouvellement :',{}));
+   var gf=[X.headRow(['Critère','Attendu','Éliminatoire ?'],[4300,3300,2040])];
+   [['Localisation de l\'hébergement (données et modèle)','UE ou garanties art. 46 RGPD','Oui si aucune garantie'],
+    ['Non-réutilisation des données pour l\'entraînement','Engagement contractuel (opt-out effectif)','Oui pour données professionnelles'],
+    ['DPA (art. 28 RGPD) signé','Oui','Oui'],
+    ['Certifications (ISO 27001, SOC 2, ISO/IEC 42001)','Au moins une','Non — point de vigilance'],
+    ['Documentation de transparence du modèle (art. 13 / 53 AI Act)','Disponible','Non — point de vigilance'],
+    ['Réversibilité (export et suppression des données en fin de contrat)','Prévue au contrat','Oui']
+   ].forEach(function(r){ gf.push(X.row([X.cell(r[0],{b:1}),X.cell(r[1]),X.cell(r[2])])); });
+   out.push(X.table(gf,[4300,3300,2040]));
+   out.push(X.h2('6. Registre des incidents IA'));
+   out.push(X.p('Tout incident lié à un système d\'IA est consigné ci-dessous (procédure de signalement : Politique d\'usage de l\'IA) :',{}));
+   var ri=[X.headRow(['Date','Système','Nature de l\'incident','Gravité','Mesures prises','Clos le'],[1200,1500,2740,1200,2000,1000])];
+   ri.push(X.row([X.cell('⟨ … ⟩'),X.cell('⟨ … ⟩'),X.cell('⟨ fuite / biais / erreur diffusée / indisponibilité ⟩'),X.cell('⟨ faible / moyenne / critique ⟩'),X.cell('⟨ … ⟩'),X.cell('⟨ … ⟩')]));
+   out.push(X.table(ri,[1200,1500,2740,1200,2000,1000]));
+   out.push(X.h2('7. Rappels de conformité (AI Act)'));
    out.push(X.li('Risque limité (chatbots, IA générative) : obligation de transparence ;'));
    out.push(X.li('Haut risque : gestion des risques, documentation, supervision humaine, journalisation ;'));
    out.push(X.li('Risque inacceptable : interdit (art. 5) ;'));
@@ -1579,15 +1735,23 @@ var DOCS=[
    out.push(X.li('Maintenir une supervision humaine sur toute décision affectant une personne ;'));
    out.push(X.li('Se méfier des biais et des discriminations possibles ;'));
    out.push(X.li('Signaler tout usage douteux ou tout outil non autorisé (« Shadow IA ») au référent.'));
+   out.push(X.h3('Mises en situation'));
+   out.push(X.li([{t:'Cas n° 1 — ',b:true},{t:'un client envoie une réclamation ; vous voulez que l\'IA rédige la réponse → anonymisez le courrier (nom, coordonnées, références) avant tout prompt, ou utilisez exclusivement l\'outil interne validé.'}]));
+   out.push(X.li([{t:'Cas n° 2 — ',b:true},{t:'l\'IA fournit un chiffre réglementaire pour un devis client → vérifiez-le à la source officielle avant envoi : vous restez responsable du livrable.'}]));
+   out.push(X.li([{t:'Cas n° 3 — ',b:true},{t:'un collègue utilise un outil d\'IA gratuit non listé dans la cartographie → signalez-le au référent IA ; l\'outil sera évalué, autorisé ou interdit.'}]));
    out.push(X.note('Les règles internes détaillées figurent dans la Politique d\'usage de l\'IA de l\'entreprise, à laquelle ce support renvoie.'));
    out.push(X.h2('4. Modalités'));
    out.push(X.kv([['Durée indicative','1 h à 2 h par session'],['Format','Présentiel ou visioconférence, en groupe'],['Fréquence','À l\'arrivée de chaque collaborateur, puis réévaluation annuelle'],['Animation',V(f.representant)+' ou le référent conformité / IA'],['Preuve conservée','Feuille d\'émargement + quiz']]));
-   out.push(X.h2('5. Quiz de validation des acquis'));
-   out.push(X.li('Peut-on saisir des données clients dans un outil d\'IA public ? (réponse attendue : non)'));
-   out.push(X.li('Citez un exemple de pratique d\'IA interdite par l\'AI Act.'));
-   out.push(X.li('Que faire avant d\'utiliser un résultat produit par une IA ? (le vérifier)'));
-   out.push(X.li('Doit-on informer un interlocuteur qu\'il échange avec un chatbot ? (oui)'));
-   out.push(X.li('À qui signaler un outil d\'IA utilisé sans autorisation ?'));
+   out.push(X.h2('5. Quiz de validation des acquis (corrigé)'));
+   out.push(X.p('Seuil de validation : 4 bonnes réponses sur 5. En deçà, une session de rattrapage est organisée sous 30 jours.',{}));
+   var qz=[X.headRow(['Question','Bonne réponse','Pourquoi'],[3800,1800,4040])];
+   [['Peut-on saisir le nom d\'un client dans un outil d\'IA grand public ?','Non','Donnée personnelle : risque de conservation et de réutilisation pour l\'entraînement'],
+    ['Un outil d\'IA qui trie des CV est un usage…','À haut risque','Emploi — Annexe III AI Act : supervision humaine et documentation obligatoires'],
+    ['Que faire avant d\'utiliser un texte généré par l\'IA ?','Le vérifier','L\'IA peut produire des erreurs plausibles (« hallucinations »)'],
+    ['Doit-on dire à un interlocuteur qu\'il échange avec un chatbot ?','Oui','Obligation de transparence — art. 50 AI Act'],
+    ['Un collègue utilise un outil d\'IA non validé. Que faites-vous ?','Le signaler au référent IA','Procédure Shadow IA — l\'outil doit être évalué avant tout usage']
+   ].forEach(function(r){ qz.push(X.row([X.cell(r[0],{b:1}),X.cell(r[1]),X.cell(r[2])])); });
+   out.push(X.table(qz,[3800,1800,4040]));
    out.push(X.h2('6. Feuille d\'émargement'));
    var em=[X.headRow(['Nom et prénom','Fonction','Date','Signature'],[3000,2640,1600,2400])];
    var k; for(k=0;k<6;k++){ em.push(X.row([X.cell('⟨ … ⟩'),X.cell('⟨ … ⟩'),X.cell('⟨ … ⟩'),X.cell(' ')])); }
@@ -1627,7 +1791,10 @@ var DOCS=[
     ['Violations de données subies sur l\'année','0','⟨ … ⟩'],
     ['Systèmes d\'IA recensés et classés','100 %','⟨ … ⟩'],
     ['Collaborateurs sensibilisés à la littératie IA (art. 4)','≥ 95 %','⟨ … ⟩'],
-    ['Systèmes à haut risque avec supervision humaine documentée','100 %','⟨ … ⟩']
+    ['Systèmes à haut risque avec supervision humaine documentée','100 %','⟨ … ⟩'],
+    ['Incidents IA enregistrés / clos dans le trimestre','100 % clos','⟨ … ⟩'],
+    ['Nouveaux outils IA passés par la procédure d\'approbation','100 %','⟨ … ⟩'],
+    ['Taux de réussite au quiz littératie IA (≥ 4/5)','≥ 90 %','⟨ … ⟩']
    ].forEach(function(r){ kpi.push(X.row([X.cell(r[0],{b:1}),X.cell(r[1]),X.cell(r[2])])); });
    out.push(X.table(kpi,[5000,2320,2320]));
    out.push(X.h2('3. Documentation en place'));
@@ -1635,10 +1802,15 @@ var DOCS=[
    [['Registre des activités de traitement','Art. 30'],['Politique de confidentialité','Art. 13-14'],['Mentions légales','LCEN'],['Procédure droits + registre','Art. 12-22'],['Procédure violations + registre','Art. 33-34'],['Politique de conservation','Art. 5.1.e'],['Politique cookies','Art. 82 LIL'],['Charte informatique','Art. 32'],['Information des salariés','Art. 13'],['Contrats de sous-traitance','Art. 28'],['Politique de sécurité (PSSI)','Art. 32'],['Plan d\'action / accountability','Art. 5.2'],['Politique & cartographie IA','AI Act'],['Sensibilisation littératie IA','AI Act art. 4']].forEach(function(r){ rows.push(X.row([X.cell(r[0],{b:1}),X.cell(r[1]),X.cell('⟨ en place / à faire ⟩')])); });
    out.push(X.table(rows,[5000,2600,2040]));
    out.push(X.h2('4. Gouvernance de l\'IA (AI Act)'));
-   out.push(X.p('Les systèmes d\'IA sont recensés et classés par niveau de risque (voir cartographie IA). Une politique d\'usage encadre les collaborateurs. Cette synthèse reflète les risques réels de l\'entreprise et est mise à jour à mesure qu\'ils évoluent.',{}));
-   out.push(X.h2('5. Engagement'));
+   out.push(X.kv([
+    ['Règles d\'usage et procédure d\'approbation','Politique d\'usage de l\'IA (§3 à 8)'],
+    ['Inventaire, classification et fournisseurs','Cartographie des systèmes d\'IA (§1 et 5)'],
+    ['Incidents IA','Registre des incidents (cartographie IA, §6)'],
+    ['Littératie (art. 4)','Support de sensibilisation + émargements + quiz corrigés'],
+    ['IA traitant des données personnelles','Registre des traitements + AIPD le cas échéant']
+   ]));
+   out.push(X.h2('5. Calendrier de réévaluation et engagement'));
    out.push(X.p(V(f.raisonSociale)+' s\'engage dans une démarche de conformité continue au RGPD et à l\'AI Act, et met à jour sa documentation à chaque évolution significative de ses activités, de ses outils ou de la réglementation.',{}));
-   out.push(X.h2('6. Calendrier de réévaluation'));
    out.push(X.p('La gouvernance dans son ensemble (registre, politiques, sécurité, cartographie IA) fait l\'objet d\'une révision obligatoire au minimum une fois par an. Dernière synthèse établie le '+today()+' — prochaine revue prévue : ⟨ date à + 12 mois ⟩. Échéances AI Act : pratiques interdites (art. 5) et littératie (art. 4) applicables depuis le 2 février 2025 ; obligations des systèmes à haut risque (Annexe III) à compter du 2 août 2026.',{b:true}));
    out=out.concat(X.signature(f,'Le référent conformité'));
    return out;
