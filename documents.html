@@ -304,7 +304,7 @@
 </div></footer>
 
 <div class="toast" id="toast"></div>
-<div style="position:fixed;bottom:8px;right:10px;z-index:9999;font:700 10px/1 system-ui,sans-serif;color:#7a7f95;background:rgba(255,255,255,.82);border:1px solid #e7e9f3;padding:4px 8px;border-radius:8px;pointer-events:none">Clarté · MàJ 08/07 · b59</div>
+<div style="position:fixed;bottom:8px;right:10px;z-index:9999;font:700 10px/1 system-ui,sans-serif;color:#7a7f95;background:rgba(255,255,255,.82);border:1px solid #e7e9f3;padding:4px 8px;border-radius:8px;pointer-events:none">Clarté · MàJ 08/07 · b60</div>
 
 <script>
 /* ================= FICHE SOCIÉTÉ (localStorage) ================= */
@@ -1264,6 +1264,10 @@ var DOCS=[
    out.push(X.table(pm,[5200,2300,2140]));
    out.push(X.h2('9. Mention courte à insérer en pied d\'e-mail'));
    out.push(X.note('« Cet e-mail contient un dispositif de mesure d\'ouverture. Vous pouvez vous y opposer à tout moment via le lien de désinscription / gestion des préférences ci-dessous. Voir notre politique de confidentialité. »',{label:'À copier-coller'}));
+   out.push(X.h2('10. Bloc de pied d\'e-mail complet (prêt à copier-coller)'));
+   out.push(X.p('Modèle aligné sur les pratiques des grands éditeurs. Important : proposer un lien « Désactiver le suivi des e-mails » DISTINCT du lien de désabonnement, afin de permettre l\'opposition au pixel sans se désinscrire (recommandation CNIL).',{i:true,c:X.C.dim,size:18}));
+   out.push(X.note('Se désabonner  ·  Désactiver le suivi des e-mails  ·  Gérer mes préférences  ·  Politique de confidentialité',{label:'Ligne de liens'}));
+   out.push(X.note('Cet e-mail a été envoyé à ⟨ adresse du destinataire ⟩. Certains de nos e-mails contiennent un pixel de mesure d\'ouverture, destiné à évaluer l\'ouverture de nos messages et à améliorer nos communications. Vous pouvez vous y opposer à tout moment via « Désactiver le suivi des e-mails » ou « Gérer mes préférences », sans que cela n\'affecte votre abonnement, ou exercer vos droits auprès de '+V(f.emailRgpd)+'. Pour en savoir plus : notre politique de confidentialité et notre politique cookies.',{label:'Bloc légal de pied de page'}));
    out=out.concat(X.versionTable(f));
    return out;
  }},
