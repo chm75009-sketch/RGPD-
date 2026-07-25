@@ -304,7 +304,7 @@
 </div></footer>
 
 <div class="toast" id="toast"></div>
-<div style="position:fixed;bottom:8px;right:10px;z-index:9999;font:700 10px/1 system-ui,sans-serif;color:#7a7f95;background:rgba(255,255,255,.82);border:1px solid #e7e9f3;padding:4px 8px;border-radius:8px;pointer-events:none">Clarté · MàJ 08/07 · b60</div>
+<div style="position:fixed;bottom:8px;right:10px;z-index:9999;font:700 10px/1 system-ui,sans-serif;color:#7a7f95;background:rgba(255,255,255,.82);border:1px solid #e7e9f3;padding:4px 8px;border-radius:8px;pointer-events:none">Clarté · MàJ 08/07 · b61</div>
 
 <script>
 /* ================= FICHE SOCIÉTÉ (localStorage) ================= */
@@ -795,8 +795,254 @@ function generate(docDef){
   });
 }
 
+// Corps du Guide complet — renvoie un tableau d'éléments docx via les helpers X
+function guideBody(X,f){
+ var out=[];
+ var H1=function(t){out.push(X.h1(t));};
+ var H2=function(t){out.push(X.h2(t));};
+ var H3=function(t){out.push(X.h3(t));};
+ var P=function(t){out.push(X.p(t));};
+ var LI=function(t){out.push(X.li(t));};
+ var NOTE=function(t,l){out.push(X.note(t,l?{label:l}:{}));};
+ var BREAK=function(){out.push(X.pageBreak());};
+
+ /* ===================== INTRODUCTION ===================== */
+ H1(`Introduction — pourquoi ce guide`);
+ P(`Le présent guide a un objectif simple : vous permettre de comprendre, de A à Z, ce qu'exigent le Règlement général sur la protection des données (RGPD) et le règlement européen sur l'intelligence artificielle (AI Act), et de savoir concrètement quoi faire. Il ne se limite pas à énoncer des principes : il explique la logique de chaque obligation, en donne la portée réelle, illustre par des exemples et renvoie aux documents opérationnels correspondants.`);
+ P(`Ces deux textes partagent une même philosophie : la confiance par la responsabilité. Ils ne demandent pas la perfection, mais la capacité à démontrer, à tout moment, que vous maîtrisez vos traitements de données et vos usages de l'intelligence artificielle. C'est la notion d'« accountability » : documenter, prouver, tenir à jour.`);
+ P(`Ce guide s'adresse aussi bien au dirigeant qui découvre le sujet qu'au référent qui pilote la conformité au quotidien. Il est organisé en cinq parties : le RGPD (Partie I), l'AI Act (Partie II), l'articulation des deux (Partie III), une méthode de mise en conformité étape par étape (Partie IV) et des annexes de référence (Partie V). Chaque section peut se lire indépendamment ; les renvois entre chapitres permettent de naviguer selon vos besoins.`);
+ NOTE(`Ce document a une vocation pédagogique et informative. Il ne constitue pas une consultation juridique individualisée. Les références (articles, délibérations, dates) sont mentionnées pour vous permettre de vérifier et d'approfondir. Chaque situation appelle une analyse propre, à mener le cas échéant avec l'appui d'un professionnel.`,`Avertissement`);
+ BREAK();
+
+ /* ===================== PARTIE I — RGPD ===================== */
+ H1(`Partie I — Le RGPD, la protection des données personnelles`);
+
+ H2(`1. Comprendre le RGPD : origine, objectifs et champ d'application`);
+ P(`Le RGPD est le Règlement (UE) 2016/679 du 27 avril 2016, applicable directement dans tous les États membres depuis le 25 mai 2018. En France, il se combine avec la loi n° 78-17 du 6 janvier 1978 dite « Informatique et Libertés », modernisée pour l'occasion. Un règlement européen s'impose sans transposition : ses règles sont d'application immédiate, ce qui explique l'uniformité du cadre à l'échelle de l'Union.`);
+ P(`Son objectif est double. D'une part, protéger les personnes physiques à l'égard du traitement de leurs données personnelles, considéré comme un droit fondamental (article 8 de la Charte des droits fondamentaux de l'Union). D'autre part, permettre la libre circulation de ces données au sein du marché intérieur, en donnant aux entreprises un cadre unique plutôt que vingt-sept législations différentes.`);
+ H3(`Le champ d'application matériel`);
+ P(`Le RGPD s'applique à tout « traitement » de « données à caractère personnel ». Une donnée personnelle est toute information se rapportant à une personne physique identifiée ou identifiable, directement (nom, photo) ou indirectement (numéro client, adresse IP, identifiant en ligne, données de localisation). Un traitement est toute opération portant sur ces données : collecte, enregistrement, consultation, conservation, modification, transmission, effacement — qu'elle soit automatisée ou manuelle dès lors que les données figurent dans un fichier structuré.`);
+ P(`Cette définition est volontairement large : dès que vous gérez un fichier clients, une paie, une newsletter, un système de badges ou de vidéosurveillance, vous réalisez des traitements soumis au RGPD. Le texte ne s'applique en revanche pas aux données des personnes morales en tant que telles, ni aux traitements strictement personnels ou domestiques.`);
+ H3(`Le champ d'application territorial`);
+ P(`Le RGPD s'applique aux organismes établis dans l'Union, quel que soit le lieu du traitement. Il s'applique aussi, par extraterritorialité (article 3), aux organismes établis hors de l'Union qui ciblent des personnes situées dans l'Union, soit en leur offrant des biens ou services, soit en suivant leur comportement. Un acteur américain qui vend en ligne à des clients français est donc concerné.`);
+ H3(`Les acteurs : responsable de traitement, sous-traitant, personne concernée`);
+ P(`Le responsable de traitement est celui qui détermine les finalités et les moyens du traitement — en pratique, l'entreprise elle-même. Le sous-traitant traite les données pour le compte du responsable, sur ses instructions (hébergeur, prestataire de paie, routeur d'e-mailing) : il est encadré par l'article 28. La personne concernée est l'individu dont les données sont traitées (client, salarié, prospect). Le délégué à la protection des données (DPO), enfin, est le référent chargé de veiller à la conformité (voir chapitre 8).`);
+
+ H2(`2. Les grands principes de licéité (article 5)`);
+ P(`L'article 5 énonce les principes qui gouvernent tout traitement. Les respecter, et pouvoir le démontrer, constitue le socle de la conformité. Ils sont au nombre de sept.`);
+ H3(`2.1 Licéité, loyauté, transparence`);
+ P(`Un traitement doit reposer sur une base légale valable (voir chapitre 3), être mis en œuvre de manière loyale (sans tromperie ni collecte cachée) et transparente : la personne doit savoir qui traite ses données, pour quoi et comment exercer ses droits. La transparence se matérialise par l'information (articles 13 et 14) et par des mentions claires.`);
+ H3(`2.2 Limitation des finalités`);
+ P(`Les données sont collectées pour des finalités déterminées, explicites et légitimes. Elles ne peuvent être réutilisées pour un objectif incompatible avec celui d'origine. On ne peut, par exemple, collecter des adresses e-mail pour la gestion d'une commande puis les exploiter pour de la prospection sans base appropriée.`);
+ H3(`2.3 Minimisation des données`);
+ P(`Seules les données adéquates, pertinentes et strictement nécessaires à la finalité peuvent être traitées. Collecter « au cas où » est contraire au RGPD. Ce principe guide la conception même des formulaires : chaque champ demandé doit être justifié.`);
+ H3(`2.4 Exactitude`);
+ P(`Les données doivent être exactes et tenues à jour ; les données inexactes doivent être rectifiées ou effacées sans tarder. Ce principe fonde le droit de rectification et impose des procédures de mise à jour.`);
+ H3(`2.5 Limitation de la conservation`);
+ P(`Les données ne sont conservées que le temps nécessaire à la finalité. Au-delà, elles doivent être supprimées ou anonymisées. La CNIL sanctionne régulièrement la conservation excessive (prospects gardés indéfiniment, dossiers d'anciens salariés jamais purgés). D'où l'importance d'une politique de durées de conservation chiffrée (voir chapitre 6).`);
+ H3(`2.6 Intégrité et confidentialité (sécurité)`);
+ P(`Les données doivent être protégées par des mesures techniques et organisationnelles appropriées contre l'accès non autorisé, la perte ou la destruction. C'est le fondement de l'obligation de sécurité de l'article 32 (voir chapitre 6).`);
+ H3(`2.7 Responsabilité (accountability)`);
+ P(`Le responsable de traitement doit non seulement respecter ces principes, mais être en mesure de le démontrer. C'est le changement de paradigme du RGPD : on passe d'une logique de formalités déclaratives préalables à une logique de responsabilisation continue, prouvée par la documentation (registre, politiques, procédures, journaux, preuves de consentement).`);
+
+ H2(`3. Les bases légales du traitement (article 6)`);
+ P(`Tout traitement doit reposer sur au moins l'une des six bases légales de l'article 6. Choisir la bonne base est déterminant : elle conditionne les droits de la personne et la manière d'informer. On ne « cumule » pas les bases : on en retient une par finalité.`);
+ var b6=[X.headRow([`Base légale`,`Quand l'utiliser`,`Exemple`],[2600,4040,3000])];
+ [[`Consentement (6.1.a)`,`La personne accepte librement, de façon spécifique, éclairée et univoque. Révocable à tout moment.`,`Newsletter, cookies non essentiels, prospection B2C`],
+  [`Exécution du contrat (6.1.b)`,`Le traitement est nécessaire à un contrat conclu avec la personne, ou à des mesures précontractuelles.`,`Livraison d'une commande, gestion d'un abonnement`],
+  [`Obligation légale (6.1.c)`,`La loi impose le traitement.`,`Facturation, déclarations sociales, conservation comptable`],
+  [`Intérêt vital (6.1.d)`,`Nécessaire à la sauvegarde de la vie d'une personne.`,`Urgence médicale`],
+  [`Mission d'intérêt public (6.1.e)`,`Exercice de l'autorité publique ou d'une mission d'intérêt général.`,`Administrations, certaines missions déléguées`],
+  [`Intérêt légitime (6.1.f)`,`Intérêt légitime du responsable, sauf atteinte disproportionnée aux droits de la personne. Nécessite un test de mise en balance.`,`Sécurité des locaux, prospection B2B, lutte contre la fraude`]
+ ].forEach(function(r){ b6.push(X.row([X.cell(r[0],{b:1}),X.cell(r[1]),X.cell(r[2])])); });
+ out.push(X.table(b6,[2600,4040,3000]));
+ P(`Le consentement mérite une vigilance particulière. Pour être valable, il doit être libre (pas de conséquence négative en cas de refus), spécifique (une case par finalité), éclairé (information préalable) et univoque (un acte positif clair — pas de case pré-cochée). Il doit pouvoir être retiré aussi facilement qu'il a été donné, et vous devez pouvoir en conserver la preuve.`);
+ P(`L'intérêt légitime, souvent utilisé, n'est pas un blanc-seing : il suppose un test documenté en trois temps — l'intérêt est-il légitime ? le traitement est-il nécessaire pour l'atteindre ? l'équilibre avec les droits et libertés de la personne est-il respecté ? Ce test (« LIA ») doit être conservé.`);
+
+ H2(`4. Les données sensibles (article 9) et particulières (article 10)`);
+ P(`Certaines données appellent une protection renforcée. L'article 9 interdit par principe le traitement des données révélant l'origine raciale ou ethnique, les opinions politiques, les convictions religieuses ou philosophiques, l'appartenance syndicale, ainsi que des données génétiques, biométriques (à des fins d'identification unique), de santé, ou relatives à la vie ou à l'orientation sexuelles.`);
+ P(`Ce principe d'interdiction connaît des exceptions strictes : consentement explicite de la personne, obligations en droit du travail et de la sécurité sociale (par exemple la gestion des arrêts maladie), sauvegarde des intérêts vitaux, activités de fondations ou d'associations, données manifestement rendues publiques par la personne, ou motifs d'intérêt public en matière de santé. En dehors de ces cas, le traitement est prohibé.`);
+ P(`L'article 10 encadre séparément les données relatives aux condamnations pénales et infractions, dont le traitement est réservé à des cas précis. Enfin, le numéro de sécurité sociale (NIR) fait l'objet d'un cadre spécifique (décret n° 2019-341) : son usage est limité, notamment, à la paie, aux déclarations sociales et au suivi mutuelle/retraite.`);
+ NOTE(`Le traitement de données de santé (dossier patient, HDS) impose l'hébergement chez un Hébergeur de Données de Santé certifié et, très souvent, une analyse d'impact (AIPD). La biométrie sur le lieu de travail est strictement encadrée par la CNIL.`,`Points de vigilance`);
+
+ H2(`5. Les droits des personnes (articles 12 à 22)`);
+ P(`Le RGPD confère aux personnes une série de droits qu'elles peuvent exercer auprès du responsable de traitement. Celui-ci doit répondre dans un délai d'un mois (prorogeable de deux mois pour les demandes complexes, en informant la personne dans le premier mois), gratuitement (sauf demande manifestement infondée ou excessive), après avoir vérifié l'identité du demandeur sans sur-collecter.`);
+ H3(`5.1 Droit à l'information (articles 13 et 14)`);
+ P(`La personne doit être informée, au moment de la collecte, de l'identité du responsable, des finalités et bases légales, des destinataires, des durées de conservation, de ses droits, de la possibilité de saisir la CNIL, et le cas échéant des transferts hors UE. Lorsque les données ne sont pas collectées directement auprès d'elle (article 14), l'information porte aussi sur la source des données.`);
+ H3(`5.2 Droit d'accès (article 15)`);
+ P(`Toute personne peut obtenir la confirmation que ses données sont traitées, en recevoir une copie, et connaître les finalités, catégories de données, destinataires et durées. La réponse ne doit pas porter atteinte aux droits de tiers (occulter les données concernant d'autres personnes).`);
+ H3(`5.3 Droit de rectification (article 16)`);
+ P(`La personne peut faire corriger des données inexactes ou compléter des données incomplètes. La rectification doit être répercutée aux destinataires auxquels les données ont été communiquées (article 19).`);
+ H3(`5.4 Droit à l'effacement, dit « droit à l'oubli » (article 17)`);
+ P(`La personne peut demander la suppression de ses données, notamment lorsqu'elles ne sont plus nécessaires, que le consentement est retiré, ou qu'elle s'oppose au traitement. Ce droit n'est pas absolu : il cède devant une obligation légale de conservation (pièces comptables conservées dix ans), l'exercice de la liberté d'expression, ou la constatation de droits en justice.`);
+ H3(`5.5 Droit à la limitation (article 18)`);
+ P(`La personne peut demander le « gel » d'un traitement, par exemple le temps de vérifier l'exactitude d'une donnée contestée. Les données sont alors conservées mais non utilisées.`);
+ H3(`5.6 Droit à la portabilité (article 20)`);
+ P(`Lorsque le traitement est fondé sur le consentement ou le contrat et qu'il est automatisé, la personne peut récupérer les données qu'elle a fournies dans un format structuré et lisible par machine, et les transmettre à un autre responsable.`);
+ H3(`5.7 Droit d'opposition (article 21)`);
+ P(`La personne peut s'opposer à un traitement fondé sur l'intérêt légitime ou l'intérêt public, pour des raisons tenant à sa situation particulière. L'opposition à la prospection est, elle, absolue et sans condition : elle doit être exécutée immédiatement.`);
+ H3(`5.8 Décision individuelle automatisée (article 22)`);
+ P(`La personne a le droit de ne pas faire l'objet d'une décision fondée exclusivement sur un traitement automatisé produisant des effets juridiques ou l'affectant significativement (par exemple un refus de crédit ou un tri de candidature entièrement automatisé). Elle peut obtenir une intervention humaine, exprimer son point de vue et contester la décision. Ce droit fait le lien direct avec l'AI Act.`);
+ NOTE(`Une procédure interne (registre des demandes, vérification d'identité, modèles de réponses, respect du délai d'un mois) est indispensable pour traiter ces droits sans risque. Voir le document « Procédure d'exercice des droits ».`,`À mettre en place`);
+
+ H2(`6. Les obligations du responsable de traitement`);
+ H3(`6.1 Le registre des activités de traitement (article 30)`);
+ P(`Le registre recense l'ensemble des traitements de l'organisme. C'est le premier document demandé lors d'un contrôle. Chaque traitement y fait l'objet d'une fiche mentionnant la finalité, les catégories de personnes et de données, les destinataires, les transferts éventuels hors UE, les durées de conservation et une description des mesures de sécurité. La CNIL fournit un modèle de registre « de base » sous forme de fiches, une par activité. L'obligation concerne en pratique la quasi-totalité des organismes.`);
+ H3(`6.2 L'information des personnes (articles 13-14)`);
+ P(`Elle se matérialise par une politique de confidentialité (sur le site, dans les contrats), des mentions sur les formulaires, et des notices spécifiques (par exemple pour les salariés). L'information doit être concise, transparente, compréhensible et aisément accessible.`);
+ H3(`6.3 La sécurité (article 32)`);
+ P(`Le responsable met en œuvre des mesures adaptées au risque : contrôle des accès et gestion des habilitations selon le besoin d'en connaître, mots de passe robustes (au moins douze caractères combinant plusieurs types, ou une phrase de passe ; stockage sous forme de condensat salé), authentification multifacteur pour les accès sensibles, chiffrement, sauvegardes régulières et testées, journalisation, mises à jour, sensibilisation du personnel. La pseudonymisation et le chiffrement sont expressément cités par le texte.`);
+ H3(`6.4 La gestion des violations de données (articles 33 et 34)`);
+ P(`Une violation est toute atteinte à la sécurité entraînant la destruction, la perte, l'altération, la divulgation ou l'accès non autorisé à des données. En cas de risque pour les droits et libertés des personnes, le responsable doit la notifier à la CNIL dans les 72 heures suivant sa découverte. Si le risque est élevé, il doit aussi informer les personnes concernées. Toute violation, notifiée ou non, est consignée dans un registre interne (faits, effets, mesures — article 33.5). Lorsque la violation survient chez un sous-traitant, celui-ci doit alerter le responsable sans délai.`);
+ H3(`6.5 L'analyse d'impact (AIPD — articles 35 et 36)`);
+ P(`Lorsqu'un traitement est susceptible d'engendrer un risque élevé pour les droits et libertés, une analyse d'impact relative à la protection des données doit être menée avant sa mise en œuvre. La CNIL a publié la liste des traitements qui y sont soumis (délibération 2018-327) et de ceux qui en sont exemptés (2019-118). En pratique, un traitement réunissant au moins deux des neuf critères des lignes directrices européennes (évaluation ou scoring, décision automatisée, surveillance systématique, données sensibles, grande échelle, croisement de données, personnes vulnérables, usage innovant, exclusion d'un droit) doit faire l'objet d'une AIPD. Elle décrit le traitement, apprécie la nécessité et la proportionnalité, évalue les risques (accès illégitime, modification, disparition) selon leur gravité et leur vraisemblance, et définit les mesures. Si un risque élevé subsiste malgré les mesures, la CNIL est consultée (article 36).`);
+ H3(`6.6 La protection dès la conception et par défaut (article 25)`);
+ P(`Le responsable doit intégrer la protection des données dès la conception d'un produit ou d'un service (« privacy by design ») et garantir que, par défaut, seules les données nécessaires sont traitées (« privacy by default »). Concrètement : minimiser les champs, activer les paramètres les plus protecteurs par défaut, ne pas rendre publiques des données sans action de la personne.`);
+ H3(`6.7 La politique de durées de conservation`);
+ P(`Chaque donnée suit un cycle de vie en trois phases : la base active (usage courant), l'archivage intermédiaire (accès restreint, pour une obligation légale ou un contentieux) et le sort final (suppression ou anonymisation). Les durées doivent être chiffrées, jamais laissées « au temps nécessaire ». Exemples : pièces comptables 10 ans (article L123-22 du code de commerce), bulletins de paie 5 ans (article L3243-4 du code du travail), prospects 3 ans après le dernier contact, candidatures non retenues 2 ans, cookies 13 mois, données issues de la mesure d'audience 25 mois.`);
+
+ H2(`7. Sous-traitants (article 28) et transferts hors UE (chapitre V)`);
+ P(`Lorsqu'un prestataire traite des données pour votre compte, un contrat de sous-traitance (« DPA ») doit être conclu. L'article 28.3 impose huit obligations : traiter les données sur instruction documentée ; garantir la confidentialité du personnel ; assurer la sécurité (article 32) ; n'engager un sous-traitant ultérieur qu'avec autorisation ; aider le responsable à répondre aux demandes de droits ; l'assister pour la sécurité, les violations et les analyses d'impact ; supprimer ou restituer les données en fin de contrat au choix du responsable ; tenir à disposition la documentation et permettre les audits. Le sous-traitant doit aussi alerter s'il estime qu'une instruction est illicite.`);
+ P(`Le transfert de données hors de l'Union européenne est encadré par le chapitre V. Il n'est possible que vers un pays offrant un niveau de protection adéquat (décision d'adéquation de la Commission, tel le Data Privacy Framework pour certains transferts vers les États-Unis) ou, à défaut, sous garanties appropriées, principalement les clauses contractuelles types (CCT), assorties si nécessaire de mesures supplémentaires. Utiliser un outil dont les serveurs sont hors UE constitue un transfert qu'il faut identifier et encadrer.`);
+
+ H2(`8. Le délégué à la protection des données (articles 37 à 39)`);
+ P(`La désignation d'un DPO est obligatoire dans trois cas (article 37.1) : pour les autorités et organismes publics ; lorsque les activités de base consistent en un suivi régulier et systématique des personnes à grande échelle ; lorsqu'elles consistent en un traitement à grande échelle de données sensibles ou relatives à des infractions. Hors ces cas, la désignation d'un référent reste vivement recommandée.`);
+ P(`Le DPO informe et conseille, contrôle le respect du RGPD, conseille sur les AIPD, coopère avec la CNIL et en est le point de contact (article 39). Il exerce ses missions en toute indépendance, ne peut être sanctionné pour cet exercice, rend compte au plus haut niveau, dispose de moyens suffisants, est soumis au secret professionnel (article 38.5) et ne doit pas être en situation de conflit d'intérêts (il ne peut être juge et partie, donc pas DSI, DRH ou dirigeant décidant des finalités). Ses coordonnées sont communiquées à la CNIL et publiées. Le responsable de traitement demeure, lui, seul responsable de la conformité.`);
+
+ H2(`9. Cookies, traceurs et pixels de suivi`);
+ P(`Les cookies et autres traceurs relèvent de l'article 82 de la loi Informatique et Libertés, qui transpose la directive « ePrivacy ». Le principe : sauf exemption, aucun traceur non essentiel ne peut être déposé ou lu sans le consentement préalable de l'internaute. Sont exemptés les traceurs strictement nécessaires (session, authentification, panier, équilibrage de charge, mémorisation du choix de consentement) et, sous conditions, certains outils de mesure d'audience.`);
+ P(`Les règles d'or de la CNIL : refuser doit être aussi simple qu'accepter (boutons de même niveau) ; la poursuite de la navigation ne vaut pas consentement ; les cases ne sont pas pré-cochées ; aucun traceur soumis à consentement n'est déposé avant le choix ; le consentement est renouvelé environ tous les six mois et sa preuve conservée. La durée de vie d'un cookie de mesure d'audience n'excède pas 13 mois et les données qui en sont issues ne sont pas conservées au-delà de 25 mois.`);
+ P(`Nouveauté 2026 : la CNIL a adopté, par la délibération n° 2026-042 du 12 mars 2026, une recommandation sur les « pixels de suivi » dans les courriels — ces images invisibles qui mesurent l'ouverture d'un e-mail. Elles relèvent des mêmes règles que les cookies (article 82). Une période transitoire permet, pour les coordonnées déjà enregistrées, de poursuivre la mesure d'ouverture en informant les personnes et en garantissant une opposition simple, distincte du désabonnement ; à son issue, le dispositif repose sur le consentement ou une exemption.`);
+
+ H2(`10. Le RGPD au travail : la protection des données des salariés`);
+ P(`La relation de travail génère de nombreux traitements : gestion administrative, paie et déclarations sociales, plannings, mutuelle, médecine du travail, formation. Les données RH ne reposent pas sur le consentement du salarié (par nature déséquilibré) mais sur le contrat, l'obligation légale et l'intérêt légitime de l'employeur. Le salarié doit être informé par une notice dédiée et conserve l'ensemble de ses droits.`);
+ P(`La mise en place d'un dispositif de contrôle (vidéosurveillance, géolocalisation des véhicules, contrôle des accès, journalisation informatique) obéit à des règles précises : il doit être proportionné, ne pas placer les salariés sous une surveillance permanente, faire l'objet d'une information préalable des intéressés et d'une consultation préalable du comité social et économique (article L2312-38 du code du travail). À défaut, la preuve tirée du dispositif peut être jugée inopposable. La géolocalisation, en particulier, doit être désactivée hors temps de travail et ne peut être le moyen principal de contrôle du temps.`);
+
+ H2(`11. Contrôles, plaintes et sanctions`);
+ P(`La CNIL peut contrôler sur place, en ligne, sur audition ou sur pièces, souvent à la suite d'une plainte. Elle dispose d'une procédure simplifiée (mises en demeure, sanctions rapides) qui vise de plus en plus les PME. Les sanctions vont de l'avertissement à l'amende administrative, qui peut atteindre 20 millions d'euros ou 4 % du chiffre d'affaires annuel mondial, le montant le plus élevé étant retenu. En 2025, la CNIL a prononcé 486 millions d'euros de sanctions ; les cookies, la surveillance des salariés, la prospection sans base légale, les défauts de sécurité et les durées de conservation excessives figurent parmi les premiers motifs. Au-delà du montant, l'atteinte à la réputation et la perte de confiance sont des risques majeurs — et la conformité est devenue un critère dans les appels d'offres.`);
+ BREAK();
+
+ /* ===================== PARTIE II — AI ACT ===================== */
+ H1(`Partie II — L'AI Act, le règlement européen sur l'intelligence artificielle`);
+
+ H2(`1. Comprendre l'AI Act : objectifs, champ et acteurs`);
+ P(`L'AI Act est le Règlement (UE) 2024/1689, entré en vigueur le 1er août 2024. C'est le premier cadre juridique complet au monde consacré à l'intelligence artificielle. Comme le RGPD, c'est un règlement d'application directe, à portée extraterritoriale : il vise aussi les acteurs hors UE dont les systèmes sont utilisés dans l'Union.`);
+ P(`Son objectif est de garantir une IA « digne de confiance » : sûre, transparente, respectueuse des droits fondamentaux, tout en soutenant l'innovation. Il ne régule pas la technologie en tant que telle, mais les usages, selon le risque qu'ils présentent.`);
+ P(`Point essentiel, souvent ignoré : l'AI Act ne concerne pas seulement ceux qui conçoivent l'IA. Il distingue notamment le « fournisseur » (qui développe et met sur le marché un système d'IA) et le « déployeur » (qui utilise un système d'IA sous sa propre autorité). Une entreprise qui utilise ChatGPT, un chatbot, un outil de tri de CV ou un logiciel intégrant de l'IA est un déployeur, et assume à ce titre des obligations. Une entreprise qui met un système d'IA sur le marché sous sa marque devient fournisseur, avec des obligations renforcées.`);
+
+ H2(`2. L'approche par les risques : quatre niveaux`);
+ P(`L'architecture de l'AI Act repose sur une pyramide de risques. Plus l'usage est risqué pour les droits et la sécurité, plus les obligations sont lourdes.`);
+ var niv=[X.headRow([`Niveau`,`Définition`,`Exemples`,`Régime`],[1900,2700,2600,2440])];
+ [[`Inacceptable`,`Usages contraires aux valeurs de l'Union`,`Notation sociale, manipulation, exploitation de vulnérabilités, catégorisation biométrique sensible, reconnaissance des émotions au travail`,`Interdit (article 5)`],
+  [`Haut risque`,`Usages pouvant affecter significativement la sécurité ou les droits`,`Recrutement, évaluation des salariés, accès à des services essentiels, biométrie`,`Obligations strictes (Annexe III)`],
+  [`Risque limité`,`Interaction avec des humains`,`Chatbots, IA générative`,`Transparence (article 50)`],
+  [`Risque minimal`,`La grande majorité des usages`,`Filtres anti-spam, correcteurs, suggestions`,`Libre ; bonnes pratiques`]
+ ].forEach(function(r){ niv.push(X.row([X.cell(r[0],{b:1}),X.cell(r[1]),X.cell(r[2]),X.cell(r[3])])); });
+ out.push(X.table(niv,[1900,2700,2600,2440]));
+
+ H2(`3. Les pratiques interdites (article 5)`);
+ P(`Certaines pratiques sont purement et simplement interdites, car jugées incompatibles avec les droits fondamentaux : la manipulation subliminale ou trompeuse causant un préjudice ; l'exploitation des vulnérabilités liées à l'âge, au handicap ou à la situation sociale ; la notation sociale généralisée par les autorités ; certaines utilisations de l'identification biométrique à distance en temps réel dans l'espace public ; la catégorisation biométrique déduisant des données sensibles ; la reconnaissance des émotions sur le lieu de travail et dans l'enseignement (sauf raisons médicales ou de sécurité) ; le moissonnage non ciblé d'images faciales pour constituer des bases de reconnaissance. Ces interdictions sont applicables depuis le 2 février 2025.`);
+
+ H2(`4. Les systèmes à haut risque (Annexe III)`);
+ P(`L'Annexe III liste les domaines où un système d'IA est présumé à haut risque : biométrie, infrastructures critiques, éducation, emploi (tri de candidatures, évaluation, décisions de promotion ou de licenciement), accès aux services essentiels (crédit, assurance, aides sociales), maintien de l'ordre, migration, justice. Pour ces systèmes, l'AI Act impose un ensemble d'obligations : système de gestion des risques, gouvernance des données d'entraînement, documentation technique et journalisation, transparence vis-à-vis des déployeurs, supervision humaine effective (article 14), robustesse, exactitude et cybersécurité. Ces obligations s'appliquent à compter du 2 août 2026.`);
+
+ H2(`5. Les obligations des déployeurs (article 26)`);
+ P(`Le déployeur d'un système à haut risque doit notamment : utiliser le système conformément à sa notice ; assurer une supervision humaine par des personnes compétentes ; surveiller le fonctionnement et signaler les incidents ; conserver les journaux ; s'assurer de la pertinence des données d'entrée qu'il maîtrise ; et informer les travailleurs et leurs représentants lorsqu'un système à haut risque est utilisé sur le lieu de travail (article 26, paragraphe 7). Le cas échéant, une analyse d'impact sur les droits fondamentaux (article 27) est requise.`);
+
+ H2(`6. Les obligations de transparence (article 50)`);
+ P(`Indépendamment du niveau de risque, la transparence s'impose dans plusieurs situations : une personne qui interagit avec un système d'IA (un chatbot) doit en être informée, sauf si c'est évident ; les contenus générés ou manipulés par IA (textes, images, sons, vidéos, « hypertrucages ») doivent être identifiés comme tels dans un format lisible par machine. Cette obligation vise à préserver la confiance et à lutter contre la désinformation.`);
+
+ H2(`7. La littératie en intelligence artificielle (article 4)`);
+ P(`L'article 4, applicable depuis le 2 février 2025, impose à toute organisation qui déploie ou utilise des systèmes d'IA de veiller à un niveau suffisant de « littératie IA » de ses personnels. Il ne s'agit pas d'une compétence technique, mais d'une compréhension adaptée à la fonction de chacun : savoir ce qu'est l'IA et ses limites (elle peut se tromper avec assurance), connaître les risques (ne jamais injecter de données personnelles ou confidentielles dans un outil grand public), respecter les règles internes, vérifier les résultats, maintenir une décision humaine et signaler les usages douteux. Cette obligation se prouve par une action de sensibilisation et sa trace (support de formation, feuille d'émargement, quiz).`);
+
+ H2(`8. Les modèles d'IA à usage général (GPAI)`);
+ P(`Les modèles d'IA à usage général — les grands modèles de fondation sur lesquels reposent de nombreuses applications — font l'objet d'obligations spécifiques de transparence et de documentation, renforcées pour ceux présentant un « risque systémique ». Ces obligations s'appliquent depuis le 2 août 2025 et concernent d'abord les fournisseurs de ces modèles ; les déployeurs en bénéficient indirectement, via la documentation mise à leur disposition.`);
+
+ H2(`9. Le calendrier d'application`);
+ var cal=[X.headRow([`Échéance`,`Ce qui s'applique`],[2600,7040])];
+ [[`1er août 2024`,`Entrée en vigueur du règlement`],
+  [`2 février 2025`,`Interdiction des pratiques à risque inacceptable (article 5) et obligation de littératie IA (article 4)`],
+  [`2 août 2025`,`Obligations relatives aux modèles d'IA à usage général (GPAI) et gouvernance`],
+  [`2 août 2026`,`Application générale, notamment aux systèmes à haut risque de l'Annexe III et aux obligations de transparence`],
+  [`2 août 2027`,`Application aux systèmes d'IA à haut risque intégrés à des produits déjà réglementés`]
+ ].forEach(function(r){ cal.push(X.row([X.cell(r[0],{b:1}),X.cell(r[1])])); });
+ out.push(X.table(cal,[2600,7040]));
+
+ H2(`10. Gouvernance et sanctions`);
+ P(`La surveillance de l'AI Act est assurée, au niveau européen, par le Bureau de l'IA, et au niveau national par des autorités désignées ; en France, la CNIL joue un rôle central, aux côtés d'autres autorités (ANSSI, DGCCRF, ARCOM, Défenseur des droits). Les sanctions sont dissuasives : jusqu'à 35 millions d'euros ou 7 % du chiffre d'affaires mondial pour les pratiques interdites (article 5), jusqu'à 15 millions d'euros ou 3 % pour les autres manquements, et des montants moindres pour les informations inexactes fournies aux autorités.`);
+ BREAK();
+
+ /* ===================== PARTIE III — ARTICULATION ===================== */
+ H1(`Partie III — RGPD et AI Act : une conformité à mener de front`);
+ P(`Les deux règlements ne se remplacent pas : ils se cumulent. Dès qu'un système d'IA traite des données à caractère personnel — ce qui est très fréquent (un outil de tri de CV, un chatbot qui enregistre des conversations, une IA de scoring) — le RGPD s'applique pleinement en même temps que l'AI Act. Il faut alors une base légale, informer les personnes, minimiser les données, respecter leurs droits, et réaliser une AIPD si le risque est élevé.`);
+ P(`Plusieurs notions se répondent d'un texte à l'autre. La supervision humaine de l'article 14 de l'AI Act prolonge le droit de ne pas subir une décision entièrement automatisée de l'article 22 du RGPD. La transparence de l'article 50 de l'AI Act complète l'information des articles 13 et 14 du RGPD. La gouvernance des données d'entraînement rejoint les principes de minimisation et de licéité. Mener les deux chantiers séparément coûte du temps et de l'argent ; les traiter ensemble, là où ils se recoupent, est à la fois plus efficace et plus sûr.`);
+ P(`Le point le plus sensible en pratique est la « fuite de données » via les outils d'IA grand public : injecter des données clients, RH ou des secrets d'affaires dans un outil public expose à une réutilisation de ces données, y compris pour l'entraînement du modèle. C'est à la fois une violation potentielle du RGPD et un manquement aux règles internes d'usage de l'IA. La règle d'or : n'utiliser que des outils validés et contractualisés pour toute donnée non publique.`);
+ BREAK();
+
+ /* ===================== PARTIE IV — METHODE ===================== */
+ H1(`Partie IV — Méthode de mise en conformité, étape par étape`);
+ P(`La conformité n'est pas un projet ponctuel mais une démarche continue. La méthode ci-dessous, en six étapes, permet de la structurer, du diagnostic au maintien dans le temps.`);
+ H2(`Étape 1 — Diagnostic et cartographie`);
+ P(`Recenser tous les traitements de données (clients, prospects, salariés, fournisseurs, site web, vidéosurveillance) et tous les usages d'IA. Pour chacun, identifier la finalité, les données, les personnes, les destinataires, les durées, la base légale et le niveau de risque. C'est la matière première du registre et de la cartographie IA.`);
+ H2(`Étape 2 — Documentation`);
+ P(`Rédiger ou mettre à jour les documents obligatoires : registre des traitements, politique de confidentialité, mentions légales, politique de cookies, politique de durées de conservation, contrats de sous-traitance, politique de sécurité, politique d'usage de l'IA et cartographie des systèmes d'IA. Chaque document doit refléter la réalité de l'organisation, non un modèle générique.`);
+ H2(`Étape 3 — Mise en conformité opérationnelle`);
+ P(`Déployer les mesures : sécuriser les données (chiffrement, MFA, sauvegardes, habilitations), contractualiser les sous-traitants, mettre en place les bandeaux cookies conformes, encadrer les transferts hors UE, régler les durées de conservation dans les logiciels (purge automatique), et cadrer les usages d'IA (règles, outils autorisés).`);
+ H2(`Étape 4 — Procédures et réflexes`);
+ P(`Installer les procédures qui font vivre la conformité : traitement des demandes de droits sous un mois, gestion des violations en 72 heures, réalisation des AIPD, workflow d'approbation d'un nouvel outil d'IA. Ces procédures doivent être connues des équipes.`);
+ H2(`Étape 5 — Sensibilisation`);
+ P(`Former les équipes au RGPD et à la littératie IA (obligation de l'article 4). La sensibilisation est à la fois une exigence légale et la première mesure de sécurité : la majorité des incidents proviennent d'une erreur humaine (hameçonnage, mauvaise manipulation, usage imprudent de l'IA). Conserver les preuves (émargement, quiz).`);
+ H2(`Étape 6 — Contrôle, preuve et amélioration continue`);
+ P(`Tenir un plan d'action et un registre de preuves (accountability), suivre des indicateurs, et programmer des revues récurrentes : test de restauration des sauvegardes, revue des habilitations, revue annuelle du registre et des durées, exercice de crise « violation », mise à jour de la cartographie IA, rapport annuel du référent. La conformité se maintient ; elle ne se décrète pas une fois pour toutes.`);
+ out=out.concat(X.coverage(`Les documents du dispositif — vue d'ensemble`,[
+   [`Cartographier`,`Registre des traitements · Cartographie des systèmes d'IA`],
+   [`Informer`,`Politique de confidentialité · Mentions légales · Note d'information des salariés · Politique cookies · Mention pixels de suivi`],
+   [`Encadrer`,`Contrat de sous-traitance (DPA) · Politique d'usage de l'IA · Charte informatique`],
+   [`Sécuriser`,`Politique de sécurité (PSSI) · Politique de durées de conservation`],
+   [`Réagir`,`Procédure d'exercice des droits · Procédure de violation de données · AIPD`],
+   [`Gouverner`,`Désignation du DPO / référent · Support littératie IA · Plan d'action · Synthèse de conformité`]
+ ]));
+ BREAK();
+
+ /* ===================== PARTIE V — ANNEXES ===================== */
+ H1(`Partie V — Annexes`);
+ H2(`Glossaire`);
+ out.push(X.kv([
+  [`Donnée personnelle`,`Toute information se rapportant à une personne physique identifiée ou identifiable.`],
+  [`Traitement`,`Toute opération portant sur des données (collecte, conservation, transmission, effacement…).`],
+  [`Responsable de traitement`,`Celui qui détermine les finalités et les moyens d'un traitement.`],
+  [`Sous-traitant`,`Celui qui traite les données pour le compte du responsable, sur ses instructions.`],
+  [`Base légale`,`Le fondement juridique qui rend un traitement licite (art. 6).`],
+  [`Donnée sensible`,`Donnée particulière (santé, opinions, biométrie…) au régime renforcé (art. 9).`],
+  [`AIPD`,`Analyse d'impact relative à la protection des données (art. 35).`],
+  [`Violation de données`,`Atteinte à la sécurité entraînant perte, altération ou divulgation de données (art. 4.12).`],
+  [`DPO`,`Délégué à la protection des données ; pilote et point de contact de la conformité.`],
+  [`Accountability`,`Obligation de rendre compte : respecter le RGPD et pouvoir le démontrer.`],
+  [`Fournisseur (AI Act)`,`Celui qui développe et met un système d'IA sur le marché.`],
+  [`Déployeur (AI Act)`,`Celui qui utilise un système d'IA sous sa propre autorité.`],
+  [`Haut risque (AI Act)`,`Système présumé à haut risque au sens de l'Annexe III.`],
+  [`Littératie IA`,`Niveau de compréhension de l'IA exigé des personnels (art. 4 AI Act).`]
+ ]));
+ H2(`Principaux textes de référence`);
+ LI(`Règlement (UE) 2016/679 du 27 avril 2016 (RGPD).`);
+ LI(`Loi n° 78-17 du 6 janvier 1978 modifiée (Informatique et Libertés).`);
+ LI(`Règlement (UE) 2024/1689 du 13 juin 2024 (AI Act).`);
+ LI(`Recommandations et référentiels de la CNIL (cookies, sécurité, durées, pixels de suivi — délib. 2026-042, listes AIPD 2018-327 et 2019-118).`);
+ LI(`Loi pour la confiance dans l'économie numérique (LCEN) pour les mentions légales.`);
+ H2(`Pour aller plus loin`);
+ P(`Ce guide donne le cadre ; sa mise en œuvre s'appuie sur les documents opérationnels générés par Clarté, personnalisés à votre organisation. Pour toute question ou pour un accompagnement, contactez ` + V(f.emailRgpd) + ` — ` + (f.telephone||`06 61 47 61 65`) + `.`);
+ NOTE(`Guide établi le ` + (typeof today==='function'?today():'') + ` par Clarté (RTH NETGOCE). Document informatif, sans valeur de conseil juridique individualisé ; références réglementaires en vigueur à sa date de rédaction.`,`Mentions`);
+ return out;
+}
+
 function buildDOCS(){
 var DOCS=[
+{id:'guide',cat:'gv',icon:'📘',title:'Guide complet RGPD & AI Act',
+ desc:'Manuel de référence (~30 pages) : tout ce qui doit être fait et su sur le RGPD et l\'AI Act — principes, obligations, droits, IA, méthode de mise en conformité, glossaire.',
+ need:'ⓘ Ressource pédagogique — se lit, se diffuse en interne, sert de base de formation.',
+ file:'Guide_complet_RGPD_AI_Act',
+ body:guideBody},
+
 
 {id:'registre',cat:'rg',icon:'📗',title:'Registre des activités de traitement',
  desc:'Le document obligatoire (art. 30 RGPD) recensant l\'ensemble de vos traitements, pré-rempli selon votre secteur.',
