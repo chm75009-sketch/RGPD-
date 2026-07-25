@@ -304,7 +304,7 @@
 </div></footer>
 
 <div class="toast" id="toast"></div>
-<div style="position:fixed;bottom:8px;right:10px;z-index:9999;font:700 10px/1 system-ui,sans-serif;color:#7a7f95;background:rgba(255,255,255,.82);border:1px solid #e7e9f3;padding:4px 8px;border-radius:8px;pointer-events:none">Clarté · MàJ 08/07 · b61</div>
+<div style="position:fixed;bottom:8px;right:10px;z-index:9999;font:700 10px/1 system-ui,sans-serif;color:#7a7f95;background:rgba(255,255,255,.82);border:1px solid #e7e9f3;padding:4px 8px;border-radius:8px;pointer-events:none">Clarté · MàJ 25/07 · b62</div>
 
 <script>
 /* ================= FICHE SOCIÉTÉ (localStorage) ================= */
@@ -1032,7 +1032,128 @@ function guideBody(X,f){
  H2(`Pour aller plus loin`);
  P(`Ce guide donne le cadre ; sa mise en œuvre s'appuie sur les documents opérationnels générés par Clarté, personnalisés à votre organisation. Pour toute question ou pour un accompagnement, contactez ` + V(f.emailRgpd) + ` — ` + (f.telephone||`06 61 47 61 65`) + `.`);
  NOTE(`Guide établi le ` + (typeof today==='function'?today():'') + ` par Clarté (RTH NETGOCE). Document informatif, sans valeur de conseil juridique individualisé ; références réglementaires en vigueur à sa date de rédaction.`,`Mentions`);
- return out;
+
+ /* ===================== PARTIE VI — JURISPRUDENCE & DOCTRINE ===================== */
+ out.push(X.pageBreak());
+ H1(`Partie VI — Panorama de la jurisprudence et de la doctrine récentes`);
+ P(`La conformité ne se comprend pas seulement à la lecture des textes : elle s'éclaire par les décisions concrètes des autorités et des juges. Voici les affaires marquantes qui dessinent, aujourd'hui, ce que « être en règle » veut dire — et ce qui se paie très cher.`);
+
+ H2(`1. CNIL — Free Mobile & Free : 42 M€ (8 janvier 2026)`);
+ P(`Par deux délibérations (SAN-2026-001 et 002), la CNIL a sanctionné Free Mobile (27 M€) et Free (15 M€) après la violation de données d'octobre 2024 : environ 24 millions de comptes exposés, IBAN compris. Les manquements retenus portent sur la sécurité (article 32), l'information des personnes en cas de violation (article 34) et les durées de conservation (article 5.1.e). Enseignement : une faille de sécurité doublée d'une mauvaise gestion de crise cumule les griefs et fait grimper la sanction ; la sécurité et la procédure de violation ne sont pas optionnelles.`);
+ H2(`2. CNIL — Bilan 2025 : 486 M€ de sanctions, 83 décisions`);
+ P(`Le rapport annuel de la CNIL confirme une pression record. Les premiers motifs de sanction : cookies (21 décisions), surveillance des salariés, prospection sans base légale, failles de sécurité et durées de conservation excessives. Surtout, la procédure simplifiée (4 à 6 mois) vise de plus en plus les PME : l'idée que « la CNIL ne s'intéresse qu'aux grands groupes » est fausse.`);
+ H2(`3. CNIL — Clearview AI : 20 M€ (2022)`);
+ P(`Sanction maximale, assortie d'astreintes, contre la société de reconnaissance faciale pour la collecte massive de photographies (« scraping ») sans base légale ni information des personnes. Enseignement : aspirer des données publiquement accessibles ne les rend pas librement exploitables — il faut une base légale et une information.`);
+ H2(`4. CNIL — Recommandation pixels de suivi : délib. 2026-042 (12 mars 2026)`);
+ P(`La CNIL encadre les pixels de suivi dans les e-mails (mesure d'ouverture) : information obligatoire, opposition simple et distincte du désabonnement, puis consentement au titre de l'article 82, à l'issue d'une période transitoire ; conservation des données limitée à 13 mois. Toute entreprise qui fait de l'e-mailing marketing est concernée. C'est le sujet chaud de 2026.`);
+ H2(`5. CJUE — Pseudonymisation : aff. C-413/23 P (4 septembre 2025)`);
+ P(`La Cour de justice précise qu'une donnée pseudonymisée reste une donnée personnelle dès lors que celui qui la détient dispose de moyens de ré-identifier la personne, directement ou indirectement. Enseignement : la pseudonymisation réduit le risque mais ne fait pas sortir du RGPD ; seule une anonymisation irréversible le permet.`);
+ H2(`6. CJUE — Droit d'accès : aff. C-526/24 (19 mars 2026)`);
+ P(`La Cour rappelle la finalité du droit d'accès (article 15) : permettre à la personne de vérifier la licéité du traitement et, le cas échéant, de demander rectification ou effacement. Le droit d'accès n'est donc pas un caprice : il conditionne l'exercice effectif des autres droits, et doit être traité sérieusement.`);
+ H2(`7. CJUE — SCHUFA : scoring de crédit, aff. C-634/21 (2023)`);
+ P(`La Cour juge qu'un score déterminant l'octroi d'un crédit constitue une décision individuelle automatisée au sens de l'article 22 du RGPD. Décision clé pour tous les usages d'IA de notation (scoring client, tri de candidatures) : dès qu'un score détermine une décision, le cadre de l'article 22 et de l'AI Act s'applique.`);
+ H2(`8. Garante (Italie) — OpenAI / ChatGPT : 15 M€ (décembre 2024)`);
+ P(`L'autorité italienne a sanctionné OpenAI pour absence de base légale, défaut de transparence et absence de vérification de l'âge (protection des mineurs). Première grande sanction visant une IA générative : elle montre que le RGPD s'applique pleinement aux acteurs de l'IA, et que les déployeurs doivent choisir des outils eux-mêmes conformes.`);
+ H2(`9. Jurisprudence sociale — IA suspendue sans consultation du CSE (21 mai 2026)`);
+ P(`Confirmation de la suspension d'outils d'IA déployés sans consultation préalable du comité social et économique. Signal fort : tout projet d'IA affectant les conditions de travail (planification, évaluation, surveillance) doit passer par l'information des salariés et la consultation du CSE, sous peine d'inopposabilité — voire de suspension.`);
+ H2(`10. AI Act — calendrier et sanctions`);
+ P(`Le Règlement (UE) 2024/1689 prévoit des sanctions jusqu'à 35 M€ ou 7 % du chiffre d'affaires. Les interdictions et l'obligation de littératie s'appliquent depuis février 2025, les obligations GPAI depuis août 2025, et les systèmes à haut risque au 2 août 2026. Anticiper est la seule stratégie raisonnable.`);
+ H2(`11. AI Act en France — la CNIL, autorité chef de file (1er août 2025)`);
+ P(`Un décret désigne la CNIL pour piloter l'application de l'AI Act en France, aux côtés de l'ANSSI, de la DGCCRF, de l'ARCOM et du Défenseur des droits. Les premiers contrôles sont attendus au second semestre 2026 : la fenêtre pour se mettre en règle est désormais courte.`);
+
+ /* ===================== PARTIE VII — AUTO-ÉVALUATION 16 POINTS ===================== */
+ out.push(X.pageBreak());
+ H1(`Partie VII — S'auto-évaluer : les 16 points de contrôle`);
+ P(`La grille ci-dessous reprend les seize points de contrôle qui structurent une conformité RGPD & AI Act. Pour chacun, posez-vous honnêtement la question, notez votre situation (en règle / partiel / à faire) et reportez-vous au chapitre et au document correspondants. C'est le socle d'un auto-diagnostic sérieux, celui-là même qui fonde le test « Le Contrôle ».`);
+ var qz=[X.headRow([`#`,`Point de contrôle`,`Référence & ce qu'il faut`],[600,4400,4640])];
+ [
+ [`1`,`Disposez-vous d'un registre des traitements à jour ?`,`Registre — art. 30. Le premier document réclamé en contrôle.`],
+ [`2`,`Informez-vous les personnes et recueillez-vous le consentement quand il le faut ?`,`Information & base légale — art. 6, 12 à 14.`],
+ [`3`,`Avez-vous une procédure pour les demandes de droits ?`,`Droits — réponse sous 1 mois, art. 15 à 22.`],
+ [`4`,`Savez-vous réagir à une violation sous 72 heures ?`,`Violations — notification CNIL, art. 33-34.`],
+ [`5`,`Réalisez-vous des AIPD pour les traitements à risque élevé ?`,`AIPD — art. 35 ; listes CNIL 2018-327 / 2019-118.`],
+ [`6`,`Recensez-vous vos usages d'IA (chatbot, IA générative, tri de CV) ?`,`Cartographie IA — première étape de l'AI Act.`],
+ [`7`,`Avez-vous classé vos systèmes d'IA par niveau de risque ?`,`Classification AI Act — 4 niveaux, Annexe III.`],
+ [`8`,`Vos équipes sont-elles sensibilisées à un usage responsable de l'IA ?`,`Littératie IA — art. 4, depuis février 2025.`],
+ [`9`,`Signalez-vous les contenus générés par IA et les chatbots ?`,`Transparence — art. 50 AI Act.`],
+ [`10`,`Avez-vous vérifié l'absence de pratiques d'IA interdites ?`,`Pratiques interdites — art. 5 AI Act.`],
+ [`11`,`Avez-vous désigné un DPO ou un référent ?`,`Pilotage — art. 37 à 39.`],
+ [`12`,`Intégrez-vous la conformité dès la conception des projets ?`,`Privacy by design & by default — art. 25.`],
+ [`13`,`Faites-vous une veille active RGPD & AI Act ?`,`Veille — échéances AI Act 2025-2026.`],
+ [`14`,`Vos contrats sous-traitants incluent-ils des clauses de conformité ?`,`DPA — art. 28, un contrat par sous-traitant.`],
+ [`15`,`Voyez-vous la conformité comme un avantage de confiance ?`,`Posture — un atout commercial, pas qu'une contrainte.`],
+ [`16`,`Connaissez-vous le montant des amendes encourues ?`,`Risque — 20 M€ / 4 % (RGPD) ; 35 M€ / 7 % (AI Act).`]
+ ].forEach(function(r){ qz.push(X.row([X.cell(r[0],{b:1}),X.cell(r[1],{b:1}),X.cell(r[2])])); });
+ out.push(X.table(qz,[600,4400,4640]));
+ NOTE(`Un « non » ou un « partiel » sur les points 1 à 5 et 11, 14 signale une exposition directe en cas de contrôle CNIL. Les points 6 à 10 concernent l'AI Act, dont l'échéance majeure est le 2 août 2026.`,`Lecture des résultats`);
+
+ /* ===================== PARTIE VIII — CHIFFRES-CLÉS ===================== */
+ out.push(X.pageBreak());
+ H1(`Partie VIII — Les chiffres-clés à retenir`);
+ var ch=[X.headRow([`Indicateur`,`Valeur`],[6000,3640])];
+ [[`Sanction maximale RGPD`,`20 M€ ou 4 % du chiffre d'affaires mondial`],
+  [`Sanction maximale AI Act (pratiques interdites)`,`35 M€ ou 7 % du chiffre d'affaires mondial`],
+  [`Sanction AI Act (autres manquements)`,`15 M€ ou 3 % du chiffre d'affaires`],
+  [`Sanctions CNIL prononcées en 2025`,`486 M€ pour 83 décisions`],
+  [`Délai de notification d'une violation à la CNIL`,`72 heures après la découverte`],
+  [`Délai de réponse à une demande de droits`,`1 mois (prorogeable de 2 mois)`],
+  [`Durée de vie maximale d'un cookie / pixel de mesure d'audience`,`13 mois (données ≤ 25 mois)`],
+  [`Conservation des pièces comptables`,`10 ans (art. L123-22 C. com.)`],
+  [`Conservation des bulletins de paie`,`5 ans (art. L3243-4 C. trav.)`],
+  [`Conservation des données de prospects`,`3 ans après le dernier contact`],
+  [`Littératie IA obligatoire depuis`,`2 février 2025 (art. 4 AI Act)`],
+  [`Systèmes d'IA à haut risque encadrés à compter du`,`2 août 2026`]
+ ].forEach(function(r){ ch.push(X.row([X.cell(r[0],{b:1}),X.cell(r[1])])); });
+ out.push(X.table(ch,[6000,3640]));
+
+ /* ===================== ANNEXE SECTORIELLE ===================== */
+ out.push(X.pageBreak());
+ H1(`Annexe sectorielle — traitements et durées par activité`);
+ P(`À titre indicatif, voici les traitements les plus courants et leurs durées de conservation selon le secteur d'activité. Cette annexe aide à démarrer un registre : à adapter, compléter et personnaliser à la réalité de chaque organisation.`);
+ (function(){
+   try{
+     var order=['commerce','ecommerce','chr','sante','services','batiment','immobilier','beaute','formation','association','autre'];
+     order.forEach(function(k){
+       if(!SECTORS[k]) return;
+       H2(SECTORS[k].label);
+       var r=[X.headRow(['Traitement (finalité)','Base légale','Durée de conservation'],[3840,2900,2900])];
+       SECTORS[k].proc.forEach(function(p){ r.push(X.row([X.cell(p.f,{b:1}),X.cell(p.b),X.cell(p.c)])); });
+       out.push(X.table(r,[3840,2900,2900]));
+       if(SECTORS[k].sensibles){ out.push(X.p('Données sensibles : '+SECTORS[k].sensibles,{i:true,c:X.C.dim,size:18})); }
+     });
+   }catch(e){ P('Annexe sectorielle indisponible : '+e.message); }
+ })();
+
+ /* ===================== ANNEXE — CORPUS DOCUMENTAIRE ===================== */
+ out.push(X.pageBreak());
+ H1(`Annexe — Le corpus documentaire de la conformité`);
+ P(`La documentation ci-dessous constitue le dossier qu'une organisation présente en cas de contrôle. Chaque pièce répond à une obligation précise ; ensemble, elles démontrent la conformité (accountability).`);
+ out=out.concat(X.coverage(`Les 20 documents et leur base légale`,[
+  [`Registre des traitements`,`Art. 30 RGPD — socle, fiche par traitement`],
+  [`Politique de confidentialité`,`Art. 13-14 RGPD — information des personnes`],
+  [`Mentions légales`,`LCEN art. 6-III — identification de l'éditeur`],
+  [`Procédure d'exercice des droits`,`Art. 12 à 22 RGPD — délai 1 mois, modèles`],
+  [`Procédure de violation de données`,`Art. 33-34 RGPD — 72 h, registre, notification`],
+  [`Politique de durées de conservation`,`Art. 5.1.e RGPD — durées chiffrées, purge`],
+  [`Politique cookies & traceurs`,`Art. 82 loi I&L — consentement, tableau`],
+  [`Mention pixels de suivi (e-mails)`,`Art. 82 ; délib. CNIL 2026-042`],
+  [`Charte informatique`,`Art. 32 RGPD ; règlement intérieur, CSE`],
+  [`Note d'information des salariés`,`Art. 13 RGPD ; art. L2312-38 C. trav. ; art. 26.7 AI Act`],
+  [`Contrat de sous-traitance (DPA)`,`Art. 28 RGPD — 8 obligations, audit`],
+  [`Analyse d'impact (AIPD)`,`Art. 35 RGPD — grille de cotation`],
+  [`Désignation du DPO / référent`,`Art. 37 à 39 RGPD — missions, indépendance`],
+  [`Politique de sécurité (PSSI)`,`Art. 32 RGPD ; guide CNIL, ANSSI`],
+  [`Plan d'action & registre de preuves`,`Art. 5.2 / 24 RGPD — accountability`],
+  [`Politique d'usage de l'IA`,`AI Act art. 3, 5, 26, 50 — règles, approbation`],
+  [`Cartographie des systèmes d'IA`,`AI Act — inventaire, risques, fournisseurs`],
+  [`Support littératie IA`,`AI Act art. 4 — sensibilisation, émargement`],
+  [`Synthèse de conformité`,`Art. 5.2 RGPD ; AI Act — tableau de bord`],
+  [`Registre & tableaux de suivi (Excel)`,`Art. 30 / 33.5 — tableaux vivants filtrables`]
+ ]));
+ P(`Ces documents sont générés, personnalisés à votre organisation, par l'application Clarté (espace client). Ils forment un dispositif cohérent : chaque document renvoie aux autres, et le plan d'action en orchestre la mise à jour dans le temps.`);
+
+
+  return out;
 }
 
 function buildDOCS(){
