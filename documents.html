@@ -304,7 +304,7 @@
 </div></footer>
 
 <div class="toast" id="toast"></div>
-<div style="position:fixed;bottom:8px;right:10px;z-index:9999;font:700 10px/1 system-ui,sans-serif;color:#7a7f95;background:rgba(255,255,255,.82);border:1px solid #e7e9f3;padding:4px 8px;border-radius:8px;pointer-events:none">Clarté · MàJ 11/08 · b63</div>
+<div style="position:fixed;bottom:8px;right:10px;z-index:9999;font:700 10px/1 system-ui,sans-serif;color:#7a7f95;background:rgba(255,255,255,.82);border:1px solid #e7e9f3;padding:4px 8px;border-radius:8px;pointer-events:none">Clarté · MàJ 11/08 · b64</div>
 
 <script>
 /* ================= FICHE SOCIÉTÉ (localStorage) ================= */
@@ -950,7 +950,14 @@ function guideBody(X,f){
  P(`Le déployeur d'un système à haut risque doit notamment : utiliser le système conformément à sa notice ; assurer une supervision humaine par des personnes compétentes ; surveiller le fonctionnement et signaler les incidents ; conserver les journaux ; s'assurer de la pertinence des données d'entrée qu'il maîtrise ; et informer les travailleurs et leurs représentants lorsqu'un système à haut risque est utilisé sur le lieu de travail (article 26, paragraphe 7). Le cas échéant, une analyse d'impact sur les droits fondamentaux (article 27) est requise.`);
 
  H2(`6. Les obligations de transparence (article 50)`);
- P(`Indépendamment du niveau de risque, la transparence s'impose dans plusieurs situations : une personne qui interagit avec un système d'IA (un chatbot) doit en être informée, sauf si c'est évident ; les contenus générés ou manipulés par IA (textes, images, sons, vidéos, « hypertrucages ») doivent être identifiés comme tels dans un format lisible par machine. Cette obligation vise à préserver la confiance et à lutter contre la désinformation.`);
+ P(`Indépendamment du niveau de risque, l'article 50 impose une transparence dans trois situations, résumées ci-dessous. Ces obligations visent à préserver la confiance et à lutter contre la désinformation ; leur échéance (2 août 2026) a été maintenue par le Digital Omnibus.`);
+ var t50=[X.headRow([`Système`,`Obligation`,`Fondement`],[2900,4740,2000])];
+ [[`Chatbot / IA conversationnelle`,`Informer la personne qu'elle interagit avec un système d'IA (sauf si c'est manifeste).`,`Art. 50 §1`],
+  [`Contenu généré ou manipulé par IA (texte, image, son, vidéo, « hypertrucages »)`,`Marquer le contenu comme artificiellement généré ou manipulé, dans un format lisible par machine.`,`Art. 50 §2 et §4`],
+  [`Reconnaissance des émotions / catégorisation biométrique`,`Avertir les personnes exposées au fonctionnement du système (et appliquer le RGPD : données biométriques et sensibles).`,`Art. 50 §3`]
+ ].forEach(function(r){ t50.push(X.row([X.cell(r[0],{b:1}),X.cell(r[1]),X.cell(r[2])])); });
+ out.push(X.table(t50,[2900,4740,2000]));
+ NOTE(`Attention à ne pas confondre : la reconnaissance des émotions sur le lieu de travail et dans l'enseignement est purement interdite (article 5), sauf raisons médicales ou de sécurité. L'obligation d'information de l'article 50 §3 ne vaut donc que pour les usages licites en dehors de ces contextes (par exemple l'analyse d'émotions sur des clients, elle-même soumise au RGPD).`,`Émotions : interdiction ou information ?`);
 
  H2(`7. La littératie en intelligence artificielle (article 4)`);
  P(`L'article 4, applicable depuis le 2 février 2025, impose à toute organisation qui déploie ou utilise des systèmes d'IA de veiller à un niveau suffisant de « littératie IA » de ses personnels. Il ne s'agit pas d'une compétence technique, mais d'une compréhension adaptée à la fonction de chacun : savoir ce qu'est l'IA et ses limites (elle peut se tromper avec assurance), connaître les risques (ne jamais injecter de données personnelles ou confidentielles dans un outil grand public), respecter les règles internes, vérifier les résultats, maintenir une décision humaine et signaler les usages douteux. Cette obligation se prouve par une action de sensibilisation et sa trace (support de formation, feuille d'émargement, quiz).`);
@@ -2192,7 +2199,7 @@ var DOCS=[
    rr.push(X.row([X.cell('Minimal',{b:1,shade:X.C.soft2}),X.cell('Correcteur, filtres, suggestions simples'),X.cell('Usage libre, bonnes pratiques')]));
    out.push(X.table(rr,[2600,4040,3000]));
    out.push(X.h3('Module 3 — Transparence'));
-   out.push(X.p('Informer les personnes lorsqu\'elles interagissent avec un système d\'IA (ex. chatbot) et signaler les contenus générés ou manipulés par IA, conformément à l\'article 50 de l\'AI Act.',{}));
+   out.push(X.p('Conformément à l\'article 50 de l\'AI Act : informer les personnes lorsqu\'elles interagissent avec un système d\'IA (ex. chatbot) [§1] ; marquer les contenus générés ou manipulés par IA (texte, image, son, vidéo) dans un format lisible par machine [§2 et §4] ; avertir les personnes exposées à un système de reconnaissance des émotions ou de catégorisation biométrique [§3] — étant rappelé que la reconnaissance des émotions au travail est, elle, interdite (art. 5).',{}));
    out.push(X.h3('Module 4 — IA et données personnelles / confidentialité'));
    out.push(X.p('Ne jamais saisir de données personnelles, de secrets d\'affaires ou d\'informations confidentielles dans un outil d\'IA public : les données saisies peuvent être conservées, réutilisées, voire servir à entraîner le modèle (risque de fuite de données). Privilégier les outils validés par l\'entreprise. Le RGPD s\'applique pleinement à tout traitement de données personnelles par l\'IA.',{}));
    out.push(X.h3('Module 5 — Bonnes pratiques d\'usage'));
