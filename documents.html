@@ -304,7 +304,7 @@
 </div></footer>
 
 <div class="toast" id="toast"></div>
-<div style="position:fixed;bottom:8px;right:10px;z-index:9999;font:700 10px/1 system-ui,sans-serif;color:#7a7f95;background:rgba(255,255,255,.82);border:1px solid #e7e9f3;padding:4px 8px;border-radius:8px;pointer-events:none">Clarté · MàJ 25/07 · b62</div>
+<div style="position:fixed;bottom:8px;right:10px;z-index:9999;font:700 10px/1 system-ui,sans-serif;color:#7a7f95;background:rgba(255,255,255,.82);border:1px solid #e7e9f3;padding:4px 8px;border-radius:8px;pointer-events:none">Clarté · MàJ 11/08 · b63</div>
 
 <script>
 /* ================= FICHE SOCIÉTÉ (localStorage) ================= */
@@ -770,7 +770,7 @@ function buildXlsxWB(f){
     ['Contractualiser les sous-traitants (art. 28)','Haute',V(f.representant),'Achats','','% sous DPA','À faire'],
     ['Sensibiliser le personnel (RGPD + littératie IA)','Moyenne',V(f.representant),'RH','','% formés','À faire'],
     ['Cartographier et classer les systèmes d\'IA','Haute',V(f.representant),'Référent IA','','Cartographie à jour','À faire'],
-    ['Vérifier les systèmes à haut risque (Annexe III)','Haute',V(f.representant),'Référent IA','02/08/2026','Systèmes conformes','À faire']
+    ['Vérifier les systèmes à haut risque (Annexe III)','Haute',V(f.representant),'Référent IA','02/12/2027','Systèmes conformes','À faire']
   ],[42,10,16,14,12,24,10]);
   sheet('Journal des violations',['Date','Nature / cause','Données & personnes','Gravité','Effets / conséquences','Notifiée CNIL ? (72 h)','Personnes informées ?','Mesures prises','Clôturé le'],[['','','','','','','','','']],[12,26,26,10,26,14,14,28,12]);
   sheet('Journal demandes de droits',['Date reçue','Demandeur','Droit exercé','Traitement concerné','Suite donnée','Date de réponse (≤ 1 mois)'],[['','','','','','']],[12,20,16,22,26,16]);
@@ -944,7 +944,7 @@ function guideBody(X,f){
  P(`Certaines pratiques sont purement et simplement interdites, car jugées incompatibles avec les droits fondamentaux : la manipulation subliminale ou trompeuse causant un préjudice ; l'exploitation des vulnérabilités liées à l'âge, au handicap ou à la situation sociale ; la notation sociale généralisée par les autorités ; certaines utilisations de l'identification biométrique à distance en temps réel dans l'espace public ; la catégorisation biométrique déduisant des données sensibles ; la reconnaissance des émotions sur le lieu de travail et dans l'enseignement (sauf raisons médicales ou de sécurité) ; le moissonnage non ciblé d'images faciales pour constituer des bases de reconnaissance. Ces interdictions sont applicables depuis le 2 février 2025.`);
 
  H2(`4. Les systèmes à haut risque (Annexe III)`);
- P(`L'Annexe III liste les domaines où un système d'IA est présumé à haut risque : biométrie, infrastructures critiques, éducation, emploi (tri de candidatures, évaluation, décisions de promotion ou de licenciement), accès aux services essentiels (crédit, assurance, aides sociales), maintien de l'ordre, migration, justice. Pour ces systèmes, l'AI Act impose un ensemble d'obligations : système de gestion des risques, gouvernance des données d'entraînement, documentation technique et journalisation, transparence vis-à-vis des déployeurs, supervision humaine effective (article 14), robustesse, exactitude et cybersécurité. Ces obligations s'appliquent à compter du 2 août 2026.`);
+ P(`L'Annexe III liste les domaines où un système d'IA est présumé à haut risque : biométrie, infrastructures critiques, éducation, emploi (tri de candidatures, évaluation, décisions de promotion ou de licenciement), accès aux services essentiels (crédit, assurance, aides sociales), maintien de l'ordre, migration, justice. Pour ces systèmes, l'AI Act impose un ensemble d'obligations : système de gestion des risques, gouvernance des données d'entraînement, documentation technique et journalisation, transparence vis-à-vis des déployeurs, supervision humaine effective (article 14), robustesse, exactitude et cybersécurité. Ces obligations devaient initialement s'appliquer au 2 août 2026 ; le « Digital Omnibus » sur l'IA, entré en vigueur le 27 juillet 2026, en a reporté l'application : au 2 décembre 2027 pour les systèmes à haut risque autonomes (Annexe III), et au 2 août 2028 pour ceux intégrés à des produits déjà réglementés (Annexe I). Ce report ne dispense pas d'anticiper : il donne le temps de bâtir la conformité, il ne la supprime pas.`);
 
  H2(`5. Les obligations des déployeurs (article 26)`);
  P(`Le déployeur d'un système à haut risque doit notamment : utiliser le système conformément à sa notice ; assurer une supervision humaine par des personnes compétentes ; surveiller le fonctionnement et signaler les incidents ; conserver les journaux ; s'assurer de la pertinence des données d'entrée qu'il maîtrise ; et informer les travailleurs et leurs représentants lorsqu'un système à haut risque est utilisé sur le lieu de travail (article 26, paragraphe 7). Le cas échéant, une analyse d'impact sur les droits fondamentaux (article 27) est requise.`);
@@ -963,10 +963,13 @@ function guideBody(X,f){
  [[`1er août 2024`,`Entrée en vigueur du règlement`],
   [`2 février 2025`,`Interdiction des pratiques à risque inacceptable (article 5) et obligation de littératie IA (article 4)`],
   [`2 août 2025`,`Obligations relatives aux modèles d'IA à usage général (GPAI) et gouvernance`],
-  [`2 août 2026`,`Application générale, notamment aux systèmes à haut risque de l'Annexe III et aux obligations de transparence`],
-  [`2 août 2027`,`Application aux systèmes d'IA à haut risque intégrés à des produits déjà réglementés`]
+  [`2 août 2026`,`Obligations de transparence (article 50) — échéance maintenue par le Digital Omnibus`],
+  [`2 décembre 2026`,`Marquage des contenus/systèmes déjà sur le marché (article 50 §2) et nouvelles pratiques interdites`],
+  [`2 décembre 2027`,`Systèmes à haut risque autonomes (Annexe III) — reporté depuis le 2 août 2026 par le Digital Omnibus`],
+  [`2 août 2028`,`Systèmes à haut risque intégrés à des produits déjà réglementés (Annexe I) — reporté depuis le 2 août 2027`]
  ].forEach(function(r){ cal.push(X.row([X.cell(r[0],{b:1}),X.cell(r[1])])); });
  out.push(X.table(cal,[2600,7040]));
+ NOTE(`Ce calendrier intègre le « Digital Omnibus » sur l'intelligence artificielle, adopté par le Parlement européen (16 juin 2026) et le Conseil (29 juin 2026), publié au Journal officiel de l'Union européenne le 24 juillet 2026 et entré en vigueur le 27 juillet 2026. Il reporte l'application des obligations relatives aux systèmes à haut risque (au 2 décembre 2027 pour les systèmes autonomes de l'Annexe III, au 2 août 2028 pour les systèmes intégrés à des produits réglementés), tout en maintenant au 2 août 2026 les obligations de transparence de l'article 50. Les interdictions (article 5), la littératie (article 4) et les obligations relatives aux modèles à usage général (GPAI) demeurent inchangées.`,`Mise à jour réglementaire`);
 
  H2(`10. Gouvernance et sanctions`);
  P(`La surveillance de l'AI Act est assurée, au niveau européen, par le Bureau de l'IA, et au niveau national par des autorités désignées ; en France, la CNIL joue un rôle central, aux côtés d'autres autorités (ANSSI, DGCCRF, ARCOM, Défenseur des droits). Les sanctions sont dissuasives : jusqu'à 35 millions d'euros ou 7 % du chiffre d'affaires mondial pour les pratiques interdites (article 5), jusqu'à 15 millions d'euros ou 3 % pour les autres manquements, et des montants moindres pour les informations inexactes fournies aux autorités.`);
@@ -1057,7 +1060,7 @@ function guideBody(X,f){
  H2(`9. Jurisprudence sociale — IA suspendue sans consultation du CSE (21 mai 2026)`);
  P(`Confirmation de la suspension d'outils d'IA déployés sans consultation préalable du comité social et économique. Signal fort : tout projet d'IA affectant les conditions de travail (planification, évaluation, surveillance) doit passer par l'information des salariés et la consultation du CSE, sous peine d'inopposabilité — voire de suspension.`);
  H2(`10. AI Act — calendrier et sanctions`);
- P(`Le Règlement (UE) 2024/1689 prévoit des sanctions jusqu'à 35 M€ ou 7 % du chiffre d'affaires. Les interdictions et l'obligation de littératie s'appliquent depuis février 2025, les obligations GPAI depuis août 2025, et les systèmes à haut risque au 2 août 2026. Anticiper est la seule stratégie raisonnable.`);
+ P(`Le Règlement (UE) 2024/1689 prévoit des sanctions jusqu'à 35 M€ ou 7 % du chiffre d'affaires. Les interdictions et l'obligation de littératie s'appliquent depuis février 2025, les obligations GPAI depuis août 2025, la transparence (art. 50) au 2 août 2026, et les systèmes à haut risque — après le report opéré par le Digital Omnibus (en vigueur le 27 juillet 2026) — au 2 décembre 2027 (systèmes autonomes) puis au 2 août 2028 (systèmes intégrés à des produits réglementés). Anticiper est la seule stratégie raisonnable.`);
  H2(`11. AI Act en France — la CNIL, autorité chef de file (1er août 2025)`);
  P(`Un décret désigne la CNIL pour piloter l'application de l'AI Act en France, aux côtés de l'ANSSI, de la DGCCRF, de l'ARCOM et du Défenseur des droits. Les premiers contrôles sont attendus au second semestre 2026 : la fenêtre pour se mettre en règle est désormais courte.`);
 
@@ -1085,7 +1088,7 @@ function guideBody(X,f){
  [`16`,`Connaissez-vous le montant des amendes encourues ?`,`Risque — 20 M€ / 4 % (RGPD) ; 35 M€ / 7 % (AI Act).`]
  ].forEach(function(r){ qz.push(X.row([X.cell(r[0],{b:1}),X.cell(r[1],{b:1}),X.cell(r[2])])); });
  out.push(X.table(qz,[600,4400,4640]));
- NOTE(`Un « non » ou un « partiel » sur les points 1 à 5 et 11, 14 signale une exposition directe en cas de contrôle CNIL. Les points 6 à 10 concernent l'AI Act, dont l'échéance majeure est le 2 août 2026.`,`Lecture des résultats`);
+ NOTE(`Un « non » ou un « partiel » sur les points 1 à 5 et 11, 14 signale une exposition directe en cas de contrôle CNIL. Les points 6 à 10 concernent l'AI Act : la transparence (art. 50) s'applique dès le 2 août 2026, tandis que les obligations des systèmes à haut risque autonomes sont reportées au 2 décembre 2027 par le Digital Omnibus.`,`Lecture des résultats`);
 
  /* ===================== PARTIE VIII — CHIFFRES-CLÉS ===================== */
  out.push(X.pageBreak());
@@ -1102,7 +1105,8 @@ function guideBody(X,f){
   [`Conservation des bulletins de paie`,`5 ans (art. L3243-4 C. trav.)`],
   [`Conservation des données de prospects`,`3 ans après le dernier contact`],
   [`Littératie IA obligatoire depuis`,`2 février 2025 (art. 4 AI Act)`],
-  [`Systèmes d'IA à haut risque encadrés à compter du`,`2 août 2026`]
+  [`Transparence IA (art. 50) applicable depuis`,`2 août 2026`],
+  [`Systèmes d'IA à haut risque autonomes encadrés à compter du`,`2 décembre 2027 (report Digital Omnibus ; initialement 2 août 2026)`]
  ].forEach(function(r){ ch.push(X.row([X.cell(r[0],{b:1}),X.cell(r[1])])); });
  out.push(X.table(ch,[6000,3640]));
 
@@ -2019,7 +2023,7 @@ var DOCS=[
     ['Sensibiliser le personnel','Moyenne',V(f.representant),'⟨ RH ⟩','⟨ … ⟩','% de salariés formés'],
     ['Cartographier et classer les systèmes d\'IA (AI Act)','Haute',V(f.representant),'⟨ Référent IA ⟩','⟨ … ⟩','Cartographie IA à jour (oui/non)'],
     ['Sensibiliser à la littératie IA (art. 4)','Moyenne',V(f.representant),'⟨ RH ⟩','depuis 02/2025','% de salariés sensibilisés IA'],
-    ['Vérifier les systèmes à haut risque (Annexe III)','Haute',V(f.representant),'⟨ Référent IA ⟩','avant le 02/08/2026','Systèmes haut risque conformes (%)']
+    ['Vérifier les systèmes à haut risque (Annexe III)','Haute',V(f.representant),'⟨ Référent IA ⟩','avant le 02/12/2027','Systèmes haut risque conformes (%)']
    ].forEach(function(r){ r2.push(X.row([X.cell(r[0],{b:1}),X.cell(r[1]),X.cell(r[2]),X.cell(r[3]),X.cell(r[4]),X.cell(r[5])])); });
    out.push(X.table(r2,[2100,1150,1450,1450,1300,2090]));
    out.push(X.h2('4. Indicateurs de suivi (KPI)'));
@@ -2154,7 +2158,7 @@ var DOCS=[
    out.push(X.li('Risque inacceptable : interdit (art. 5) ;'));
    out.push(X.li('Déployeur d\'un système à haut risque (art. 26) : supervision humaine, surveillance du fonctionnement, conservation des journaux, information des travailleurs concernés (art. 26 §7) et, le cas échéant, analyse d\'impact sur les droits fondamentaux (art. 27) ;'));
    out.push(X.li('Traitement de données personnelles : application cumulative du RGPD.'));
-   out.push(X.note('Calendrier AI Act : interdictions et littératie IA depuis février 2025 ; IA à usage général depuis août 2025 ; systèmes à haut risque à compter du 2 août 2026.'));
+   out.push(X.note('Calendrier AI Act (après le Digital Omnibus entré en vigueur le 27 juillet 2026) : interdictions (art. 5) et littératie IA (art. 4) depuis février 2025 ; IA à usage général (GPAI) depuis août 2025 ; transparence (art. 50) au 2 août 2026 ; systèmes à haut risque autonomes (Annexe III) reportés au 2 décembre 2027 ; systèmes à haut risque intégrés à des produits réglementés au 2 août 2028.'));
    out=out.concat(X.versionTable(f));
    return out;
  }},
@@ -2273,7 +2277,7 @@ var DOCS=[
    ]));
    out.push(X.h2('5. Calendrier de réévaluation et engagement'));
    out.push(X.p(V(f.raisonSociale)+' s\'engage dans une démarche de conformité continue au RGPD et à l\'AI Act, et met à jour sa documentation à chaque évolution significative de ses activités, de ses outils ou de la réglementation.',{}));
-   out.push(X.p('La gouvernance dans son ensemble (registre, politiques, sécurité, cartographie IA) fait l\'objet d\'une révision obligatoire au minimum une fois par an. Dernière synthèse établie le '+today()+' — prochaine revue prévue : ⟨ date à + 12 mois ⟩. Échéances AI Act : pratiques interdites (art. 5) et littératie (art. 4) applicables depuis le 2 février 2025 ; obligations des systèmes à haut risque (Annexe III) à compter du 2 août 2026.',{b:true}));
+   out.push(X.p('La gouvernance dans son ensemble (registre, politiques, sécurité, cartographie IA) fait l\'objet d\'une révision obligatoire au minimum une fois par an. Dernière synthèse établie le '+today()+' — prochaine revue prévue : ⟨ date à + 12 mois ⟩. Échéances AI Act : pratiques interdites (art. 5) et littératie (art. 4) applicables depuis le 2 février 2025 ; transparence (art. 50) au 2 août 2026 ; obligations des systèmes à haut risque autonomes (Annexe III) reportées au 2 décembre 2027, et des systèmes intégrés à des produits réglementés (Annexe I) au 2 août 2028, par le Digital Omnibus entré en vigueur le 27 juillet 2026.',{b:true}));
    out=out.concat(X.signature(f,'Le référent conformité'));
    return out;
  }}
